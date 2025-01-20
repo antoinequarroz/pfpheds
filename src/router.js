@@ -59,10 +59,12 @@ import CommunityInfo from '@/components/Social/CommunityInfo.vue'; // Import du 
 import EducationManagement from '@/components/Education/EducationManagement.vue'; // Import du composant Infos
 import EducationView from '@/components/Education/DigitalHealthB22Option/EducationView.vue'; // Import du composant Infos
 import TBChrisView from '@/components/Education/TBChris/TBChrisView.vue'; // Import du composant Infos
-import PlanningView from '@/components/Planning/PlanningView.vue'; // Import du composant Infos
+import GestionCalendarManagement from '@/components/calendar/GestionCalendarManagement.vue'; // Import du composant Infos
 import GestionSalleManagement from '@/components/Room/GestionSalleManagement.vue'; // Import du composant Infos
 import GestionMaterielManagement from '@/components/Material/GestionMaterielManagement.vue'; // Import du composant Infos
 import SeriousGameManagement from '@/components/SeriousGame/SeriousGameManagement.vue'; // Import du composant Infos
+import FormationPratiqueManagement from '@/components/formationPratique/FormationPratiqueManagement.vue'; // Import du composant Infos
+import ClinicalReasoning from '@/components/ClinicalReasoning/ClinicalReasoning.vue'; // Import du composant Infos
 
 // E-Portfolio Layout & Pages
 import EportfolioHome from '@/components/Eportfolio/pages/EportfolioHome.vue';
@@ -70,6 +72,7 @@ import EportfolioManagement from '@/components/Eportfolio/pages/EportfolioManage
 import EportfolioLayout from '@/components/Eportfolio/layouts/EportfolioLayout.vue';
 import EportfolioNotFound from '@/components/Eportfolio/pages/EportfolioNotFound.vue';
 import EportfolioNotAuthorized from '@/components/Eportfolio/pages/EportfolioNotAuthorized.vue';
+import IntranetManagement from '@/components/Intranet/IntranetManagement.vue';
 
 // Dynamic Imports for e-portfolio roles
 const StudentDashboard = () => import('@/components/Eportfolio/roles/student/StudentDashboard.vue');
@@ -240,13 +243,24 @@ const routes = [
   {
     path: '/planning',
     name: 'planning',
-    component: PlanningView, // importé ou lazy-loaded
+    component: GestionCalendarManagement, // importé ou lazy-loaded
   },
   {
     path: '/salles',
     name: 'salles',
     component: GestionSalleManagement, // importé ou lazy-loaded
   },
+  {
+    path: '/clinicalreasoning',
+    name: 'clinicalreasoning',
+    component: ClinicalReasoning, // importé ou lazy-loaded
+  },
+  {
+    path: '/intranet',
+    name: 'intranet',
+    component: IntranetManagement, // importé ou lazy-loaded
+  },
+  
 
   {
     path: '/seriousgamemanagement',
@@ -259,7 +273,11 @@ const routes = [
     name: 'materials',
     component: GestionMaterielManagement, // importé ou lazy-loaded
   },
-  
+  {
+    path: '/formationPratique',
+    name: 'formationPratique',
+    component: FormationPratiqueManagement, // importé ou lazy-loaded
+  },
 
   {
     path: '/tb-capsules',

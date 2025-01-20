@@ -1,6 +1,29 @@
 {
   "rules": {
-    ".read": "now < 1792706400000",  // 2026-10-23
-    ".write": "now < 1792706400000"  // 2026-10-23
+    ".read": "now < 1767225600000",
+    ".write": "now < 1767225600000",
+    "Posts": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": [
+        "Timestamp",
+        "Hashtags/BA22",
+        "Hashtags/BA23",
+        "Hashtags/BA24",
+        "Hashtags/PHYSIO",
+        "Community",
+                "MentionGroups/test",
+                "Community/physio"
+
+      ]
+    },
+    "Users": {
+      ".read": true,
+      ".write": true,
+      ".indexOn": ["UserName"]
+    },
+    "conversations": {
+      ".indexOn": ["member1", "member2"]
+    }
   }
 }

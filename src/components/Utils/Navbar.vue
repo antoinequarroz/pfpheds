@@ -30,7 +30,7 @@
             <li v-if="user && hasAdminAccess" class="mx-3">
               <ButtonNavbar icon="pi pi-check" :bgColor="'var(--surface-overlay)'"
                 :hoverBgColor="'var(--surface-hover)'" :iconColor="'var(--primary-color)'"
-                @click="navigateTo('/votation')" title="Votation PFP" />
+                @click="navigateTo('/formationPratique')" title="Votation PFP" />
             </li>
             <li v-if="user && hasAdminAccess" class="mx-3">
               <ButtonNavbar icon="pi pi-map-marker" :bgColor="'var(--surface-overlay)'"
@@ -42,32 +42,39 @@
                 :iconColor="'var(--primary-color)'" @click="navigateTo('/education')" title="Capsules Asynchrones" />
             </li>
 
-            <li v-if="user && hasOptions || hasAdminAccess" class="mx-3">
+            <li v-if="user &&  hasAdminAccess" class="mx-3">
               <ButtonNavbar icon="pi pi-compass" :bgColor="'var(--surface-overlay)'" :hoverBgColor="'var(--surface-hover)'"
                 :iconColor="'var(--primary-color)'" @click="navigateTo('/salles')" title="Gestion des salles" />
             </li>
 
 
             
-            <li v-if="user && hasOptions || hasAdminAccess" class="mx-3">
+            <li v-if="user && hasAdminAccess" class="mx-3">
               <ButtonNavbar icon="pi pi-folder-open" :bgColor="'var(--surface-overlay)'" :hoverBgColor="'var(--surface-hover)'"
                 :iconColor="'var(--primary-color)'" @click="navigateTo('/eportfolio')" title="E-Portfolio" />
             </li>
             
-            <li v-if="user && hasOptions || hasAdminAccess" class="mx-3">
+            <li v-if="user && hasAdminAccess" class="mx-3">
               <ButtonNavbar icon="pi pi-table" :bgColor="'var(--surface-overlay)'" :hoverBgColor="'var(--surface-hover)'"
                 :iconColor="'var(--primary-color)'" @click="navigateTo('/materials')" title="Gestion du materiel" />
             </li>
 
-            <li v-if="user && hasOptions || hasAdminAccess" class="mx-3">
+            <li v-if="user && hasAdminAccess" class="mx-3">
               <ButtonNavbar icon="pi pi-star-fill" :bgColor="'var(--surface-overlay)'" :hoverBgColor="'var(--surface-hover)'"
                 :iconColor="'var(--primary-color)'" @click="navigateTo('/seriousgamemanagement')" title="Serious Game" />
             </li>
-            <li v-if="user && hasOptions || hasAdminAccess" class="mx-3">
+            <li v-if="user &&  hasAdminAccess" class="mx-3">
               <ButtonNavbar icon="pi pi-calendar-plus" :bgColor="'var(--surface-overlay)'" :hoverBgColor="'var(--surface-hover)'"
                 :iconColor="'var(--primary-color)'" @click="navigateTo('/planning')" title="Gestion du programme" />
             </li>
-
+            <li v-if="user &&  hasAdminAccess" class="mx-3">
+              <ButtonNavbar icon="pi pi-sliders-v" :bgColor="'var(--surface-overlay)'" :hoverBgColor="'var(--surface-hover)'"
+                :iconColor="'var(--primary-color)'" @click="navigateTo('/clinicalreasoning')" title="Clinical Reasoning" />
+            </li>
+            <li v-if="user &&  hasAdminAccess" class="mx-3">
+              <ButtonNavbar icon="pi pi-list" :bgColor="'var(--surface-overlay)'" :hoverBgColor="'var(--surface-hover)'"
+                :iconColor="'var(--primary-color)'" @click="navigateTo('/intranet')" title="Intranet" />
+            </li>
             <li v-if="user && hasAdminAccess" class="mx-3">
               <ButtonNavbar icon="pi pi-sitemap" :bgColor="'var(--surface-overlay)'"
                 :hoverBgColor="'var(--surface-hover)'" :iconColor="'var(--primary-color)'" @click="navigateTo('/admin')"

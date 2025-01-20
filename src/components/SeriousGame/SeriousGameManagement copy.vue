@@ -8,7 +8,7 @@
       </aside>
 
       <main class="main-content">
-        <h1>Simulation Infirmière - Diabète</h1>
+        <h1>Simulation Infirmière - Pinia Store</h1>
 
         <!-- Barre de progression -->
         <div class="progress-indicator">
@@ -22,14 +22,23 @@
         </div>
         <p class="score-label">Score : {{ game.score }}</p>
 
-        <!-- Iframe du site externe -->
-        <iframe
-          src="https://natb1899.github.io/DiabeteSimGameHEVS/"
-          width="150%"
-          height="800"
-          frameborder="0"
-          title="Simulation Diabète"
-        ></iframe>
+        <!-- Canvas -->
+        <canvas
+          ref="gameCanvas"
+          width="400"
+          height="300"
+          @keydown="handleKeydown"
+          tabindex="0"
+        ></canvas>
+
+        <!-- DialogueBox (étape 1) -->
+        <DialogueBox
+          v-if="game.currentStep === 1 && game.showDialogue"
+          :dialogLines="game.dialogLinesStep1"
+          :currentLineIndex="game.dialogIndex"
+          @next-line="game.nextDialogueLine"
+          @close-dialog="game.closeDialogue"
+        />
 
         <!-- Étape 3 : affichage des mesures (si on est en step 3) -->
         <section v-if="game.currentStep === 3" class="measures-section">
@@ -70,20 +79,100 @@
 import Navbar from '@/components/Utils/Navbar.vue'
 import LeftGameSidebar from './LeftGameSidebar.vue'
 import RightGameSidebar from './RightGameSidebar.vue'
+import DialogueBox from './DialogueBox.vue'
 import QuestionMultipleChoice from './QuestionMultipleChoice.vue'
 import { useGameStore } from '@/stores/gameStore.js'
-
 export default {
   name: 'SeriousGameManagement',
   components: {
     Navbar,
     LeftGameSidebar,
     RightGameSidebar,
+    DialogueBox,
     QuestionMultipleChoice,
   },
   setup() {
+    // On récupère notre store
     const game = useGameStore()
+
     return { game }
+  },
+  methods: {
+    handleKeydown(e) {
+      e.preventDefault()
+      switch (e.key) {
+        case 'ArrowUp':
+          this.game.moveNurse('up')
+          break
+        case 'ArrowDown':
+          this.game.moveNurse('down')
+          break
+        case 'ArrowLeft':
+          this.game.moveNurse('left')
+          break
+        case 'ArrowRight':
+          this.game.moveNurse('right')
+          break
+      }
+      // On redessine la scène
+      this.drawGame()
+
+      // Étape 1 : check patient
+      if (this.game.currentStep === 1) {
+        this.game.checkPatientEncounter()
+      }
+
+      // Étape 2 : check items
+      if (this.game.currentStep === 2) {
+        this.game.checkItemsCollection()
+      }
+    },
+    drawGame() {
+      const canvas = this.$refs.gameCanvas
+      if (!canvas) return
+      const ctx = canvas.getContext('2d')
+      // Effacer
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      // Fond
+      ctx.fillStyle = '#ecf0f1'
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+
+      // Dessiner le patient si step <= 3
+      if (this.game.currentStep <= 3) {
+        ctx.fillStyle = '#2ecc71'
+        ctx.fillRect(
+          this.game.patientX,
+          this.game.patientY,
+          this.game.patientSize,
+          this.game.patientSize
+        )
+      }
+
+      // Dessiner les items si step=2
+      if (this.game.currentStep === 2) {
+        this.game.itemsList.forEach(item => {
+          if (!item.collected) {
+            ctx.fillStyle = item.color
+            ctx.fillRect(item.x, item.y, item.width, item.height)
+          }
+        })
+      }
+
+      // Dessiner le nurse (bleu)
+      ctx.fillStyle = '#3498db'
+      ctx.fillRect(
+        this.game.nurseX,
+        this.game.nurseY,
+        this.game.nurseSize,
+        this.game.nurseSize
+      )
+    },
+  },
+  mounted() {
+    // Focus sur le canvas
+    this.$refs.gameCanvas.focus()
+    // Dessin initial
+    this.drawGame()
   },
 }
 </script>
@@ -92,7 +181,7 @@ export default {
 .serious-game-layout {
   display: flex;
   flex-direction: column;
-  min-height: 150vh;
+  min-height: 100vh;
 }
 .game-container {
   display: grid;
@@ -143,10 +232,10 @@ export default {
   color: #e74c3c;
   font-weight: bold;
 }
-iframe {
-  border: none;
-  width: 100%;
-  height: 700px;
+canvas {
+  border: 2px solid #7f8c8d;
+  border-radius: 4px;
+  outline: none;
 }
 .measures-section ul {
   list-style: none;

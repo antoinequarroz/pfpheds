@@ -1,7 +1,8 @@
 <template>
+      <Navbar />
+
   <div class="eportfolio-layout">
     <!-- Barre de navigation globale -->
-    <Navbar />
 
     <!-- Bannière si le site est en mode maintenance -->
     <div v-if="maintenanceMode" class="maintenance-banner">
@@ -29,9 +30,9 @@
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import Navbar from './Navbar.vue';
-import LeftEportfolioSidebar from './LeftEportfolioSidebar.vue';
-import RightEportfolioSidebar from './RightEportfolioSidebar.vue';
+import Navbar from '@/components/Utils/Navbar.vue';
+import LeftEportfolioSidebar from './LeftSidebar.vue';
+import RightEportfolioSidebar from './RightSidebar.vue';
 import { db } from '@/firebase.js'; // ou chemin selon ton arborescence
 import { ref as dbRef, onValue } from 'firebase/database';
 
@@ -60,7 +61,6 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: #f9f9f9;
 }
 
 .maintenance-banner {
