@@ -170,6 +170,11 @@ const routes = [
     name: 'TemplateTest',
     component: () => import('@/views/TemplateTest.vue')
   },
+  {
+    path: '/affectation-stage-etudiant',
+    name: 'AffectationStageEtudiant',
+    component: () => import('./components/Dashboard/DashboardForms/AffectationStageEtudiant.vue')
+  },
 ];
 
 // Create router instance
