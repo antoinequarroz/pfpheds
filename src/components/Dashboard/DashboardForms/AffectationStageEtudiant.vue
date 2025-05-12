@@ -19,24 +19,6 @@
             <Button type="submit" label="Affecter" class="p-button-success" :disabled="!selectedEtudiant || selectedStages.length === 0" />
           </div>
         </form>
-        <Divider class="my-5" />
-        <div class="mb-4">
-          <h3 class="mb-2">Ajouter un étudiant</h3>
-          <div class="flex gap-2 mb-2">
-            <InputText v-model="newEtudiant.nom" placeholder="Nom" />
-            <InputText v-model="newEtudiant.prenom" placeholder="Prénom" />
-            <InputText v-model="newEtudiant.id" placeholder="ID unique" />
-            <Button label="Ajouter" class="p-button-sm p-button-info" @click="ajouterEtudiant" />
-          </div>
-        </div>
-        <div class="mb-4">
-          <h3 class="mb-2">Ajouter une place de stage</h3>
-          <div class="flex gap-2 mb-2">
-            <InputText v-model="newStage.titre" placeholder="Titre du stage" />
-            <InputText v-model="newStage.id" placeholder="ID unique" />
-            <Button label="Ajouter" class="p-button-sm p-button-info" @click="ajouterStage" />
-          </div>
-        </div>
         <div v-if="message" class="mt-4 text-green-600">{{ message }}</div>
       </div>
     </section>
@@ -49,29 +31,26 @@ import Dropdown from 'primevue/dropdown';
 import MultiSelect from 'primevue/multiselect';
 import Button from 'primevue/button';
 import Divider from 'primevue/divider';
-import InputText from 'primevue/inputtext';
 import { db } from '../../../../firebase.js';
 import { ref, onValue, update } from "firebase/database";
 
 export default {
   name: 'AffectationStageEtudiant',
-  components: { Navbar, Dropdown, MultiSelect, Button, Divider, InputText },
+  components: { Navbar, Dropdown, MultiSelect, Button, Divider },
   data() {
     return {
       etudiantsOptions: [], // [{ id, nom }]
       stagesOptions: [],    // [{ id, titre }]
+      stagesRaw: {},         // Données brutes des places
       selectedEtudiant: null,
       selectedStages: [],
       message: '',
-      newEtudiant: { nom: '', prenom: '', id: '' },
-      newStage: { titre: '', id: '' },
     };
   },
   mounted() {
     // Charger les étudiants (IDs)
     onValue(ref(db, 'Students'), (snapshot) => {
       const studentsData = snapshot.val() || {};
-      // Charger les noms/prénoms depuis Users
       onValue(ref(db, 'Users'), (usersSnap) => {
         const usersData = usersSnap.val() || {};
         this.etudiantsOptions = Object.entries(studentsData).map(([id, val]) => {
@@ -87,24 +66,31 @@ export default {
     // Charger les places de stage avec infos d'institution
     onValue(ref(db, 'Places'), (snapshot) => {
       const placesData = snapshot.val() || {};
+      this.stagesRaw = placesData; // Stocke les données brutes
       onValue(ref(db, 'Institutions'), (institSnap) => {
         const institutionsData = institSnap.val() || {};
-        this.stagesOptions = Object.entries(placesData).map(([id, val]) => {
-          // Affiche : institution.Name – domaine – NomPlace | Critères validés : ...
-          let institutionId = val.InstitutionId || val.IDInstitution || '';
-          let institution = institutionsData[institutionId] || {};
-          let institutionName = institution.Name || '';
-          let domaine = institution.Category || '';
-          let nomPlace = val.NomPlace || '';
-          // Critères validés
-          const criteriaKeys = ['MSQ','NEUROGER','REHAB','AMBU','FR','AIGU','DE','SYSINT'];
-          let validCriteria = criteriaKeys.filter(k => val[k] === true || (typeof val[k] === 'string' && val[k].toLowerCase() === 'true'));
-          let label = institutionName;
-          if (domaine) label += ' – ' + domaine;
-          if (nomPlace) label += ' – ' + nomPlace;
-          if (validCriteria.length) label += ' | Critères validés : ' + validCriteria.join(', ');
-          return { id, titre: label, institutionName, domaine };
-        });
+        this.stagesOptions = Object.entries(placesData)
+          .filter(([id, val]) => val && (val.NomPlace || val.Titre) && id)
+          .map(([id, val]) => {
+            let nomPlace = val.NomPlace || '';
+            let titrePlace = val.Titre || '';
+            let institutionName = '';
+            let institutionId = val.InstitutionId || val.IDInstitution  || val.IDPlace || '';
+            if (institutionId && institutionsData[institutionId]) {
+              institutionName = institutionsData[institutionId].Name || '';
+            }
+            // Critères validés
+            const criteriaKeys = ['MSQ','NEUROGER','REHAB','AMBU','FR','AIGU','DE','SYSINT'];
+            let validCriteria = criteriaKeys.filter(k => val[k] === true || (typeof val[k] === 'string' && val[k].toLowerCase() === 'true'));
+            let critLabel = validCriteria.length ? ' | Critères : ' + validCriteria.join(', ') : '';
+            // Construction du label complet
+            let labelParts = [];
+            if (institutionName) labelParts.push(institutionName);
+            if (titrePlace) labelParts.push(titrePlace);
+            if (nomPlace && nomPlace !== titrePlace) labelParts.push(nomPlace);
+            let titre = labelParts.join(' – ') + critLabel;
+            return { id, titre };
+          });
       });
     });
   },
@@ -112,39 +98,51 @@ export default {
     async affecterStage() {
       if (!this.selectedEtudiant || this.selectedStages.length === 0) return;
       try {
-        // Place juste le nom et l'id dans PFP_2
         const pfp2 = [];
+        const PFP_valided = [];
         for (const stageId of this.selectedStages) {
           const place = this.stagesOptions.find(opt => opt.id === stageId);
+          const fullPlace = this.stagesRaw && this.stagesRaw[stageId] ? this.stagesRaw[stageId] : null;
           if (!place) continue;
           pfp2.push({
             id: stageId,
             nom: place.titre || ''
           });
+          if (fullPlace) {
+            const obj = {};
+            obj.Domaine = fullPlace.Domaine || fullPlace.Titre || '';
+            obj.ID_PFP = stageId;
+            obj.MSQ = fullPlace.MSQ || false;
+            obj.NEUROGER = fullPlace.NEUROGER || false;
+            obj.REHAB = fullPlace.REHAB || false;
+            obj.AMBU = fullPlace.AMBU || false;
+            obj.FR = fullPlace.FR || false;
+            obj.AIGU = fullPlace.AIGU || false;
+            obj.DE = fullPlace.DE || false;
+            obj.SYSINT = fullPlace.SYSINT || false;
+            PFP_valided.push(obj);
+          }
         }
-        await update(ref(db, `Students/${this.selectedEtudiant}`), { PFP_2: pfp2 });
+        // Met à jour PFP_2 à la racine
+        await update(ref(db, `Students/${this.selectedEtudiant}`), {
+          PFP_2: pfp2
+        });
+        // Met à jour PFP_valided dans le sous-noeud '1'
+        await update(ref(db, `Students/${this.selectedEtudiant}/1`), {
+          PFP_valided: PFP_valided
+        });
         this.message = "Stage(s) affecté(s) avec succès !";
       } catch (e) {
         this.message = "Erreur lors de l'affectation.";
       }
     },
-    async ajouterEtudiant() {
-      if (!this.newEtudiant.nom || !this.newEtudiant.prenom || !this.newEtudiant.id) return;
-      await update(ref(db, `Students/${this.newEtudiant.id}`), { Nom: this.newEtudiant.nom, Prenom: this.newEtudiant.prenom });
-      this.newEtudiant = { nom: '', prenom: '', id: '' };
-    },
-    async ajouterStage() {
-      if (!this.newStage.titre || !this.newStage.id) return;
-      await update(ref(db, `Places/${this.newStage.id}`), { Titre: this.newStage.titre });
-      this.newStage = { titre: '', id: '' };
-    }
   }
 }
 </script>
 
 <style scoped>
 .card {
-  background: #fff;
+  background: var(--surface-card);
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
 }
