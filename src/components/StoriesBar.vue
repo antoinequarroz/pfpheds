@@ -1,32 +1,32 @@
 <template>
-  
-  <div class="stories-bar">
+  <div class="stories-bar p-d-flex p-ai-center p-px-2" style="gap: 1rem; overflow-x: auto;">
     <!-- Bouton d'ajout de story -->
-    <div class="story-item add-story" @click="showAddStory = true">
-      <span class="add-icon">+</span>
-      <p>Votre story</p>
-    </div>
+    <Button icon="pi pi-plus" label="Votre story" class="p-button-rounded p-button-outlined p-mr-2" @click="showAddStory = true" />
     <!-- Liste des stories -->
-    <div
-      v-for="user in uniqueUsers"
-      :key="user.userId"
-      class="story-item"
-      @click="openStory(user.stories)"
-    >
-      <img
-        :src="user.userAvatar || defaultAvatar"
-        alt="avatar"
-        class="avatar"
-        :class="{ 'unseen-story': user.hasUnseenStory }"
+    <div v-for="user in uniqueUsers" :key="user.userId" class="p-d-flex p-flex-column p-ai-center story-avatar-col" style="min-width: 70px;">
+      <Avatar
+        :image="user.userAvatar || defaultAvatar"
+        :class="['p-mb-1', { 'p-shadow-4': user.hasUnseenStory }]"
+        shape="circle"
+        size="large"
+        style="border: 2px solid var(--primary-color); cursor: pointer;"
+        @click="selectStory(user.stories)"
       />
-      <p>{{ getUserDisplayName(user.userName) }}</p>
+      <small class="story-username p-text-center p-text-truncate">{{ getUserDisplayName(user.userName) }}</small>
     </div>
-    <AddStory v-if="showAddStory" @close="showAddStory = false" @uploaded="fetchStories" />
-    <StoryModal v-if="selectedStory" :story="selectedStory" @close="selectedStory = null" @refreshStories="fetchStories" />
+    <Dialog v-model:visible="showAddStory" modal header="Ajouter une story" :closable="true" dismissableMask style="width: 400px">
+      <AddStory @close="showAddStory = false" @uploaded="fetchStories" />
+    </Dialog>
+    <Dialog v-model:visible="showStoryDialog" modal header="Story" :closable="true" dismissableMask style="width: 400px" @hide="onStoryDialogHide">
+      <StoryModal v-if="selectedStory" :story="selectedStory" @close="onStoryDialogHide" @refreshStories="fetchStories" />
+    </Dialog>
   </div>
 </template>
 
 <script>
+import Button from 'primevue/button';
+import Avatar from 'primevue/avatar';
+import Dialog from 'primevue/dialog';
 import AddStory from './AddStory.vue';
 import StoryModal from './StoryModal.vue';
 import { db } from 'root/firebase';
@@ -35,13 +35,14 @@ import { getCurrentUser } from './Utils/authUser.js';
 
 export default {
   name: 'StoriesBar',
-  components: { AddStory, StoryModal },
+  components: { AddStory, StoryModal, Button, Avatar, Dialog },
   data() {
     return {
       stories: [], // toutes les stories non expirées
       uniqueUsers: [], // stories groupées par utilisateur
       showAddStory: false,
       selectedStory: null,
+      showStoryDialog: false,
       defaultAvatar: 'https://ui-avatars.com/api/?name=User',
       currentUser: null,
     };
@@ -116,6 +117,14 @@ export default {
         this.stories = stories;
       });
     },
+    selectStory(stories) {
+      this.selectedStory = stories;
+      this.showStoryDialog = true;
+    },
+    onStoryDialogHide() {
+      this.showStoryDialog = false;
+      this.selectedStory = null;
+    },
     async openStory(stories) {
       // stories = tableau de stories de l'utilisateur
       this.selectedStory = stories;
@@ -140,151 +149,21 @@ export default {
 <style scoped>
 .stories-bar {
   display: flex;
-  flex-direction: row;
   align-items: center;
-  border-bottom: 2px solid #e0e0e0;
-  padding: 12px 0;
-  gap: 16px;
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  min-height: 90px;
+  gap: 1rem;
   overflow-x: auto;
+  padding: 0.5rem 1rem;
 }
-.story-item {
+.story-avatar-col {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin: 0 8px;
-  cursor: pointer;
-  background: rgba(255,255,255,0.85);
-  border-radius: 14px;
-  box-shadow: 0 2px 12px 0 rgba(33,150,243,0.09), 0 1.5px 6px 0 rgba(0,0,0,0.07);
-  padding: 10px 7px 10px 7px;
-  transition: box-shadow 0.22s, background 0.22s, transform 0.18s;
-  border: 1.5px solid var(--surface-border, #e0e0e0);
-  backdrop-filter: blur(7px) saturate(1.15);
-  -webkit-backdrop-filter: blur(7px) saturate(1.15);
-  position: relative;
-  outline: none;
+  min-width: 70px;
 }
-
-.story-item:focus-visible {
-  box-shadow: 0 0 0 3px var(--primary-color, #2196f3), 0 2px 12px 0 rgba(33,150,243,0.09);
-}
-
-.story-item:hover {
-  box-shadow: 0 8px 28px 0 rgba(33,150,243,0.18), 0 1.5px 6px 0 rgba(0,0,0,0.10);
-  background: rgba(255,255,255,0.97);
-  transform: translateY(-2px) scale(1.03);
-}
-
-.story-item:active::after {
-  content: '';
-  position: absolute;
-  left: 50%; top: 50%;
-  transform: translate(-50%,-50%) scale(1.5);
-  width: 80%; height: 80%;
-  border-radius: 50%;
-  background: rgba(33,150,243,0.11);
-  animation: ripple-story 0.4s linear;
-  pointer-events: none;
-  z-index: 1;
-}
-
-@keyframes ripple-story {
-  0% { opacity: 1; transform: translate(-50%,-50%) scale(0.8); }
-  100% { opacity: 0; transform: translate(-50%,-50%) scale(1.6); }
-}
-
-.story-item .avatar {
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  margin-bottom: 5px;
-  object-fit: cover;
-  border: 3px solid var(--primary-color, #2196f3);
-  box-shadow: 0 0 0 0 rgba(33,150,243,0);
-  transition: box-shadow 0.22s, border 0.22s;
-  background: linear-gradient(135deg, #e3f2fd 0%, #fff 100%);
-  position: relative;
-}
-
-.story-item .avatar.active, .story-item .avatar.unseen {
-  border: 3px solid;
-  border-image: linear-gradient(120deg, #2196f3 60%, #ffb300 100%) 1;
-  box-shadow: 0 0 0 3px #fff, 0 0 12px 2px #2196f3;
-}
-
-.story-item .avatar:hover {
-  box-shadow: 0 0 0 4px var(--primary-color, #2196f3), 0 0 12px 3px #2196f3;
-}
-
-.story-item p {
-  margin: 0;
-  margin-top: 3px;
-  font-size: 1.07rem;
-  color: var(--primary-color, #1976d2);
-  font-weight: 600;
-  text-align: center;
-  letter-spacing: 0.01em;
-  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-  text-shadow: 0 1px 2px rgba(33,150,243,0.07);
-}
-
-.add-story {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
-  background: var(--primary-color, #2196f3);
-  box-shadow: 0 4px 16px 0 rgba(33,150,243,0.11);
-  color: #fff;
-  font-size: 2rem;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  margin-bottom: 5px;
-  position: relative;
-  transition: box-shadow 0.2s, background 0.2s;
-  aria-label: "Ajouter une histoire";
-}
-
-.add-story:hover {
-  background: var(--primary-color, #42a5f5);
-  box-shadow: 0 8px 28px 0 rgba(33,150,243,0.18);
-}
-
-.add-story:focus-visible {
-  box-shadow: 0 0 0 3px var(--primary-color, #2196f3), 0 4px 16px 0 rgba(33,150,243,0.11);
-}
-
-.add-story .plus-icon {
-  font-size: 2.1rem;
-  font-weight: bold;
-  text-shadow: 0 2px 8px rgba(33,150,243,0.13);
-  color: #fff;
-}
-
-.add-icon {
-  font-size: 2rem;
-  color: #2196f3;
-}
-
-.story-item p {
-  font-size: 0.8rem;
-  margin: 4px 0 0 0;
+.story-username {
+  margin-top: 4px;
+  max-width: 200px;
   text-align: center;
   word-break: break-word;
-}
-
-@media (max-width: 768px) {
-  .add-story {
-    width: 40px;
-    height: 40px;
-    font-size: 1.5rem;
-  }
 }
 </style>
