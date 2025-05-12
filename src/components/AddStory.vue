@@ -1,67 +1,95 @@
 <template>
-  <div class="add-story-modal">
-    <div class="modal-content">
-      <button class="close-btn" @click="$emit('close')">&times;</button>
-      <h3>Ajouter une story</h3>
-      <input v-if="step === 'select'" type="file" accept="image/*" capture @change="onFileChange" />
-      <button v-if="step === 'select'" class="webcam-btn" @click="step = 'webcam'">Prendre une photo avec la webcam</button>
-      <div v-if="step === 'select'" class="step-msg">Prenez une photo ou choisissez une image à publier en story.</div>
-
-      <WebcamCapture v-if="step === 'webcam'" @captured="onWebcamCaptured" @cancel="step = 'select'" />
-
-
-      <ImageCropper
-        v-if="step === 'crop' && previewUrl"
-        :src="previewUrl"
-        :aspect="9/16"
-        :outputWidth="720"
-        :outputHeight="1280"
-        @cropped="onCropped"
-        @cancel="step = 'select'"
-      />
-      <div v-if="step === 'crop'" class="step-msg">Recadrez votre image pour la story.</div>
-
-      <StoryEditor
-        v-if="step === 'edit' && previewUrl"
-        :src="previewUrl"
-        :outputWidth="720"
-        :outputHeight="1280"
-        @edited="onEdited"
-        @cancel="step = 'crop'"
-      />
-      <div v-if="step === 'edit'" class="step-msg">Ajoutez du texte ou des emojis sur votre image.</div>
-
-      <div v-if="step === 'preview' && previewUrl" class="story-preview">
-        <img :src="previewUrl" alt="Prévisualisation" />
-      </div>
-      <div v-if="step === 'preview'" class="step-msg">Prévisualisez votre story, ajoutez une légende puis publiez.</div>
-
-      <div v-if="step === 'preview'" class="duration-select">
-        <label for="duration">Durée de visibilité :</label>
-        <select id="duration" v-model="selectedDuration">
-          <option :value="1 * 60 * 1000">1 minute</option>
-          <option :value="60 * 60 * 1000">1 heure</option>
-          <option :value="24 * 60 * 60 * 1000">24 heures</option>
-        </select>
-      </div>
-
-      <textarea v-if="step === 'preview'" v-model="caption" maxlength="100" placeholder="Ajouter un texte (optionnel)" class="caption-input"></textarea>
-
-      <div v-if="step === 'upload' || uploading" class="progress-bar-container">
-        <div class="progress-bar" :style="{ width: uploadProgress + '%' }"></div>
-        <span>{{ uploadProgress }}%</span>
-      </div>
-      <div v-if="error" class="error">{{ error }}</div>
-      <button
-        class="add-btn"
-        :disabled="step !== 'preview' || uploading || !fileSelected"
-        @click="submitStory"
-      >Publier la story</button>
-    </div>
+  <div class="p-d-flex p-jc-center p-ai-center" style="min-height: 100%;">
+    <Card style="width: 100%; max-width: 600px;">
+      <template #title>
+        <div class="p-d-flex p-jc-between p-ai-center">
+          <span style="font-size: 1.5rem">Ajouter une story</span>
+          <Button icon="pi pi-times" class="p-button-rounded p-button-text p-button-lg" @click="$emit('close')" />
+        </div>
+      </template>
+      <template #content>
+        <!-- Sélection image -->
+        <div v-if="step === 'select'" class="p-d-flex p-flex-column p-ai-center p-mb-4">
+          <FileUpload mode="basic" name="storyImage" accept="image/*" chooseLabel="Choisir une image" customUpload @uploader="onFileChange" class="p-mb-3" chooseIcon="pi pi-image" style="font-size: 1.2rem;"/>
+          <Button label="Prendre une photo avec la webcam" icon="pi pi-camera" class="p-button-text p-button-lg p-mt-2" @click="step = 'webcam'" style="font-size: 1.1rem;"/>
+          <small class="p-mt-3 p-text-secondary" style="font-size: 1.1rem;">Prenez une photo ou choisissez une image à publier en story.</small>
+        </div>
+        <div v-if="step === 'webcam'">
+          <WebcamCapture @captured="onWebcamCaptured" @cancel="step = 'select'" />
+        </div>
+        <div v-if="step === 'crop' && previewUrl">
+          <ImageCropper
+            :src="previewUrl"
+            :aspect="9/16"
+            :outputWidth="720"
+            :outputHeight="1280"
+            @cropped="onCropped"
+            @cancel="step = 'select'"
+          />
+          <small class="p-mt-3 p-text-secondary" style="font-size: 1.1rem;">Recadrez votre image pour la story.</small>
+        </div>
+        <div v-if="step === 'edit' && previewUrl" class="p-d-flex p-flex-column p-ai-center">
+          <StoryEditor
+            :src="previewUrl"
+            :outputWidth="720"
+            :outputHeight="1280"
+            style="width: 360px; height: 640px; margin-bottom: 12px;"
+            @edited="onEdited"
+            @cancel="step = 'crop'"
+          />
+          <small class="p-mt-3 p-text-secondary" style="font-size: 1.1rem;">Ajoutez du texte, des emojis ou des stickers sur votre image.</small>
+        </div>
+        <div v-if="step === 'preview' && previewUrl" class="p-d-flex p-flex-column p-ai-center">
+          <img :src="previewUrl" alt="Prévisualisation" style="max-width: 360px; border-radius: 18px; box-shadow: 0 4px 16px rgba(33,150,243,0.11); margin-bottom: 18px;" />
+          <small class="p-mt-2 p-text-secondary" style="font-size: 1.1rem;">Prévisualisez votre story, ajoutez une légende puis publiez.</small>
+          <div class="p-mt-4 p-d-flex p-ai-center p-jc-between" style="width: 100%; max-width: 360px;">
+            <span style="font-size: 1.1rem;">Durée de visibilité :</span>
+            <Dropdown
+              v-model="selectedDuration"
+              :options="durationOptions"
+              optionLabel="label"
+              optionValue="value"
+              style="width: 180px; font-size: 1.1rem;"
+              inputClass="p-inputtext-lg"
+            />
+          </div>
+          <textarea
+            v-model="caption"
+            maxlength="100"
+            placeholder="Ajouter un texte (optionnel)"
+            rows="3"
+            class="p-inputtext p-mt-3"
+            style="width: 100%; max-width: 360px; font-size: 1.15rem; resize: vertical;"
+          />
+        </div>
+        <div v-if="(step === 'upload' || uploading)" class="p-mt-4">
+          <ProgressBar :value="uploadProgress" showValue style="height: 1.5rem; font-size: 1.1rem;"/>
+        </div>
+        <Message v-if="error" severity="error" class="p-mt-3" style="font-size: 1.1rem;">{{ error }}</Message>
+      </template>
+      <template #footer>
+        <div class="p-d-flex p-jc-end">
+          <Button
+            label="Publier la story"
+            icon="pi pi-upload"
+            class="p-button-success p-button-lg"
+            style="font-size: 1.15rem; min-width: 180px;"
+            :disabled="step !== 'preview' || uploading || !fileSelected"
+            @click="submitStory"
+          />
+        </div>
+      </template>
+    </Card>
   </div>
 </template>
 
 <script>
+import Card from 'primevue/card';
+import Button from 'primevue/button';
+import FileUpload from 'primevue/fileupload';
+import Dropdown from 'primevue/dropdown';
+import ProgressBar from 'primevue/progressbar';
+import Message from 'primevue/message';
 import { storage, db } from 'root/firebase';
 import { ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { ref as dbRef, push, set } from 'firebase/database';
@@ -72,20 +100,26 @@ import WebcamCapture from './WebcamCapture.vue';
 
 export default {
   name: 'AddStory',
-  components: { ImageCropper, StoryEditor, WebcamCapture },
+  components: {
+    Card, Button, FileUpload, Dropdown, ProgressBar, Message,
+    ImageCropper, StoryEditor, WebcamCapture
+  },
   data() {
     return {
-      step: 'select', // étapes: select, crop, edit, preview, upload
+      step: 'select',
       uploading: false,
       error: null,
       previewUrl: '',
       fileSelected: null,
+      selectedDuration: 24 * 60 * 60 * 1000,
+      durationOptions: [
+        { label: '1 minute', value: 1 * 60 * 1000 },
+        { label: '1 heure', value: 60 * 60 * 1000 },
+        { label: '24 heures', value: 24 * 60 * 60 * 1000 },
+      ],
       caption: '',
       uploadProgress: 0,
-      croppedBlob: null,
-      editedBlob: null,
-      selectedDuration: 60 * 60 * 1000, // Par défaut 1 heure
-      storyElements: [], // <-- Ajouté pour stocker les modules interactifs
+      storyElements: [],
     };
   },
   methods: {
@@ -95,8 +129,13 @@ export default {
       this.previewUrl = URL.createObjectURL(blob);
       this.step = 'edit';
     },
-    onFileChange(e) {
-      const file = e.target.files[0];
+    onFileChange(event) {
+      let file;
+      if (event.files && event.files[0]) {
+        file = event.files[0];
+      } else if (event.target && event.target.files && event.target.files[0]) {
+        file = event.target.files[0];
+      }
       if (!file) return;
       if (file.size > 10 * 1024 * 1024) {
         this.error = 'Image trop lourde (max 10 Mo)';
@@ -123,20 +162,15 @@ export default {
       this.step = 'preview';
     },
     async submitStory() {
-      if (!this.editedBlob && !this.croppedBlob) {
-        this.error = 'Merci de recadrer et éditer l’image.';
-        return;
-      }
-      const fileToUpload = this.editedBlob || this.croppedBlob;
+      if (!this.fileSelected) return;
       this.uploading = true;
-      this.uploadProgress = 0;
       this.error = null;
-      this.step = 'upload';
+      this.uploadProgress = 0;
       try {
         const auth = getAuth();
         const user = auth.currentUser;
         if (!user) throw new Error('Vous devez être connecté pour créer une story.');
-        const file = fileToUpload;
+        const file = this.editedBlob || this.croppedBlob;
         const fileName = `story_${user.uid}_${Date.now()}.jpg`;
         const storageReference = storageRef(storage, `stories/${user.uid}/${fileName}`);
         await uploadBytes(storageReference, file).then(() => {
@@ -154,7 +188,7 @@ export default {
           timestamp: now,
           expiresAt: now + (this.selectedDuration || 60 * 60 * 1000), // durée choisie
           viewers: [],
-          elements: this.storyElements || [], // <-- Ajout modules interactifs
+          elements: this.storyElements || [], 
         });
         this.$emit('uploaded');
         this.$emit('close');
@@ -174,168 +208,11 @@ export default {
     },
   },
 };
-
 </script>
 
 <style scoped>
-.add-story-modal {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-}
-
-.modal-content {
-  background: var(--surface-card);
-  border-radius: 8px;
-  padding: 18px 16px 18px 16px;
-  max-width: 90vw;
-  max-height: 90vh;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
-  position: relative;
-  color: var(--text-color, #222);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-}
-
-@media (max-width: 600px) {
-  .modal-content {
-    min-width: unset;
-    padding: 10px 3vw 14px 3vw;
-    border-radius: 6px;
-    max-width: 98vw;
-    max-height: 97vh;
-  }
-}
-
-.modal-content h3 {
-  color: var(--primary-color, #2196f3);
-  font-weight: 700;
-  margin-bottom: 20px;
-  font-size: 1.3rem;
-  letter-spacing: 0.01em;
-}
-
-.story-preview img {
-  max-width: 220px;
-  max-height: 340px;
-  border-radius: 12px;
-  margin-bottom: 14px;
-  box-shadow: 0 2px 12px rgba(33,150,243,0.11);
-}
-
-@media (max-width: 600px) {
-  .story-preview img {
-    max-width: 95vw;
-    max-height: 50vh;
-    border-radius: 6px;
-  }
-}
-
-.caption-input {
-  width: 95%;
-  min-height: 38px;
-  margin: 8px 0 18px 0;
-  border-radius: 8px;
-  border: 1.5px solid var(--surface-border, #e0e0e0);
-  padding: 8px;
-  font-size: 1rem;
-  background: var(--surface-card, #f8fafd);
-  color: var(--text-color, #222);
-  font-family: inherit;
-  transition: border 0.2s;
-}
-.caption-input:focus {
-  border: 1.5px solid var(--primary-color, #2196f3);
-  outline: none;
-}
-
-.add-btn {
-  margin-top: 14px;
-  background: var(--primary-color, #2196f3);
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  padding: 10px 22px;
-  font-size: 1.1rem;
-  font-weight: bold;
-  cursor: pointer;
-  box-shadow: 0 2px 8px rgba(33,150,243,0.10);
-  transition: background 0.18s, box-shadow 0.18s;
-}
-.add-btn:hover:not(:disabled) {
-  background: var(--primary-color-hover, #1565c0);
-  box-shadow: 0 6px 18px rgba(33,150,243,0.13);
-}
-.add-btn:focus-visible {
-  outline: 2px solid var(--primary-color, #2196f3);
-  outline-offset: 2px;
-}
-
-.add-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-.progress-bar-container {
-  width: 100%;
-  background: var(--surface-border, #e0e0e0);
-  border-radius: 8px;
-  height: 14px;
-  margin-bottom: 8px;
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-}
-
-.progress-bar {
-  height: 100%;
-  background: var(--primary-color, #2196f3);
-  transition: width 0.3s;
-}
-
-.error {
-  color: #d32f2f;
-  margin-top: 10px;
-  font-size: 0.98rem;
-}
-
-.close-btn {
-  position: absolute;
-  top: 10px;
-  right: 14px;
-  font-size: 2rem;
-  background: none;
-  border: none;
-  color: var(--primary-color, #2196f3);
-  cursor: pointer;
-  transition: color 0.18s;
-  z-index: 2;
-}
-.close-btn:hover {
-  color: var(--primary-color-hover, #1565c0);
-}
-.close-btn:focus-visible {
-  outline: 2px solid var(--primary-color, #2196f3);
-  outline-offset: 2px;
-}
-
-
-.close-btn {
-  position: absolute;
-  top: 8px;
-  right: 12px;
-  font-size: 1.5rem;
-  border: none;
-  background: none;
-  cursor: pointer;
-}
-.error {
-  color: #d32f2f;
-  margin-top: 10px;
+img {
+  max-width: 360px;
+  border-radius: 18px;
 }
 </style>

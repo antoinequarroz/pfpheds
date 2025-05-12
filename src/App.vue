@@ -12,10 +12,8 @@
       <Toast />
       <router-view />
       <VersionningComponent />
-
       <!-- Intégration du widget ConvAI -->
       <ConvaiWidget />
-
     </div>
 
     <!-- Loader
@@ -25,28 +23,27 @@
 
 <script>
 import Toast from 'primevue/toast';
-import ConvaiWidget from './components/ConvaiWidget.vue'; // Import du composant ConvaiWidget
-import Loader from '@/components/utils/Loader.vue'; // Import du composant Loader
-import VersionningComponent from './components/utils/VersionningComponent.vue'; // Import du nouveau composant
+import ConvaiWidget from './components/ConvaiWidget.vue';
+import Loader from '@/components/utils/Loader.vue';
+import VersionningComponent from './components/utils/VersionningComponent.vue';
 
 export default {
   name: "App",
   components: {
     Toast,
-    ConvaiWidget, // Déclaration du composant
-    Loader, // Déclaration du composant Loader
+    ConvaiWidget,
+    Loader,
     VersionningComponent,
   },
   data() {
     return {
-      isLoading: true, // État de chargement
+      isLoading: true,
     };
   },
   mounted() {
-    // Simuler un chargement de données (par exemple, lors du démarrage de l'application)
     setTimeout(() => {
-      this.isLoading = false; // Masquer le loader après 3 secondes
-    }, 3000); // Temps en millisecondes
+      this.isLoading = false;
+    }, 3000);
   },
 };
 </script>
