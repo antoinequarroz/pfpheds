@@ -68,7 +68,8 @@ const onRemoveTags = (tag) => {
                         <InputText type="text" placeholder="Product SKU" label="SKU" v-model="product.sku" />
                     </div>
                     <div class="col-12">
-                        <Editor editorStyle="height: 320px"></Editor>
+                        <!-- Remplacement Editor PrimeVue par TextAreaComponent (Quill) -->
+                        <TextAreaComponent v-model="product.description" />
                     </div>
                     <div class="col-12 mt-3">
                         <FileUpload
