@@ -620,6 +620,22 @@ const fetchPosts = async () => {
   overflow-y: auto;
 }
 
+.main-feed > .stories-bar {
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  min-height: 100px;
+  max-height: 120px;
+  overflow-y: auto;
+}
+@media (max-width: 600px) {
+  .main-feed > .stories-bar {
+    margin-top: 1.2rem;
+    margin-bottom: 1.2rem;
+    min-height: 64px;
+    max-height: 76px;
+  }
+}
+
 .post-textarea-card {
   border-radius: 0.75rem;
 }
