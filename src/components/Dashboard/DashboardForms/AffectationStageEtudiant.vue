@@ -112,20 +112,20 @@ export default {
             const obj = {};
             obj.Domaine = fullPlace.Domaine || fullPlace.Titre || '';
             obj.ID_PFP = stageId;
-            obj.MSQ = fullPlace.MSQ || false;
-            obj.NEUROGER = fullPlace.NEUROGER || false;
-            obj.REHAB = fullPlace.REHAB || false;
-            obj.AMBU = fullPlace.AMBU || false;
-            obj.FR = fullPlace.FR || false;
-            obj.AIGU = fullPlace.AIGU || false;
-            obj.DE = fullPlace.DE || false;
-            obj.SYSINT = fullPlace.SYSINT || false;
+            obj.MSQ = !!fullPlace.MSQ;
+            obj.NEUROGER = !!fullPlace.NEUROGER;
+            obj.REHAB = !!fullPlace.REHAB;
+            obj.AMBU = !!fullPlace.AMBU;
+            obj.FR = !!fullPlace.FR;
+            obj.AIGU = !!fullPlace.AIGU;
+            obj.DE = !!fullPlace.DE;
+            obj.SYSINT = !!fullPlace.SYSINT;
             PFP_valided.push(obj);
           }
         }
         // Met à jour PFP_2 à la racine
         await update(ref(db, `Students/${this.selectedEtudiant}`), {
-          PFP_2: pfp2
+          'PFP_valided/1': pfp2,
         });
         // Met à jour PFP_valided dans le sous-noeud '1'
         await update(ref(db, `Students/${this.selectedEtudiant}`), {
