@@ -128,8 +128,8 @@ export default {
           PFP_2: pfp2
         });
         // Met à jour PFP_valided dans le sous-noeud '1'
-        await update(ref(db, `Students/${this.selectedEtudiant}/PFP_valided`), {
-          1: PFP_valided
+        await update(ref(db, `Students/${this.selectedEtudiant}`), {
+          'PFP_valided/1': PFP_valided[0]
         });
         this.message = "Stage(s) affecté(s) avec succès !";
       } catch (e) {
