@@ -8,7 +8,7 @@
           v-if="post.IdUser"
           :to="{ name: 'Profile', params: { id: post.IdUser } }"
         >
-      <strong>  <p class="text-primary strong">{{ authorName }}</p></strong>
+          <strong> <p class="text-primary strong">{{ authorName }}</p></strong>
         </router-link>
         <h5 v-else>{{ authorName }}</h5>
         <div>
@@ -29,6 +29,10 @@
         <!-- Spotify Embed -->
         <div v-for="(sp, i) in extractSpotifyLinks(post.Content)" :key="'sp-'+i" class="embed-responsive embed-responsive-16by9 mt-2">
           <iframe :src="getSpotifyEmbedUrl(sp)" frameborder="0" allow="encrypted-media" style="width:100%;min-height:152px;"></iframe>
+        </div>
+        <!-- Instagram, TikTok, Facebook, X Embeds -->
+        <div v-for="(item, i) in extractSocialLinks(post.Content)" :key="'social-'+i" class="embed-responsive embed-responsive-16by9 mt-2">
+          <component :is="item.component" :url="item.url" />
         </div>
       </div>
 
@@ -128,11 +132,15 @@ import { ref as dbRef, onValue, push, serverTimestamp, update, get } from "fireb
 import { db } from "../../../firebase.js";
 import Textarea from "primevue/textarea";
 import Button from "primevue/button";
+import InstagramEmbed from './embeds/InstagramEmbed.vue';
+import TikTokEmbed from './embeds/TikTokEmbed.vue';
+import FacebookEmbed from './embeds/FacebookEmbed.vue';
+import XEmbed from './embeds/XEmbed.vue';
 
 export default {
   name: "PostItem",
   // eslint-disable-next-line vue/no-reserved-component-names
-  components: { Textarea, Button },
+  components: { Textarea, Button, InstagramEmbed, TikTokEmbed, FacebookEmbed, XEmbed },
   props: {
     post: {
       type: Object,
@@ -362,6 +370,40 @@ export default {
       const type = match[1];
       const id = match[2];
       return `https://open.spotify.com/embed/${type}/${id}`;
+    },
+    // --- Social embed helpers ---
+    extractSocialLinks(content) {
+      if (!content) return [];
+      const patterns = [
+        {
+          name: 'instagram',
+          regex: /https?:\/\/(www\.)?instagram\.com\/(p|reel|tv)\/([\w-]+)/gi,
+          component: 'InstagramEmbed',
+        },
+        {
+          name: 'tiktok',
+          regex: /https?:\/\/(www\.)?tiktok\.com\/@[\w.-]+\/video\/[0-9]+/gi,
+          component: 'TikTokEmbed',
+        },
+        {
+          name: 'facebook',
+          regex: /https?:\/\/(www\.)?facebook\.com\/[\w.-]+\/posts\/[0-9]+/gi,
+          component: 'FacebookEmbed',
+        },
+        {
+          name: 'x',
+          regex: /https?:\/\/(twitter|x)\.com\/[\w.-]+\/status\/[0-9]+/gi,
+          component: 'XEmbed',
+        },
+      ];
+      let found = [];
+      patterns.forEach(({ regex, component }) => {
+        let match;
+        while ((match = regex.exec(content))) {
+          found.push({ url: match[0], component });
+        }
+      });
+      return found;
     },
   },
 };
