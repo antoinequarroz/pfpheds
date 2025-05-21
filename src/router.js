@@ -74,6 +74,7 @@ import ProfileAdmin from '@/components/Home/ProfileAdmin.vue'
 import SettingView from '@/components/Home/SettingView.vue'
 import SearchResults from '@/components/Utils/SearchResults.vue'
 import AffectationStageEtudiant from '@/components/Dashboard/DashboardForms/AffectationStageEtudiant.vue'
+import QrCodeGenerator from '@/views/QrCodeGenerator.vue';
 
 // Define your routes
 const routes = [
@@ -182,6 +183,7 @@ const routes = [
     component: () => import('@/components/Dashboard/DashboardDetails/ValidatePFP1A.vue'),
     meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] }
   },
+  { path: '/qr', component: QrCodeGenerator, name: 'QrCodeGenerator' },
 ];
 
 // Create router instance
