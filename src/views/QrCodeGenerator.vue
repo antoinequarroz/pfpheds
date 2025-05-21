@@ -3,6 +3,9 @@
     <canvas ref="canvas" :width="size" :height="size"></canvas>
     <div class="controls">
       <input v-model="url" placeholder="Lien URL à encoder" />
+      <label>Couleur du QR: <input type="color" v-model="fgColor" /></label>
+      <label>Fond: <input type="color" v-model="bgColor" /></label>
+      <label><input type="checkbox" v-model="transparentBg" /> Fond transparent</label>
       <label>Taille(px): <input type="number" min="10" max="1000" v-model.number="size" /></label>
       <button @click="downloadPng" :disabled="!url">Télécharger en PNG</button>
     </div>
@@ -16,28 +19,31 @@ import QRCode from 'qrcode'
 const url = ref('https://')
 const size = ref(240)
 const canvas = ref(null)
+const fgColor = ref('#000000')
+const bgColor = ref('#ffffff')
+const transparentBg = ref(false)
 
-const renderQr = () => {
+const renderQr = async () => {
   if (!canvas.value) return
-  QRCode.toCanvas(canvas.value, url.value, {
+  await QRCode.toCanvas(canvas.value, url.value, {
     width: size.value,
-    margin: 0, // Pas de quiet zone
+    margin: 0,
     color: {
-      dark: '#fff',    // Jaune
-      light: '#00000000', // Transparent
+      dark: fgColor.value,
+      light: transparentBg.value ? '#00000000' : bgColor.value,
     }
   })
 }
 
-watch([url, size], renderQr)
+watch([url, size, fgColor, bgColor, transparentBg], renderQr)
 onMounted(renderQr)
 
 function downloadPng() {
   if (!canvas.value) {
-    alert("QR code non généré !");
-    return;
+    alert('QR code non généré !')
+    return
   }
-  renderQr();
+  renderQr()
   const link = document.createElement('a')
   link.download = 'qr-code.png'
   link.href = canvas.value.toDataURL('image/png')
