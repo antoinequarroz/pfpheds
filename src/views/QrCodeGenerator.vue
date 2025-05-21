@@ -69,6 +69,7 @@ const renderQr = async () => {
   await QRCode.toCanvas(canvas.value, url.value, {
     width: size.value,
     margin: 0,
+    errorCorrectionLevel: 'H',
     color: {
       dark: fgColor.value,
       light: transparentBg.value ? '#00000000' : bgColor.value,
@@ -85,10 +86,12 @@ function downloadPng() {
     return
   }
   renderQr()
-  const link = document.createElement('a')
-  link.download = 'qr-code.png'
-  link.href = canvas.value.toDataURL('image/png')
-  link.click()
+  setTimeout(() => {
+    const link = document.createElement('a')
+    link.download = 'qr-code.png'
+    link.href = canvas.value.toDataURL('image/png')
+    link.click()
+  }, 120)
 }
 </script>
 
@@ -115,6 +118,7 @@ function downloadPng() {
   align-items: center;
   justify-content: center;
   min-height: 320px;
+  position: relative;
 }
 canvas {
   background: transparent;
