@@ -60,36 +60,22 @@ export default {
   display: grid;
   grid-template-columns: 1fr 3fr 1fr; /* Sidebar gauche, MainFeed, Sidebar droite */
   gap: 1.5rem; /* Espace entre les colonnes */
-  height: 100vh; /* Hauteur fixe pour la page */
-  overflow: hidden; /* Empêche tout débordement de contenu */
+  height: 100vh; /* Fixe la hauteur à la fenêtre pour layout 3 colonnes */
 }
 
 /* Sidebar Gauche */
-.sidebar-left {
-  overflow-y: auto; /* Permet de scroller si le contenu dépasse */
+.sidebar-left, .sidebar-right {
+  height: 100vh;
+  overflow: hidden; /* Pas de scroll sur les sidebars */
 }
 
 /* MainFeed (Infinity Scroll) */
 .main-feed {
-  overflow-y: scroll; /* Activer le scroll uniquement pour MainFeed */
+  height: 100vh;
+  overflow-y: auto; /* Seul le flux central scrolle */
   display: flex;
   flex-direction: column;
   gap: 1rem;
-}
-
-/* Masquer la barre de défilement dans le MainFeed */
-.main-feed::-webkit-scrollbar {
-  width: 0; /* Masque la barre de défilement */
-  height: 0;
-}
-
-.main-feed {
-  scrollbar-width: none; /* Masque la barre de défilement pour Firefox */
-}
-
-/* Sidebar Droite */
-.sidebar-right {
-  overflow-y: auto; /* Permet de scroller si nécessaire */
 }
 
 /* RESPONSIVE DESIGN */

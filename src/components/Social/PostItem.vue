@@ -371,18 +371,24 @@ export default {
     async loadCommentAvatars() {
       const userIds = new Set();
       // Collecte tous les IdUser des commentaires et réponses (thread 1 niveau)
-      for (const reply of Object.values(this.post.replies || {})) {
-        if (reply && reply.IdUser) userIds.add(reply.IdUser);
-        if (reply && reply.replies) {
-          for (const subReply of Object.values(reply.replies)) {
-            if (subReply && subReply.IdUser) userIds.add(subReply.IdUser);
+      if (this.post && this.post.replies) {
+        for (const reply of Object.values(this.post.replies || {})) {
+          if (reply && reply.IdUser) userIds.add(reply.IdUser);
+          if (reply && reply.replies) {
+            for (const subReply of Object.values(reply.replies)) {
+              if (subReply && subReply.IdUser) userIds.add(subReply.IdUser);
+            }
           }
         }
       }
       // Pour chaque userId, récupère photoURL si ce n'est pas le currentUser
       for (const userId of userIds) {
         if (userId === (this.currentUserLocal && this.currentUserLocal.uid)) {
-          this.userPhotoCache[userId] = this.currentUserLocal.photoURL;
+          if (this.currentUserLocal && this.currentUserLocal.photoURL) {
+            this.userPhotoCache[userId] = this.currentUserLocal.photoURL;
+          } else {
+            this.userPhotoCache[userId] = null;
+          }
           continue;
         }
         if (!this.userPhotoCache[userId]) {
@@ -396,6 +402,7 @@ export default {
         }
       }
       // Ajoute photoURL à chaque commentaire et réponse pour le template
+      if (!this.post || !this.post.replies) return;
       for (const reply of Object.values(this.post.replies || {})) {
         if (reply && reply.IdUser) reply.photoURL = this.userPhotoCache[reply.IdUser] || null;
         if (reply && reply.replies) {
