@@ -1,32 +1,28 @@
 <template>
-  <div class="add-story-core">
-    <div v-if="step === 1" class="step-container">
-      <div class="step-header">1/4 — Choisir un média</div>
-      <div class="media-select-ui">
-        <button class="media-btn" @click="openCamera">
-          <i class="pi pi-camera"></i> Prendre une photo
-        </button>
-        <button class="media-btn" @click="triggerGallery">
-          <i class="pi pi-image"></i> Choisir depuis la galerie
-        </button>
+  <div class="add-story-core mobile-style">
+    <!-- Header -->
+
+    <!-- Step 1: Choix média -->
+    <div v-if="step === 1" class="media-step">
+      <div class="media-btn-row">
+        <Button class="media-btn camera surface-card" @click="openCamera">
+          <i class="pi pi-camera"></i>
+          <span>Appareil</span>
+        </Button>
+        <Button class="media-btn gallery surface-card" @click="triggerGallery">
+          <i class="pi pi-image"></i>
+          <span>Galerie</span>
+        </Button>
         <input ref="fileInput" type="file" accept="image/*,video/*" @change="onFileChange" style="display:none" />
-        <div v-if="dragActive" class="drag-zone drag-active"
-          @dragover.prevent="dragActive = true"
-          @dragleave.prevent="dragActive = false"
-          @drop.prevent="onDrop">
-          <span>Déposez votre média ici</span>
-        </div>
-        <div v-else class="drag-zone"
-          @dragover.prevent="dragActive = true">
-          <span>Ou glissez-déposez un fichier</span>
-        </div>
       </div>
       <div v-if="previewUrl" class="media-preview">
         <img v-if="isImage" :src="previewUrl" :style="previewStyle" />
         <video v-else :src="previewUrl" controls :style="previewStyle" />
       </div>
-      <button class="publish-btn" @click="goToStep2" :disabled="!previewUrl">Suivant</button>
+
     </div>
+
+    <!-- Étapes suivantes inchangées -->
     <ImageCropper
       v-if="step === 2 && isImage"
       :src="previewUrl"
@@ -252,18 +248,153 @@ export default {
 </script>
 
 <style scoped>
-.add-story-core { display: flex; flex-direction: column; align-items: center; padding: 16px 0; }
-.step-container { width: 100%; max-width: 350px; display: flex; flex-direction: column; align-items: center; }
-.step-header { font-weight: 600; font-size: 1.1rem; margin-bottom: 12px; color: #F3C300; letter-spacing: 0.04em; }
-.info { color: #555; font-size: 0.97rem; margin-bottom: 18px; }
-.media-select-ui { display: flex; flex-direction: column; gap: 10px; align-items: center; width: 100%; }
-.media-btn { background: #fff; color: #222; border: 1.5px solid #F3C300; border-radius: 10px; padding: 10px 18px; font-size: 1.05rem; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: 0 1px 6px rgba(0,0,0,0.05); transition: background .15s; }
-.media-btn:active { background: #f8f8f8; }
-.drag-zone { margin: 12px 0 0 0; width: 98%; min-height: 60px; border: 2px dashed #F3C300; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: #bfa700; font-size: 1rem; background: #fffbe6; cursor: pointer; transition: border .2s; }
-.drag-active { border: 2.5px solid #F3C300; background: #fff8d6; }
-.media-preview { margin: 14px 0 0 0; display: flex; flex-direction: column; align-items: center; }
-.media-preview img, .media-preview video { border-radius: 14px; box-shadow: 0 2px 12px rgba(0,0,0,0.13); }
-textarea { width: 90vw; max-width: 320px; min-height: 40px; border-radius: 8px; border: 1px solid #ccc; padding: 8px; font-size: 1rem; margin: 12px 0; }
+.add-story-core.mobile-style {
+  background: #0a2240;
+  min-height: 100vh;
+  color: #fff;
+  position: relative;
+  padding-bottom: 64px;
+}
+
+.media-step {
+  margin-top: 38px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.media-btn-row {
+  display: flex;
+  gap: 28px;
+  margin-bottom: 36px;
+}
+.media-btn {
+  width: 140px;
+  height: 90px;
+  border-radius: 16px;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  font-weight: 500;
+  background: #11284b;
+  color: #fff;
+  transition: box-shadow 0.2s;
+  box-shadow: 0 2px 8px #0002;
+}
+.media-btn.camera {
+  color: #f3c300;
+}
+.media-btn.camera i {
+  color: #f3c300;
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+.media-btn.camera:hover {
+  color: #fff;
+}
+
+.media-btn.camera i:hover {
+  color: #fff;
+}
+.media-btn.gallery {
+  color: #fff;
+}
+.media-btn.gallery i {
+  color: #fff;
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+.media-btn span {
+  margin-top: 4px;
+  font-size: 17px;
+}
+.media-preview {
+  margin-bottom: 36px;
+}
+.bottom-btns {}
+.step-container {
+  width: 100%;
+  max-width: 350px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.step-header {
+  font-weight: 600;
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  color: #F3C300;
+  letter-spacing: 0.04em;
+}
+.info {
+  color: #555;
+  font-size: 0.97rem;
+  margin-bottom: 18px;
+}
+.media-select-ui {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+  width: 100%;
+}
+.media-btn {
+  background: #fff;
+  color: #222;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 1.05rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.05);
+  transition: background .15s;
+}
+.media-btn:active {
+  background: #f8f8f8;
+}
+.drag-zone {
+  margin: 12px 0 0 0;
+  width: 98%;
+  min-height: 60px;
+  border: 2px dashed #F3C300;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #bfa700;
+  font-size: 1rem;
+  background: #fffbe6;
+  cursor: pointer;
+  transition: border .2s;
+}
+.drag-active {
+  border: 2.5px solid #F3C300;
+  background: #fff8d6;
+}
+.media-preview {
+  margin: 14px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.media-preview img, .media-preview video {
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.13)
+}
+textarea {
+  width: 90vw;
+  max-width: 320px;
+  min-height: 40px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  padding: 8px;
+  font-size: 1rem;
+  margin: 12px 0;
+}
 .publish-btn {
   background: #F3C300;
   color: #181e2a;
@@ -295,9 +426,27 @@ textarea { width: 90vw; max-width: 320px; min-height: 40px; border-radius: 8px; 
   color: #181e2a;
   border: none;
 }
-.cancel-btn { margin-top: 4px; background: #eee; color: #222; border: none; border-radius: 8px; padding: 6px 18px; font-weight: 400; font-size: 1.07rem; }
-.error { color: #d32f2f; margin-top: 8px; font-size: 0.98rem; text-align: center; }
-.step-actions { display: flex; gap: 12px; margin-top: 12px; }
+.cancel-btn {
+  margin-top: 4px;
+  background: #eee;
+  color: #222;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 18px;
+  font-weight: 400;
+  font-size: 1.07rem;
+}
+.error {
+  color: #d32f2f;
+  margin-top: 8px;
+  font-size: 0.98rem;
+  text-align: center;
+}
+.step-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 12px;
+}
 .canvas-container, .canvas-wrapper {
   max-height: 48vh !important;
 }
