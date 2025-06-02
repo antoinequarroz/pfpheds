@@ -24,11 +24,11 @@
         class="avatar"
         :class="{ 'unseen-story': user.hasUnseenStory }"
       />
-      <p>{{ getUserDisplayName(user.userName) }}</p>
+      <p>{{ user.userName }}</p>
     </div>
     <!-- Sur desktop uniquement, dialog AddStory -->
     <AddStory v-if="showAddStory && !isMobile" @close="showAddStory = false" @uploaded="fetchStories" />
-    <StoryModal v-if="selectedStory" :story="selectedStory" @close="selectedStory = null" @refreshStories="fetchStories" />
+    <StoryModal v-if="selectedStory" :story="selectedStory" @close="closeStory" @refreshStories="fetchStories" />
   </div>
 </template>
 
@@ -36,9 +36,10 @@
 import AddStory from './AddStory.vue';
 import StoryModal from './StoryModal.vue';
 import { db } from '../../../../firebase';
-import { ref as dbRef, onValue, update } from 'firebase/database';
+import { ref as dbRef, onValue, update, get } from 'firebase/database';
 import { getCurrentUser } from './Utils/authUser.js';
 import { useRouter } from 'vue-router';
+import eventBus from '@/event-bus';
 
 export default {
   name: 'StoriesBar',
@@ -54,6 +55,18 @@ export default {
       isMobile: window.innerWidth <= 768,
     };
   },
+  watch: {
+    selectedStory(newVal) {
+      // Synchronise l'état story-modal avec App.vue via eventBus
+      if (newVal) {
+        console.log('[StoriesBar] story ouverte, eventBus emit TRUE');
+        eventBus.emit('story-opened', true);
+      } else {
+        console.log('[StoriesBar] story fermée, eventBus emit FALSE');
+        eventBus.emit('story-opened', false);
+      }
+    },
+  },
   async mounted() {
     this.currentUser = await getCurrentUser();
     this.fetchStories();
@@ -63,75 +76,53 @@ export default {
     window.removeEventListener('resize', this.checkMobile);
   },
   methods: {
+    // Affiche le nom complet sans modification
     getUserDisplayName(userName) {
-      if (!userName) return '';
-      if (userName.includes('@')) {
-        return userName.split('@')[0];
-      }
-      return userName;
+      return userName || 'Utilisateur';
     },
-    fetchStories() {
-      // Récupère les stories non expirées depuis la RTDB
-      const now = Date.now();
+    async fetchStories() {
       const storiesRef = dbRef(db, 'stories');
-      onValue(storiesRef, (snapshot) => {
-        const data = snapshot.val();
-        let stories = [];
-        if (data) {
-          const storyEntries = Object.entries(data)
-            .map(([id, story]) => ({ id, ...story }))
+      onValue(storiesRef, async (snapshot) => {
+        const allStories = snapshot.val() || {};
+        const now = Date.now();
+        const users = [];
+        const userPromises = Object.entries(allStories).map(async ([userId, userStories]) => {
+          const userStoriesArr = Object.values(userStories || {})
             .filter(story => story.expiresAt > now)
-            .sort((a, b) => b.expiresAt - a.expiresAt);
-         // Pour chaque story, récupère la photo utilisateur depuis /Users/{userId}/PhotoURL
-         const promises = storyEntries.map(async (story) => {
-           if (story.userId) {
-             try {
-               const userRef = dbRef(db, `Users/${story.userId}/PhotoURL`);
-               const snapshot = await new Promise(resolve => onValue(userRef, resolve, { onlyOnce: true }));
-               const photoURL = snapshot.val();
-               return { ...story, userAvatar: photoURL || story.userAvatar || this.defaultAvatar };
-             } catch {
-               return { ...story, userAvatar: story.userAvatar || this.defaultAvatar };
-             }
-           }
-           return { ...story, userAvatar: story.userAvatar || this.defaultAvatar };
-         });
-         Promise.all(promises).then(storiesWithAvatars => {
-            this.stories = storiesWithAvatars;
-            // Grouper les stories par utilisateur
-            const userMap = {};
-            storiesWithAvatars.forEach(story => {
-              if (!userMap[story.userId]) {
-                userMap[story.userId] = [];
+            .sort((a, b) => b.timestamp - a.timestamp);
+          if (userStoriesArr.length > 0) {
+            // Fallback multi-source pour nom/avatar
+            let userName = userStoriesArr[0].userName || 'Utilisateur';
+            let userAvatar = userStoriesArr[0].userAvatar || this.defaultAvatar;
+            try {
+              const userSnap = await get(dbRef(db, 'Users/' + userId));
+              const userData = userSnap.val();
+              console.log('Profil récupéré pour', userId, ':', userData);
+              if (userData) {
+                userName = userData.displayName || userName;
+                userAvatar = userData.photoURL || userAvatar;
               }
-              userMap[story.userId].push(story);
+            } catch (e) { console.error(e); }
+            // Si toujours rien, fallback ui-avatars
+            if (!userAvatar) {
+              userAvatar = `https://ui-avatars.com/api/?name=${encodeURIComponent(userName || 'Utilisateur')}`;
+            }
+            users.push({
+              userId,
+              userName,
+              userAvatar,
+              stories: userStoriesArr,
+              hasUnseenStory: true
             });
-            this.uniqueUsers = Object.values(userMap).map(stories => {
-              // Trier les stories de l'utilisateur par date
-              stories.sort((a, b) => b.timestamp - a.timestamp);
-              // Vérifier si l'utilisateur courant a vu toutes les stories de cet utilisateur
-              const hasUnseenStory = this.currentUser
-                ? stories.some(story => !(story.viewers || []).includes(this.currentUser.uid))
-                : false;
-              // Utiliser la plus récente pour l'avatar/nom
-              return {
-                userId: stories[0].userId,
-                userName: stories[0].userName,
-                userAvatar: stories[0].userAvatar,
-                stories: stories,
-                hasUnseenStory
-              };
-            });
-          });
-         return;
-        }
-        this.stories = stories;
+          }
+        });
+        await Promise.all(userPromises);
+        this.uniqueUsers = users;
       });
     },
     async openStory(stories) {
-      // stories = tableau de stories de l'utilisateur
       this.selectedStory = stories;
-      // Marquer toutes les stories comme vues pour l'utilisateur courant
+      // eventBus.emit('story-opened', true); // -> Désormais géré par le watcher
       if (this.currentUser) {
         for (const story of stories) {
           if (!(story.viewers || []).includes(this.currentUser.uid)) {
@@ -144,6 +135,10 @@ export default {
         // Refresh stories to update seen status
         setTimeout(() => this.fetchStories(), 500);
       }
+    },
+    async closeStory() {
+      this.selectedStory = null;
+      // eventBus.emit('story-opened', false); // -> Désormais géré par le watcher
     },
     checkMobile() {
       this.isMobile = window.innerWidth <= 768;

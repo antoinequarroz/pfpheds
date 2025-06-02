@@ -3,7 +3,7 @@
   <div class="main-feed">
     <div v-if="isMobile" class="mainfeed-mobile">
       <transition name="fade">
-        <div v-show="showHeaderIcons">
+        <div v-show="showHeaderIcons && !isStoryModalOpen">
           <HeaderIcons />
         </div>
       </transition>
@@ -82,6 +82,7 @@ import TextAreaComponent from "./TextAreaComponent.vue"; // <-- Import du nouvea
 import CreatePostDialog from '@/components/Social/CreatePostDialog.vue';
 import { useRouter } from 'vue-router';
 import HeaderIcons from '@/components/Utils/HeaderIcons.vue'
+import eventBus from '@/event-bus';
 
 import {
   ref as dbRef,
@@ -140,6 +141,7 @@ export default {
     const showHeaderStories = ref(true);
     const showHeaderIcons = ref(true);
     let lastScrollY = 0;
+    const isStoryModalOpen = ref(false);
 
     // Filtres
     const filterTypes = ref([
@@ -562,11 +564,17 @@ export default {
         lastScrollY = window.scrollY;
         window.addEventListener('scroll', handleWindowScroll);
       }
+      eventBus.on('story-opened', (open) => {
+        isStoryModalOpen.value = open;
+      });
     });
 
     // Hook de cycle de vie onUnmounted
     onUnmounted(() => {
       window.removeEventListener('scroll', handleWindowScroll);
+      eventBus.off('story-opened', (open) => {
+        isStoryModalOpen.value = open;
+      });
     });
 
     // --- Ajout : recharger les posts après retour de publication ---
@@ -611,6 +619,7 @@ export default {
       handleCreateClick,
       showHeaderStories,
       showHeaderIcons,
+      isStoryModalOpen,
       // Méthodes
       extractTags,
       postMessage,

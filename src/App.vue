@@ -10,9 +10,16 @@
     <!-- Contenu de l'application -->
     <div class="content">
       <Toast />
-      <router-view />
+      <router-view
+        v-slot="{ Component }"
+      >
+        <component
+          :is="Component"
+        />
+      </router-view>
       <Toast position="bottom-center" />
-      <MobileBottomNav v-if="showMobileBottomNav" />
+      <HeaderIcons v-if="!isStoryModalOpen" />
+      <MobileBottomNav v-if="showMobileBottomNav && !isStoryModalOpen" />
       <VersionningComponent />
       <PwaInstallPrompt />
       <!-- Intégration du widget ConvAI -->
@@ -32,7 +39,8 @@ import Loader from '@/components/utils/Loader.vue'; // Import du composant Loade
 import VersionningComponent from './components/utils/VersionningComponent.vue'; // Import du nouveau composant
 import MobileBottomNav from '@/components/Utils/MobileBottomNav.vue';
 import PwaInstallPrompt from '@/components/Utils/PwaInstallPrompt.vue';
-import HeaderIcons from '@/components/Utils/HeaderIcons.vue'
+import HeaderIcons from '@/components/Utils/HeaderIcons.vue';
+import eventBus from '@/event-bus';
 
 export default {
   name: "App",
@@ -49,6 +57,7 @@ export default {
     return {
       isLoading: true, // État de chargement
       showMobileBottomNav: true,
+      isStoryModalOpen: false,
     };
   },
   computed: {
@@ -59,10 +68,6 @@ export default {
         'LoginHome',
         'CreatePostDialog',
         'StoryEditor',
-        'StoryModal',
-        'AddStory',
-        'AddStoryCore',
-        'AddStoryMobile',
       ];
       // Affiche uniquement sur mobile
       return window.innerWidth <= 600 && !excluded.includes(routeName);
@@ -79,6 +84,10 @@ export default {
     }
   },
   mounted() {
+    eventBus.on('story-opened', (open) => {
+      console.log('[App.vue] eventBus story-opened reçu:', open);
+      this.isStoryModalOpen = open;
+    });
     // Simuler un chargement de données (par exemple, lors du démarrage de l'application)
     setTimeout(() => {
       this.isLoading = false; // Masquer le loader après 3 secondes
@@ -87,6 +96,9 @@ export default {
     if (this.$route.name === 'LoginHome') {
       this.showMobileBottomNav = false;
     }
+  },
+  beforeUnmount() {
+    eventBus.off('story-opened');
   },
 };
 </script>

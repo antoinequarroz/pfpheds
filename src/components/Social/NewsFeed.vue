@@ -16,16 +16,17 @@
       <RightSidebar />
     </div>
   </div>
-  <MobileBottomNav :scrollTarget="mainFeedRef" />
+  <MobileBottomNav v-if="!isStoryModalOpen" :scrollTarget="mainFeedRef" />
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
 import LeftSidebar from '@/components/Bibliotheque/Social/LeftSidebar.vue'
 import MainFeed from '@/components/Bibliotheque/Social/MainFeed.vue'
 import RightSidebar from '@/components/Bibliotheque/Social/RightSidebar.vue'
 import Navbar from '@/components/Utils/Navbar.vue'
 import MobileBottomNav from '@/components/Utils/MobileBottomNav.vue'
+import eventBus from '@/event-bus';
 
 export default {
   components: {
@@ -37,7 +38,18 @@ export default {
   },
   setup() {
     const mainFeedRef = ref(null);
-    return { mainFeedRef };
+    const isStoryModalOpen = ref(false);
+
+    const handler = (open) => {
+      isStoryModalOpen.value = open;
+    };
+    onMounted(() => {
+      eventBus.on('story-opened', handler);
+    });
+    onBeforeUnmount(() => {
+      eventBus.off('story-opened', handler);
+    });
+    return { mainFeedRef, isStoryModalOpen };
   }
 };
 </script>
