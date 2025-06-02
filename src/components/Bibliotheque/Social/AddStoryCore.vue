@@ -83,6 +83,7 @@ import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'fire
 import { ref as dbRef, push, set } from 'firebase/database';
 import { getAuth } from 'firebase/auth';
 import { db } from '../../../../firebase.js';
+import { Camera, CameraResultType, CameraSource } from '@capacitor/camera';
 import StoryEditor from './StoryEditor.vue';
 import ImageCropper from './ImageCropper.vue';
 
@@ -127,9 +128,23 @@ export default {
     }
   },
   methods: {
-    openCamera() {
-      // Si Capacitor/Ionic, utiliser la caméra native
-      this.$toast && this.$toast.add({severity:'info', summary:'Fonction caméra à intégrer (voir Capacitor Camera)', life: 1800});
+    async openCamera() {
+      try {
+        const photo = await Camera.getPhoto({
+          quality: 80,
+          allowEditing: false,
+          resultType: CameraResultType.DataUrl, // base64
+          source: CameraSource.Camera,
+        });
+        if (photo && photo.dataUrl) {
+          this.previewUrl = photo.dataUrl;
+          this.isImage = true;
+        }
+      } catch (err) {
+        // Si l'utilisateur annule ou refuse, on ne fait rien
+        if (err && err.message && err.message.includes('User cancelled photos app')) return;
+        this.$toast && this.$toast.add({severity:'error', summary:'Erreur caméra', detail: err.message, life: 2500});
+      }
     },
     triggerGallery() {
       this.$refs.fileInput.click();

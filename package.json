@@ -11,11 +11,15 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@capacitor/camera": "^7.0.1",
+    "@capacitor/cli": "^7.2.0",
+    "@capacitor/core": "^7.2.0",
     "@fullcalendar/core": "^6.1.8",
     "@fullcalendar/daygrid": "^6.1.8",
     "@fullcalendar/interaction": "^6.1.8",
     "@fullcalendar/timegrid": "^6.1.8",
     "@fullcalendar/vue3": "^6.1.8",
+    "@ionic/pwa-elements": "^3.3.0",
     "chart.js": "^4.4.7",
     "csv-parser": "^3.0.0",
     "csv-stringify": "^6.5.0",

@@ -106,13 +106,14 @@ import TreeSelect from 'primevue/treeselect';
 import TreeTable from 'primevue/treetable';
 import VirtualScroller from 'primevue/virtualscroller';
 
-
-
 import BlockViewer from '@/components/BlockViewer.vue';
 
 import '@/assets/styles.scss';
 import "primeflex/primeflex.css";
 import '@/assets/mobile-scale.css'; 
+
+import { defineCustomElements } from '@ionic/pwa-elements/loader';
+defineCustomElements(window);
 
 const app = createApp(App);
 
