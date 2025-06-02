@@ -18,7 +18,6 @@
         />
       </router-view>
       <Toast position="bottom-center" />
-      <HeaderIcons v-if="!isStoryModalOpen" />
       <MobileBottomNav v-if="showMobileBottomNav && !isStoryModalOpen" />
       <VersionningComponent />
       <PwaInstallPrompt />
@@ -39,7 +38,6 @@ import Loader from '@/components/utils/Loader.vue'; // Import du composant Loade
 import VersionningComponent from './components/utils/VersionningComponent.vue'; // Import du nouveau composant
 import MobileBottomNav from '@/components/Utils/MobileBottomNav.vue';
 import PwaInstallPrompt from '@/components/Utils/PwaInstallPrompt.vue';
-import HeaderIcons from '@/components/Utils/HeaderIcons.vue';
 import eventBus from '@/event-bus';
 
 export default {
@@ -50,8 +48,7 @@ export default {
     Loader, // Déclaration du composant Loader
     VersionningComponent,
     MobileBottomNav,
-    PwaInstallPrompt,
-    HeaderIcons
+    PwaInstallPrompt
   },
   data() {
     return {
