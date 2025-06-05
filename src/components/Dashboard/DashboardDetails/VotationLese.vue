@@ -330,13 +330,7 @@ export default {
         }))
         .sort((a, b) => b.criteriaCount - a.criteriaCount);
 
-      const groupsWithMoreThanFive = allGroups.filter(g => g.places.length > 5);
-      if (groupsWithMoreThanFive.length > 0) {
-        const maxCriteriaCount = Math.max(...groupsWithMoreThanFive.map(g => g.criteriaCount));
-        return allGroups.filter(g => g.criteriaCount === maxCriteriaCount);
-      } else {
-        return allGroups;
-      }
+      return allGroups;
     },
     // Nombre total de places sélectionnées parmi les places disponibles
     totalSelectedOut() {
