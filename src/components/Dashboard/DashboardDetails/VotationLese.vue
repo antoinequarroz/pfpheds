@@ -294,6 +294,9 @@ export default {
     availablePlaces() {
   let places = this.expandedPFP4;
 
+  // Exclure les places où selectedActiveBA23PFP3-1 === false
+  places = places.filter(place => place['selectedActiveBA23PFP3-1'] !== false);
+
   if (this.allCriteriaValidated) {
     return places;
   }
