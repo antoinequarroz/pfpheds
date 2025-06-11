@@ -20,6 +20,7 @@ export const useEventStore = defineStore('event', () => {
             endDate: ev.endDate || '',
             type: ev.type || 'public',
             role: ev.role || '',
+            admin: ev.admin || '',
             likes: ev.likes || 0,
             liked: ev.liked || false,
             registered: Array.isArray(ev.registered) ? ev.registered : (ev.registered && typeof ev.registered === 'object' ? Object.values(ev.registered) : [])

@@ -131,28 +131,38 @@ export default {
     },
     registeredEvents() {
       const now = new Date();
+      // DEBUG
+      console.log('[DEBUG] userId:', this.userId, 'user.id:', this.user.id, 'user.Roles:', this.user.Roles);
+      console.log('[DEBUG] events:', this.events);
+      this.events.forEach(ev => {
+        console.log('[DEBUG] Event:', ev.title, 'registered:', this.toArray(ev.registered), 'userId:', this.userId);
+      });
       return this.events
         .filter(ev => {
-          const reg = this.toArray(ev.registered);
-          return this.userId && reg.includes(this.userId) && new Date(ev.startDate) >= now;
+          const reg = this.toArray(ev.registered).map(id => String(id).trim());
+          const userId = String(this.userId).trim();
+          return userId && reg.includes(userId) && new Date(ev.startDate) >= now;
         })
         .sort((a, b) => new Date(a.startDate) - new Date(b.startDate));
     },
     accessibleEvents() {
+      // Affiche les événements accessibles : publics OU privés accessibles par rôle ou admin
       const now = new Date();
       const already = new Set(this.registeredEvents.map(ev => ev.id));
+      // DEBUG
+      console.log('[DEBUG] accessibleEvents - user:', this.user);
+      const userId = String(this.userId).trim();
       return this.events
         .filter(ev => {
-          const reg = this.toArray(ev.registered);
-          return !already.has(ev.id)
-            && new Date(ev.startDate) >= now
-            && (
-              ev.type === 'public'
-              || (ev.type === 'private' && (
-                (ev.role && this.userId && this.$root?.$?.appContext.provides?.userState?.user?.role === ev.role)
-                || ev.admin === this.userId
-              ))
-            );
+          const reg = this.toArray(ev.registered).map(id => String(id).trim());
+          return (
+            (!userId || !reg.includes(userId)) && // L'utilisateur n'est PAS inscrit
+            new Date(ev.startDate) >= now &&
+            (
+              ev.type === 'public' ||
+              (ev.type === 'private' && (ev.admin && this.user.id && ev.admin === this.user.id))
+            )
+          );
         })
         .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
         .slice(0, 5);
@@ -289,8 +299,6 @@ export default {
       if (typeof date === 'string') date = new Date(date);
       return date.toLocaleDateString('fr-CH', { month: '2-digit', day: '2-digit' });
     },
-  },
-  methods: {
     toArray(val) {
       if (Array.isArray(val)) return val;
       if (val && typeof val === 'object') return Object.values(val);
@@ -366,7 +374,7 @@ export default {
         this.fetchRecentConversations();
       }
     });
-    // Inject events if provided by parent (EventManagement.vue)
+    // Inject events if provided by  parent (EventManagement.vue)
     if (this.$root && this.$root.$emit) {
       this.$root.$emit('request-events', (events) => {
         if (Array.isArray(events)) {
