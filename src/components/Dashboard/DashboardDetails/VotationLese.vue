@@ -292,29 +292,28 @@ export default {
     // Retourne les places disponibles. Si tous les critères sont validés, retourne toutes les places ;
     // sinon, filtre selon les nouveaux critères.
     availablePlaces() {
-  let places = this.expandedPFP4;
+      let places = this.expandedPFP4;
+      // Exclure les places où selectedActiveBA23PFP3-1 === false
+      places = places.filter(place => place['selectedActiveBA23PFP3-1'] !== false);
 
-  // Exclure les places où selectedActiveBA23PFP3-1 === false
-  places = places.filter(place => place['selectedActiveBA23PFP3-1'] !== false);
+      if (this.allCriteriaValidated) {
+        return places;
+      }
 
-  if (this.allCriteriaValidated) {
-    return places;
-  }
+      const manqueFR = !this.aggregatedPFP.FR;
+      const manqueDE = !this.aggregatedPFP.DE;
 
-  const manqueFR = !this.aggregatedPFP.FR;
-  const manqueDE = !this.aggregatedPFP.DE;
-
-  if (manqueFR && manqueDE) {
-    return places.filter(place => !!place.FR || !!place.DE);
-  }
-  if (manqueFR) {
-    return places.filter(place => !!place.FR);
-  }
-  if (manqueDE) {
-    return places.filter(place => !!place.DE);
-  }
-  return places;
-},
+      if (manqueFR && manqueDE) {
+        return places.filter(place => !!place.FR || !!place.DE);
+      }
+      if (manqueFR) {
+        return places.filter(place => !!place.FR);
+      }
+      if (manqueDE) {
+        return places.filter(place => !!place.DE);
+      }
+      return places;
+    },
     // Regroupe les places disponibles par nombre de nouveaux critères validés
     groupedByCriteriaCount() {
       const groups = {};
@@ -333,6 +332,7 @@ export default {
         }))
         .sort((a, b) => b.criteriaCount - a.criteriaCount);
 
+      // Si un groupe a plus de 5 places, n'affiche que les groupes avec le nombre max de critères validés
       const groupsWithMoreThanFive = allGroups.filter(g => g.places.length > 5);
       if (groupsWithMoreThanFive.length > 0) {
         const maxCriteriaCount = Math.max(...groupsWithMoreThanFive.map(g => g.criteriaCount));
