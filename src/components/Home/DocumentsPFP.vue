@@ -2,7 +2,7 @@
   <!-- Insertion du composant Navbar -->
   <Navbar />
 
-  <div class="grid">
+  <div class="scrollable-content grid">
     <!-- Parcours de chaque dossier -->
     <div class="col-12 md:col-12">
       <div class="grid">
@@ -356,5 +356,19 @@ const saveNewFile = async (newFile) => {
 .add-file-button {
   margin-top: 1rem;
   text-align: center;
+}
+.scrollable-content {
+  height: 100vh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  /* Pour iOS */
+  padding-bottom: 70px; /* Pour ne pas cacher le contenu sous la nav mobile */
+}
+</style>
+
+<style>
+html, body, #app {
+  height: 100%;
+  min-height: 100vh;
 }
 </style>
