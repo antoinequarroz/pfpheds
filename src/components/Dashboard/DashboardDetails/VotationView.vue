@@ -19,6 +19,8 @@
       <!-- Affichage des places disponibles -->
       <div v-if="allCriteriaValidated">
         <h2>Toutes les places disponibles ( {{ availablePlaces.length }} places )</h2>
+<Button label="Créer JSON" icon="pi pi-download" class="p-button-success m-2" @click="downloadPlacesJson" />
+<Button label="Créer JSON" icon="pi pi-download" class="p-button-success m-2" @click="downloadPlacesJson" />
         <DataTable :value="availablePlaces" class="p-datatable-sm custom-datatable" responsiveLayout="scroll">
           <!-- Colonne Institution avec lien -->
           <Column header="Institution">
@@ -755,6 +757,19 @@ export default {
     },
     getVoteCount(place) {
       return this.votesAggregation[place.IdPlace] || { top1: 0, top2: 0, top3: 0, top4: 0, top5: 0, total: 0 };
+    },
+    downloadPlacesJson() {
+      // Génère le JSON à partir des places disponibles
+      const dataStr = JSON.stringify(this.availablePlaces, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'places.json';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
     }
   },
   mounted() {

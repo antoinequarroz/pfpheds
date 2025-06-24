@@ -58,6 +58,7 @@ import PlacesAssigned from '@/components/Dashboard/DashboardDetails/PlacesAssign
 import ManagementPFPEnCours from '@/components/Dashboard/DashboardDetails/ManagementPFPEnCours.vue';
 import ManagementRepondant from '@/components/Dashboard/DashboardDetails/Management_repondant.vue';
 import InfoRepondant from '@/components/Dashboard/DashboardDetails/Info_repondant.vue';
+import EventDetails from '@/views/EventDetails.vue';
 import LoginHome from '@/components/Utils/LoginHome.vue';
 import NewsFeed from '@/components/Social/NewsFeed.vue';
 import HashtagPage from '@/components/Social/HashtagPage.vue';
@@ -80,6 +81,13 @@ import QrCodeGenerator from '@/components/QrCodeGenerator.vue'
 
 // Define your routes
 const routes = [
+  {
+    path: '/events/:id',
+    name: 'EventDetails',
+    component: EventDetails,
+    props: true,
+    meta: { requiresAuth: true }
+  },
   { path: '/', component: LoginHome, name: 'LoginHome',   props: true   }, // Fil d'actualité
   { path: '/home', component: LoginHome, name: 'LoginHome',   props: true   }, // Fil d'actualité
   { path: '/feed', component: NewsFeed, name: 'NewsFeed',   props: true, meta: { requiresAuth: true } }, // Fil d'actualité
@@ -176,6 +184,11 @@ const routes = [
     path: '/template-test',
     name: 'TemplateTest',
     component: () => import('@/views/TemplateTest.vue')
+  },
+  {
+    path: '/algo',
+    name: 'Algo',
+    component: () => import('@/views/dashboards/AlgoView.vue')
   },
   {
     path: '/validate-pfp1a',

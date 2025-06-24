@@ -20,6 +20,7 @@ export const useEventStore = defineStore('event', () => {
             endDate: ev.endDate || '',
             type: ev.type || 'public',
             role: ev.role || '',
+            admin: ev.admin || '',
             likes: ev.likes || 0,
             liked: ev.liked || false,
             registered: Array.isArray(ev.registered) ? ev.registered : (ev.registered && typeof ev.registered === 'object' ? Object.values(ev.registered) : [])
@@ -69,5 +70,31 @@ export const useEventStore = defineStore('event', () => {
     await update(eventRef, { registered: newList });
   }
 
-  return { events, listenEvents, addEvent, updateEvent, toggleRegistration };
+  // Ajoute un participant à un événement
+  async function addParticipantToEvent(eventId, userId) {
+    const eventRef = dbRef(db, `events/${eventId}`);
+    // Récupérer la liste actuelle
+    const snapshot = await new Promise(resolve => onValue(eventRef, resolve, { onlyOnce: true }));
+    const event = snapshot.val();
+    let registered = event && event.registered ? event.registered : [];
+    if (!registered.includes(userId)) {
+      registered = [...registered, userId];
+      await update(eventRef, { registered });
+    }
+  }
+
+  // Retire un participant d'un événement
+  async function removeParticipantFromEvent(eventId, userId) {
+    const eventRef = dbRef(db, `events/${eventId}`);
+    // Récupérer la liste actuelle
+    const snapshot = await new Promise(resolve => onValue(eventRef, resolve, { onlyOnce: true }));
+    const event = snapshot.val();
+    let registered = event && event.registered ? event.registered : [];
+    if (registered.includes(userId)) {
+      registered = registered.filter(id => id !== userId);
+      await update(eventRef, { registered });
+    }
+  }
+
+  return { events, listenEvents, addEvent, updateEvent, toggleRegistration, addParticipantToEvent, removeParticipantFromEvent };
 });

@@ -46,10 +46,10 @@
         <div class="event-list-scrollable">
           <h3>Événements à venir</h3>
           <div v-if="eventStore.events.length === 0" class="empty">Aucun événement pour l'instant.</div>
-          <div v-for="event in eventStore.events" :key="event.id" class="event-card-beautiful">
+          <div v-for="event in eventStore.events" :key="event.id" class="event-card-beautiful event-card-link" @click="goToEventDetails(event.id)">
             <div class="event-card-header">
               <span class="event-date-pill"><i class="pi pi-calendar"></i> {{ formatDate(event.startDate) }} - {{ formatDate(event.endDate) }}</span>
-              <Button icon="pi pi-heart" :label="event.likes.toString()" class="p-button-rounded p-button-text p-button-danger event-like-btn" :severity="event.liked ? 'danger' : undefined" @click="likeEvent(event)" />
+              <Button icon="pi pi-heart" :label="event.likes.toString()" class="p-button-rounded p-button-text p-button-danger event-like-btn" :severity="event.liked ? 'danger' : undefined" @click.stop="likeEvent(event)" />
             </div>
             <div class="event-title-main">{{ event.title }}</div>
             <div class="event-description-main">{{ event.description }}</div>
@@ -62,7 +62,7 @@
         :label="event.registered && event.registered.includes(userId) ? 'Inscrit !' : 'S\'inscrire'"
         class="p-button-rounded p-button-primary event-register-btn"
         :severity="event.registered && event.registered.includes(userId) ? 'success' : 'primary'"
-        @click="registerEvent(event)" />
+        @click.stop="registerEvent(event)" />
             </div>
           </div>
         </div>
@@ -78,6 +78,12 @@
 
 <script setup>
 import { ref, computed, onMounted, inject } from 'vue';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+function goToEventDetails(id) {
+  router.push({ name: 'EventDetails', params: { id } });
+}
 import { useEventStore } from '@/stores/eventStore';
 import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
@@ -334,5 +340,12 @@ h2 {
   h2 {
     text-align: center;
   }
+}
+.event-card-link {
+  cursor: pointer;
+  transition: box-shadow 0.2s;
+}
+.event-card-link:hover {
+  box-shadow: 0 2px 12px rgba(60,60,60,0.18);
 }
 </style>
