@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="notes-main">
     <Navbar />
     <!-- Dialog création classeur -->
     <Dialog v-model:visible="showNotebookDialog" header="Nouveau classeur" :modal="true" :closable="false">
@@ -58,28 +58,32 @@
       </template>
     </Dialog>
     <div class="notes-workspace">
-      <NotebookSidebar
-        :notebooks="notebooks"
-        @select="selectNotebook"
-        @create-notebook="showNotebookDialog = true"
-        @edit-notebook="openEditNotebook"
-        @delete-notebook="openDeleteNotebook"
-      />
-      <PageList
-        v-if="selectedNotebook"
-        :pages="pages"
-        @select="selectPage"
-        @create-page="showPageDialog = true"
-        @edit-page="openEditPage"
-        @delete-page="openDeletePage"
-      />
-      <NoteEditor
-        v-if="selectedPage"
-        :page="selectedPage"
-        @save="savePage"
-      />
-      <div v-else-if="selectedNotebook" class="empty-editor">Sélectionne ou crée une feuille</div>
-      <div v-else class="empty-editor">Sélectionne ou crée un classeur</div>
+      <div class="sidebar-col">
+        <NotebookSidebar
+          :notebooks="notebooks"
+          @select="selectNotebook"
+          @create-notebook="showNotebookDialog = true"
+          @edit-notebook="openEditNotebook"
+          @delete-notebook="openDeleteNotebook"
+        />
+      </div>
+      <div class="pages-col" v-if="selectedNotebook">
+        <PageList
+          :pages="pages"
+          @select="selectPage"
+          @create-page="showPageDialog = true"
+          @edit-page="openEditPage"
+          @delete-page="openDeletePage"
+        />
+      </div>
+      <div class="editor-col" v-if="selectedPage">
+        <NoteEditor
+          :page="selectedPage"
+          @save="savePage"
+        />
+      </div>
+      <div v-else-if="selectedNotebook" class="editor-col empty-editor">Sélectionne ou crée une feuille</div>
+      <div v-else class="editor-col empty-editor">Sélectionne ou crée un classeur</div>
     </div>
   </div>
 </template>
@@ -149,7 +153,12 @@ onBeforeUnmount(() => {
 
 async function loadPages(notebookId) {
   try {
+    const currentPageId = selectedPage.value?.id
     pages.value = await notesService.fetchPages(notebookId)
+    if (currentPageId) {
+      const found = pages.value.find(p => p.id === currentPageId)
+      if (found) selectedPage.value = found
+    }
   } catch (e) {
     pages.value = []
     toast.add({ severity: 'error', summary: 'Erreur', detail: 'Erreur de chargement des feuilles', life: 4000 })
@@ -157,9 +166,16 @@ async function loadPages(notebookId) {
 }
 
 function selectNotebook(notebook) {
-  selectedNotebook.value = notebook
-  selectedPage.value = null
-  loadPages(notebook.id)
+  // Si on change vraiment de notebook, on reset la page sélectionnée
+  if (!selectedNotebook.value || notebook.id !== selectedNotebook.value.id) {
+    selectedNotebook.value = notebook
+    selectedPage.value = null
+    loadPages(notebook.id)
+  } else {
+    // Si c'est une resynchro ou une sélection identique, ne touche pas selectedPage
+    selectedNotebook.value = notebook
+    loadPages(notebook.id)
+  }
 }
 
 function selectPage(page) {
@@ -268,27 +284,55 @@ async function deletePageConfirm() {
   }
   showDeletePageDialog.value = false
 }
-async function savePage({ title, content }) {
-  if (selectedPage.value && selectedNotebook.value) {
-    try {
-      await notesService.updatePage(selectedNotebook.value.id, selectedPage.value.id, { ...selectedPage.value, title, content })
-      toast.add({ severity: 'success', summary: 'Feuille sauvegardée', life: 2000 })
-      await loadPages(selectedNotebook.value.id)
-      // conserve la sélection
-      const p = pages.value.find(pg => pg.id === selectedPage.value.id)
-      if (p) selectPage(p)
-    } catch (e) {
-      toast.add({ severity: 'error', summary: 'Erreur', detail: "Impossible de sauvegarder la feuille", life: 4000 })
-    }
+async function savePage(pageData) {
+  if (!selectedNotebook.value || !selectedPage.value) return
+  try {
+    await notesService.updatePage(selectedNotebook.value.id, selectedPage.value.id, pageData)
+  } catch (e) {
+    toast.add({ severity: 'error', summary: 'Erreur', detail: "Impossible d'enregistrer la feuille", life: 4000 })
   }
 }
 </script>
 
 <style scoped>
+.notes-main {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 .notes-workspace {
   display: flex;
+  flex: 1;
+  min-height: 0;
+  background: var(--surface-a, #18191c);
+}
+.sidebar-col {
+  width: 260px;
+  min-width: 200px;
+  max-width: 320px;
   height: 100vh;
-  background: #fafbfc;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.pages-col {
+  width: 300px;
+  min-width: 220px;
+  max-width: 400px;
+  height: 100vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.editor-col {
+  flex: 1;
+  min-width: 0;
+  height: 100vh;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.sidebar-col::-webkit-scrollbar,
+.pages-col::-webkit-scrollbar,
+.editor-col::-webkit-scrollbar {
+  display: none;
 }
 .empty-editor {
   flex: 1;

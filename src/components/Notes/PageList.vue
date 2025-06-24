@@ -1,5 +1,5 @@
 <template>
-  <Panel header="Feuilles" class="page-list">
+  <Panel header="Feuilles" class="page-list page-list-panel">
     <InputText v-model="search" placeholder="Rechercher une feuille..." class="p-mb-2" />
     <ul class="page-list-ul">
       <li v-for="page in filteredPages" :key="page.id" :class="{active: selectedPageId === page.id}">
@@ -49,7 +49,10 @@ function formatDate(date) {
   min-width: 200px;
   height: 100vh;
   border-right: 1px solid #e0e0e0;
-  background: var(--surface-b);
+}
+.page-list-panel {
+  background: transparent;
+  box-shadow: none;
 }
 .page-list-ul {
   list-style: none;

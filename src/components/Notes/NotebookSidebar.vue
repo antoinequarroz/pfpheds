@@ -1,5 +1,5 @@
 <template>
-  <Panel header="Mes classeurs" class="notebook-sidebar">
+  <Panel header="Mes classeurs" class="notebook-sidebar-panel notebook-sidebar">
     <ul class="notebook-list">
       <li v-for="notebook in notebooks" :key="notebook.id" :class="{active: selectedNotebookId === notebook.id}">
         <span @click="$emit('select', notebook)">{{ notebook.name }}</span>
@@ -24,11 +24,14 @@ const selectedNotebookId = null // la sélection est gérée dans la vue princip
 </script>
 
 <style scoped>
+.notebook-sidebar-panel {
+  background: transparent;
+  box-shadow: none;
+}
 .notebook-sidebar {
   min-width: 240px;
   height: 100vh;
   border-right: 1px solid #e0e0e0;
-  background: var(--surface-a);
 }
 .notebook-list {
   list-style: none;
