@@ -310,52 +310,117 @@ async function savePage(pageData) {
   background: var(--surface-a, #18191c);
   overflow: hidden;
 }
-.sidebar-col,
-.pages-col,
-.editor-col {
-  flex: 1 1 0;
-  min-width: 0;
-  min-height: 0;
-  height: auto;
-  max-height: none;
-  overflow-y: auto;
-  scrollbar-width: none;
-  padding-bottom: 48px;
-  box-sizing: border-box;
+.notes-workspace .sidebar-col,
+.notes-workspace .pages-col,
+.notes-workspace .editor-col {
+  border-radius: 20px;
+  box-shadow: 0 2px 16px 0 #0003;
+  margin: 18px 8px 18px 8px;
+  background: #23242a;
+  border: 1.5px solid #282a36;
+  overflow: hidden;
+  transition: box-shadow 0.2s, border 0.2s;
 }
-.sidebar-col {
-  flex: 0 0 260px;
-  width: 260px;
+.notes-workspace .sidebar-col {
   min-width: 200px;
   max-width: 320px;
+  flex: 0 0 260px;
 }
-.pages-col {
-  flex: 0 0 300px;
-  width: 300px;
+.notes-workspace .pages-col {
   min-width: 220px;
   max-width: 400px;
+  flex: 0 0 300px;
 }
-.editor-col {
+.notes-workspace .editor-col {
   flex: 1 1 0;
   min-width: 0;
 }
-.sidebar-col::-webkit-scrollbar,
-.pages-col::-webkit-scrollbar,
-.editor-col::-webkit-scrollbar {
-  display: none;
+
+/* Boutons PrimeVue visibles et modernes */
+.notes-workspace .p-button {
+  border-radius: 12px !important;
+  font-weight: 600;
+  font-size: 1.02em;
+  background: linear-gradient(90deg, #ffd700 60%, #ffb400 100%);
+  color: #23242a !important;
+  border: none !important;
+  box-shadow: 0 2px 10px #ffd70033;
+  margin: 0.15em 0.2em;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
 }
-.empty-editor {
+.notes-workspace .p-button.p-button-text {
+  background: none !important;
+  color: #ffd700 !important;
+  border: 2px solid #ffd70033 !important;
+  box-shadow: none !important;
+}
+.notes-workspace .p-button:hover, .notes-workspace .p-button:focus {
+  background: linear-gradient(90deg, #ffe066 60%, #ffd700 100%) !important;
+  color: #1a1a1a !important;
+  box-shadow: 0 4px 16px #ffd70055;
+}
+
+/* Pour les boutons d'action (stylo, poubelle, etc.) dans les colonnes */
+.notes-workspace :deep(.p-button-icon-only) {
+  background: #ffd70022 !important;
+  color: #ffd700 !important;
+  border-radius: 50% !important;
+  box-shadow: none !important;
+  margin: 0 0.15em;
+  transition: background 0.15s, color 0.15s;
+}
+.notes-workspace :deep(.p-button-icon-only):hover {
+  background: #ffd70055 !important;
+  color: #23242a !important;
+}
+
+/* Titres et placeholders */
+.notes-workspace .p-inputtext {
+  border-radius: 8px;
+  background: #23242a;
+  color: #ffd700;
+  border: 1.5px solid #ffd70055;
+  font-weight: 500;
+}
+.notes-workspace .p-inputtext::placeholder {
+  color: #ffd70077;
+}
+
+/* Dialogs arrondis */
+.notes-workspace .p-dialog {
+  border-radius: 18px !important;
+  overflow: hidden;
+}
+.notes-workspace .p-dialog .p-dialog-header,
+.notes-workspace .p-dialog .p-dialog-footer {
+  border-radius: 0 !important;
+}
+
+/* Navbar arrondi (si présent) */
+.notes-workspace :deep(.navbar) {
+  border-radius: 18px 18px 0 0 !important;
+  margin: 8px 8px 0 8px !important;
+}
+
+/* Responsive ajusté */
+@media (max-width: 1100px) {
+  .notes-workspace .sidebar-col, .notes-workspace .pages-col {
+    margin: 10px 3px;
+    min-width: 120px;
+    max-width: 180px;
+  }
+  .notes-workspace .editor-col {
+    margin: 10px 3px;
+  }
+}
+
+/* Empty editor message */
+.notes-workspace .empty-editor {
+  color: #999;
+  font-size: 1.2rem;
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #999;
-  font-size: 1.2rem;
-}
-.notes-main,
-.notes-workspace {
-  min-height: 0;
-  height: 100vh;
-  overflow: hidden;
 }
 </style>

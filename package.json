@@ -70,6 +70,6 @@
     "sass": "^1.62.1",
     "vite": "^5.1.6",
     "vite-plugin-pwa": "^1.0.0",
-    "vite-plugin-vue-devtools": "^7.0.18"
+    "vite-plugin-vue-devtools": "^7.7.7"
   }
 }
