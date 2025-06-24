@@ -78,6 +78,7 @@ import AffectationStageEtudiant from '@/components/Dashboard/DashboardForms/Affe
 import CreateContentMobile from '@/components/Bibliotheque/Social/CreateContentMobile.vue';
 import Ventriglisse3D from '@/ventriglisse3d/Ventriglisse3D.vue';
 import QrCodeGenerator from '@/components/QrCodeGenerator.vue'
+import MobileLangApps from '@/views/MobileLangApps.vue';
 
 // Define your routes
 const routes = [
@@ -231,6 +232,12 @@ const routes = [
     name: 'EventManagement',
     component: () => import('@/views/EventManagement.vue'),
     meta: { requiresAuth: false }
+  },
+  {
+    path: '/lang-apps', 
+    component: MobileLangApps, 
+    name: 'MobileLangApps', 
+    meta: { mobileOnly: true } 
   },
 ];
 
