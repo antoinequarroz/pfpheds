@@ -1,5 +1,5 @@
 <template>
-  <Panel header="Éditeur de note" class="note-editor">
+  <div class="note-editor">
     <div class="p-fluid">
       <InputText v-model="title" placeholder="Titre de la feuille" class="note-title p-mb-3" />
       <div class="note-dates">
@@ -24,12 +24,11 @@
         <EditorContent :editor="editor" class="tiptap-editor" />
       </template>
     </div>
-  </Panel>
+  </div>
 </template>
 
 <script setup>
 import { ref, watch, defineProps, defineEmits, onMounted, onBeforeUnmount } from 'vue'
-import Panel from 'primevue/panel';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import { Editor, EditorContent } from '@tiptap/vue-3'
