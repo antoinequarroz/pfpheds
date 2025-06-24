@@ -135,9 +135,11 @@ function addImage() {
 
 <style scoped>
 .note-editor {
-  flex: 1;
-  min-width: 0;
-  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
+  box-sizing: border-box;
   background: transparent;
   color: var(--text-color, #f5f6fa);
   box-shadow: none;
@@ -178,7 +180,11 @@ function addImage() {
   color: #ffd700;
 }
 .tiptap-editor {
-  min-height: 300px;
+  min-height: 400px;
+  height: 100%;
+  max-height: none;
+  overflow-y: auto;
+  padding-bottom: 40px;
   background: transparent;
   border-radius: 4px;
   border: 1px solid #333;
@@ -188,6 +194,7 @@ function addImage() {
   margin-bottom: 1.5em;
   color: #f5f6fa;
   caret-color: #ffd700;
+  box-sizing: border-box;
 }
 .tiptap-editor ::selection {
   background: #444a;
@@ -214,5 +221,17 @@ function addImage() {
 .is-active {
   background: #3a3b45 !important;
   color: #ffd700 !important;
+}
+.p-panel-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+  box-sizing: border-box;
+}
+.p-panel.note-editor {
+  height: 100%;
+  min-height: 0;
 }
 </style>

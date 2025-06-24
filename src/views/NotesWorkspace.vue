@@ -299,35 +299,45 @@ async function savePage(pageData) {
   display: flex;
   flex-direction: column;
   height: 100vh;
+  min-height: 0;
+  overflow: hidden;
 }
 .notes-workspace {
   display: flex;
-  flex: 1;
+  flex: 1 1 auto;
   min-height: 0;
+  height: 0;
   background: var(--surface-a, #18191c);
+  overflow: hidden;
+}
+.sidebar-col,
+.pages-col,
+.editor-col {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  height: auto;
+  max-height: none;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding-bottom: 48px;
+  box-sizing: border-box;
 }
 .sidebar-col {
+  flex: 0 0 260px;
   width: 260px;
   min-width: 200px;
   max-width: 320px;
-  height: 100vh;
-  overflow-y: auto;
-  scrollbar-width: none;
 }
 .pages-col {
+  flex: 0 0 300px;
   width: 300px;
   min-width: 220px;
   max-width: 400px;
-  height: 100vh;
-  overflow-y: auto;
-  scrollbar-width: none;
 }
 .editor-col {
-  flex: 1;
+  flex: 1 1 0;
   min-width: 0;
-  height: 100vh;
-  overflow-y: auto;
-  scrollbar-width: none;
 }
 .sidebar-col::-webkit-scrollbar,
 .pages-col::-webkit-scrollbar,
@@ -341,5 +351,11 @@ async function savePage(pageData) {
   justify-content: center;
   color: #999;
   font-size: 1.2rem;
+}
+.notes-main,
+.notes-workspace {
+  min-height: 0;
+  height: 100vh;
+  overflow: hidden;
 }
 </style>
