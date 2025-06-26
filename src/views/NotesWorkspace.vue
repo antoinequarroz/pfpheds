@@ -77,10 +77,7 @@
         />
       </div>
       <div class="editor-col" v-if="selectedPage">
-        <NoteEditor
-          :page="selectedPage"
-          @save="savePage"
-        />
+        <TiptapSimpleEditor :page="selectedPage" @save="savePage" />
       </div>
       <div v-else-if="selectedNotebook" class="editor-col empty-editor">Sélectionne ou crée une feuille</div>
       <div v-else class="editor-col empty-editor">Sélectionne ou crée un classeur</div>
@@ -93,7 +90,7 @@ import Navbar from '../components/Utils/Navbar.vue'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
 import NotebookSidebar from '../components/Notes/NotebookSidebar.vue'
 import PageList from '../components/Notes/PageList.vue'
-import NoteEditor from '../components/Notes/NoteEditor.vue'
+import TiptapSimpleEditor from '@/components/Notes/TiptapSimpleEditor.vue'
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
