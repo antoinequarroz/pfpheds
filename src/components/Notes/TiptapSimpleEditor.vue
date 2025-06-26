@@ -1,38 +1,93 @@
 <template>
   <div class="tiptap-simple-editor">
-    <div class="toolbar">
-      <Button @click="editor.chain().focus().toggleBold().run()" :class="{ active: editor.isActive('bold') }" title="Gras"><b>B</b></Button>
-      <Button @click="editor.chain().focus().toggleItalic().run()" :class="{ active: editor.isActive('italic') }" title="Italique"><i>I</i></Button>
-      <Button @click="editor.chain().focus().toggleStrike().run()" :class="{ active: editor.isActive('strike') }" title="Barré"><s>S</s></Button>
-      <Button @click="editor.chain().focus().toggleHeading({ level: 1 }).run()" :class="{ active: editor.isActive('heading', { level: 1 }) }" title="Titre 1">H1</Button>
-      <Button @click="editor.chain().focus().toggleHeading({ level: 2 }).run()" :class="{ active: editor.isActive('heading', { level: 2 }) }" title="Titre 2">H2</Button>
-      <button @click="editor.chain().focus().toggleBulletList().run()" :class="{ active: editor.isActive('bulletList') }" title="Liste à puces">• List</button>
-      <button @click="editor.chain().focus().toggleOrderedList().run()" :class="{ active: editor.isActive('orderedList') }" title="Liste numérotée">1. List</button>
-      <button @click="editor.chain().focus().toggleBlockquote().run()" :class="{ active: editor.isActive('blockquote') }" title="Citation">❝</button>
-      <button @click="editor.chain().focus().toggleCodeBlock().run()" :class="{ active: editor.isActive('codeBlock') }" title="Bloc code">{ }</button>
-      <button @click="editor.chain().focus().undo().run()" title="Annuler">↺</button>
-      <button @click="editor.chain().focus().redo().run()" title="Rétablir">↻</button>
+    <div class="toolbar" v-if="editor">
+      <Button @click="editor.chain().focus().toggleBold().run()" :class="{ active: editor.isActive('bold') }" :disabled="!editor" title="Gras"><b>B</b></Button>
+      <Button @click="editor.chain().focus().toggleItalic().run()" :class="{ active: editor.isActive('italic') }" :disabled="!editor" title="Italique"><i>I</i></Button>
+      <Button @click="editor.chain().focus().toggleStrike().run()" :class="{ active: editor.isActive('strike') }" :disabled="!editor" title="Barré"><s>S</s></Button>
+      <Button @click="editor.chain().focus().toggleHeading({ level: 1 }).run()" :class="{ active: editor.isActive('heading', { level: 1 }) }" :disabled="!editor" title="Titre 1">H1</Button>
+      <Button @click="editor.chain().focus().toggleHeading({ level: 2 }).run()" :class="{ active: editor.isActive('heading', { level: 2 }) }" :disabled="!editor" title="Titre 2">H2</Button>
+      <button @click="editor.chain().focus().toggleBulletList().run()" :class="{ active: editor.isActive('bulletList') }" :disabled="!editor" title="Liste à puces">• List</button>
+      <button @click="editor.chain().focus().toggleOrderedList().run()" :class="{ active: editor.isActive('orderedList') }" :disabled="!editor" title="Liste numérotée">1. List</button>
+      <button @click="editor.chain().focus().toggleBlockquote().run()" :class="{ active: editor.isActive('blockquote') }" :disabled="!editor" title="Citation">❝</button>
+      <button @click="editor.chain().focus().toggleCodeBlock().run()" :class="{ active: editor.isActive('codeBlock') }" :disabled="!editor" title="Bloc code">{ }</button>
+      <button @click="editor.chain().focus().undo().run()" :disabled="!editor" title="Annuler">↺</button>
+      <button @click="editor.chain().focus().redo().run()" :disabled="!editor" title="Rétablir">↻</button>
     </div>
-    <EditorContent :editor="editor" class="tiptap-editor" />
+    <EditorContent v-if="editor" :editor="editor" class="tiptap-editor" />
   </div>
 </template>
 
 <script setup>
-import { ref, onBeforeUnmount } from 'vue'
+import { ref, watch, defineProps, defineEmits, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
+import MarkdownIt from 'markdown-it'
 
-const editor = ref(
-  new Editor({
-    extensions: [
-      StarterKit,
-    ],
-    content: '<p>Commence à écrire…</p>',
+const props = defineProps({ page: Object })
+const emit = defineEmits(['save'])
+const editor = ref(null)
+const md = new MarkdownIt()
+let lastPageId = ref(props.page?.id)
+
+function getInitialContent(page) {
+  if (!page || !page.content) return '<h1>Commence à écrire…</h1>'
+  try {
+    return JSON.parse(page.content)
+  } catch (e) {
+    return page.content
+  }
+}
+
+function handlePaste(view, event) {
+  const clipboardData = event.clipboardData
+  if (clipboardData) {
+    const text = clipboardData.getData('text/plain')
+    if (text && /[#*_`\-\[\]>]/.test(text)) {
+      const html = md.render(text)// Utilise la commande officielle TipTap pour insérer du HTML
+      editor.value.commands.insertContent(html)
+      event.preventDefault()
+      return true
+    }
+  }
+  return false
+}
+
+function createEditor(page) {
+  if (editor.value) {
+    editor.value.destroy()
+    editor.value = null
+  }
+  editor.value = new Editor({
+    extensions: [StarterKit],
+    content: getInitialContent(page),
+    editorProps: {
+      handlePaste,
+    },
+    onUpdate: () => {
+      emit('save', {
+        ...props.page,
+        content: JSON.stringify(editor.value.getJSON())
+      })
+    }
   })
-)
+}
+
+onMounted(() => {
+  createEditor(props.page)
+  lastPageId.value = props.page?.id
+})
+
+watch(() => props.page?.id, (newId, oldId) => {
+  if (newId && newId !== oldId) {
+    nextTick(() => {
+      createEditor(props.page)
+      lastPageId.value = newId
+    })
+  }
+})
 
 onBeforeUnmount(() => {
-  editor.value.destroy()
+  if (editor.value) editor.value.destroy()
 })
 </script>
 
@@ -42,7 +97,6 @@ onBeforeUnmount(() => {
   border-radius: 18px;
   box-shadow: 0 4px 32px 0 #0005;
   border: 1.5px solid #23242a;
-  /* Prend toute la place attribuée par .editor-col */
   width: 100%;
   height: 100%;
   margin: 0;
