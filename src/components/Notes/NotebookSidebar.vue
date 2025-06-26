@@ -25,19 +25,19 @@ const selectedNotebookId = null // la sélection est gérée dans la vue princip
 
 <style scoped>
 .notebook-sidebar-panel {
-  background: transparent;
+  background: var(--surface-card) !important;
   box-shadow: none;
 }
 .notebook-sidebar {
-  min-width: 240px;
+  min-width: 200px;
   height: 100%;
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  border-right: 1px solid #e0e0e0;
-  padding-bottom: 32px; /* Marge basse */
+  padding-bottom: 32px;
+  background: var(--surface-card) !important;
 }
 :deep(.notebook-sidebar)::-webkit-scrollbar {
   display: none;

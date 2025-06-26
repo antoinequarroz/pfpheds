@@ -54,12 +54,13 @@ function formatDate(date) {
   scrollbar-width: none;
   -ms-overflow-style: none;
   padding-bottom: 32px;
+  background: var(--surface-card) !important;
 }
 :deep(.page-list)::-webkit-scrollbar {
   display: none;
 }
 .page-list-panel {
-  background: transparent;
+  background: var(--surface-card) !important;
   box-shadow: none;
 }
 .page-list-ul {

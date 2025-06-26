@@ -140,7 +140,7 @@ function addImage() {
   height: 100%;
   min-height: 0;
   box-sizing: border-box;
-  background: transparent;
+  background: var(--surface-card) !important;
   color: var(--text-color, #f5f6fa);
   box-shadow: none;
   overflow-y: auto;
@@ -155,9 +155,8 @@ function addImage() {
 .note-title {
   font-size: 1.2rem;
   width: 100%;
-  background: var(--surface-c, #22232a);
+  background: var(--surface-card) !important;
   color: var(--text-color, #f5f6fa);
-  border: 1px solid #333;
 }
 .note-title::placeholder {
   color: #888a;
@@ -174,17 +173,17 @@ function addImage() {
   gap: 0.25em;
   margin-bottom: 0.5em;
   flex-wrap: wrap;
-  background: #23242a;
+  background: var(--surface-card) !important;
   border-radius: 5px;
   padding: 0.4em 0.3em;
 }
 .tiptap-toolbar .p-button {
   color: #f5f6fa;
-  background: transparent;
+  background: var(--surface-card) !important;
   border: none;
 }
 .tiptap-toolbar .p-button.is-active {
-  background: #3a3b45;
+  background: var(--surface-card) !important;
   color: #ffd700;
 }
 .tiptap-editor {
@@ -193,7 +192,7 @@ function addImage() {
   max-height: none;
   overflow-y: auto;
   padding-bottom: 40px;
-  background: transparent;
+  background: var(--surface-card) !important;
   border-radius: 4px;
   border: 1px solid #333;
   padding: 1em;
@@ -205,7 +204,7 @@ function addImage() {
   box-sizing: border-box;
 }
 .tiptap-editor ::selection {
-  background: #444a;
+  background: var(--surface-card) !important;
 }
 .tiptap-editor p,
 .tiptap-editor ul,
@@ -218,7 +217,7 @@ function addImage() {
   color: #80bfff;
 }
 .tiptap-editor pre {
-  background: #18191c;
+  background: var(--surface-card) !important;
   color: #ffd700;
   border-radius: 4px;
   padding: 0.5em 0.8em;
@@ -227,7 +226,7 @@ function addImage() {
   border: 1px solid #444;
 }
 .is-active {
-  background: #3a3b45 !important;
+  background: var(--surface-card) !important;
   color: #ffd700 !important;
 }
 .p-panel-content {

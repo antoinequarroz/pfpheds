@@ -301,31 +301,29 @@ async function savePage(pageData) {
   height: 100vh;
   min-height: 0;
   overflow: hidden;
+
 }
 .notes-workspace {
   display: flex;
   flex: 1 1 auto;
   min-height: 0;
   height: 0;
-  background: var(--surface-a, #18191c);
   overflow: hidden;
 }
 .notes-workspace .sidebar-col,
 .notes-workspace .pages-col,
 .notes-workspace .editor-col {
   border-radius: 20px;
-  box-shadow: 0 2px 16px 0 #0003;
   margin: 18px 8px 18px 8px;
-  background: #23242a;
+  background: var(--surface-card) !important;
   border: 1.5px solid #282a36;
-  /* Permet le scroll vertical, occupe toute la hauteur */
-  height: calc(100vh - 36px); /* 36px = marges verticales */
+  height: calc(100vh - 36px);
   min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE 10+ */
-  padding-bottom: 32px; /* Marge basse pour éviter que le contenu soit collé au fond */
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 32px;
 }
 .notes-workspace .sidebar-col::-webkit-scrollbar,
 .notes-workspace .pages-col::-webkit-scrollbar,
