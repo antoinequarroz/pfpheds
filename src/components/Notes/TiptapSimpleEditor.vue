@@ -21,7 +21,23 @@
 import { ref, watch, defineProps, defineEmits, onMounted, onBeforeUnmount, nextTick } from 'vue'
 import { Editor, EditorContent } from '@tiptap/vue-3'
 import StarterKit from '@tiptap/starter-kit'
+import Underline from '@tiptap/extension-underline'
+import Link from '@/components/tiptap-extension/link-extension.js'
+import TaskList from '@tiptap/extension-task-list'
+import TaskItem from '@tiptap/extension-task-item'
+import TextAlign from '@tiptap/extension-text-align'
+import Selection from '@/components/tiptap-extension/selection-extension.js'
+import TrailingNode from '@/components/tiptap-extension/trailing-node-extension.js'
+import { ImageUploadNode } from '@/components/tiptap-node/image-upload-node/image-upload-node-extension.js'
 import MarkdownIt from 'markdown-it'
+// UI Components (menus, boutons, icônes)
+import { HeadingDropdownMenu } from '@/components/tiptap-ui/heading-dropdown-menu'
+import { ListDropdownMenu } from '@/components/tiptap-ui/list-dropdown-menu'
+import { TextAlignButton } from '@/components/tiptap-ui/text-align-button'
+import { UndoRedoButton } from '@/components/tiptap-ui/undo-redo-button'
+import { MarkButton } from '@/components/tiptap-ui/mark-button'
+import { ImageUploadButton } from '@/components/tiptap-ui/image-upload-button'
+import { LinkPopover } from '@/components/tiptap-ui/link-popover'
 
 const props = defineProps({ page: Object })
 const emit = defineEmits(['save'])
@@ -43,7 +59,7 @@ function handlePaste(view, event) {
   if (clipboardData) {
     const text = clipboardData.getData('text/plain')
     if (text && /[#*_`\-\[\]>]/.test(text)) {
-      const html = md.render(text)// Utilise la commande officielle TipTap pour insérer du HTML
+      const html = md.render(text)
       editor.value.commands.insertContent(html)
       event.preventDefault()
       return true
@@ -58,7 +74,17 @@ function createEditor(page) {
     editor.value = null
   }
   editor.value = new Editor({
-    extensions: [StarterKit],
+    extensions: [
+      StarterKit,
+      Underline,
+      Link,
+      TaskList,
+      TaskItem,
+      TextAlign.configure({ types: ['heading', 'paragraph'] }),
+      Selection,
+      TrailingNode,
+      ImageUploadNode,
+    ],
     content: getInitialContent(page),
     editorProps: {
       handlePaste,

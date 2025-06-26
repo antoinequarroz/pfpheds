@@ -1,8 +1,8 @@
 <template>
   <Panel header="Feuilles" class="page-list page-list-panel">
-    <InputText v-model="search" placeholder="Rechercher une feuille..." class="p-mb-2" />
-    <ul class="page-list-ul">
-      <li v-for="page in filteredPages" :key="page.id" :class="{active: selectedPageId === page.id}">
+    <InputText v-model="search" placeholder="Rechercher une feuille..." class="p-mb-2 w-12 mb-5" />
+    <ul class="page-list-ul mb-3">
+      <li v-for="page in filteredPages" :key="page.id" :class="{active: selectedPageId === page.id}" class="mb-4">
         <span @click="$emit('select', page)">
           {{ page.title }}
           <small class="page-date">({{ formatDate(page.updatedAt || page.createdAt) }})</small>
