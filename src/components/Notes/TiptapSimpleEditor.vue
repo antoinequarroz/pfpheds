@@ -160,17 +160,11 @@ onBeforeUnmount(() => {
   box-shadow: none !important;
 }
 .tiptap-editor {
-  min-height: 0;
   flex: 1 1 auto;
-  background: transparent;
-  color: #f5f6fa;
-  font-size: 1.13em;
-  padding: 1.7em 2.2em 1.2em 2.2em;
-  border-radius: 10px;
-  line-height: 1.7;
-  word-break: break-word;
-  width: 100%;
-  height: 100%;
+  overflow-y: auto;
+  padding: 2.5rem 2.2rem 4.5rem 2.2rem; /* Ajoute une grosse marge en bas */
+  min-height: 0;
+  /* Pour éviter que le contenu soit caché par la toolbar sticky ou le bord */
   box-sizing: border-box;
 }
 .tiptap-editor h1 {
