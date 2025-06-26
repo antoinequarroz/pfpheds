@@ -318,8 +318,19 @@ async function savePage(pageData) {
   margin: 18px 8px 18px 8px;
   background: #23242a;
   border: 1.5px solid #282a36;
-  overflow: hidden;
-  transition: box-shadow 0.2s, border 0.2s;
+  /* Permet le scroll vertical, occupe toute la hauteur */
+  height: calc(100vh - 36px); /* 36px = marges verticales */
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+  padding-bottom: 32px; /* Marge basse pour éviter que le contenu soit collé au fond */
+}
+.notes-workspace .sidebar-col::-webkit-scrollbar,
+.notes-workspace .pages-col::-webkit-scrollbar,
+.notes-workspace .editor-col::-webkit-scrollbar {
+  display: none;
 }
 .notes-workspace .sidebar-col {
   min-width: 200px;

@@ -30,8 +30,17 @@ const selectedNotebookId = null // la sélection est gérée dans la vue princip
 }
 .notebook-sidebar {
   min-width: 240px;
-  height: 100vh;
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   border-right: 1px solid #e0e0e0;
+  padding-bottom: 32px; /* Marge basse */
+}
+:deep(.notebook-sidebar)::-webkit-scrollbar {
+  display: none;
 }
 .notebook-list {
   list-style: none;

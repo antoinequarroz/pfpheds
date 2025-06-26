@@ -47,8 +47,16 @@ function formatDate(date) {
 <style scoped>
 .page-list {
   min-width: 200px;
-  height: 100vh;
-  border-right: 1px solid #e0e0e0;
+  height: 100%;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 32px;
+}
+:deep(.page-list)::-webkit-scrollbar {
+  display: none;
 }
 .page-list-panel {
   background: transparent;

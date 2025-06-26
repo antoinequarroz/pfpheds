@@ -143,6 +143,14 @@ function addImage() {
   background: transparent;
   color: var(--text-color, #f5f6fa);
   box-shadow: none;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-bottom: 32px; /* Marge basse */
+}
+.note-editor::-webkit-scrollbar {
+  display: none;
 }
 .note-title {
   font-size: 1.2rem;
