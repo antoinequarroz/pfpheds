@@ -98,8 +98,8 @@ const showVoirPlus = computed(() => outils.value.length >= 12);
 .outils-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  gap: 1.2rem;
-  padding: 2rem 0.7rem 0 0.7rem;
+  gap: 4.2rem;
+  padding: 10rem 0.7rem 0 0.7rem;
   background: none;
 }
 .outil-tile {
