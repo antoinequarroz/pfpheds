@@ -34,8 +34,7 @@ import ResumStageUserProfile from '@/components/UserProfile/ResumStageUserProfil
 import DocumentsUserProfile from '@/components/UserProfile/DocumentsUserProfile.vue';
 import ChatProfil from '@/components/UserProfile/ChatProfil.vue';
 import AppDarkAndLightMode from '@/layout/AppDarkAndLightMode.vue';
-
-
+import { useRoute } from 'vue-router';
 
 export default {
   name: 'Profile',
@@ -49,7 +48,7 @@ export default {
     DocumentsUserProfile,
     ChatProfil,
   },
-  setup(props, { route }) {
+  setup(props) {
     const activeTab = ref(0);
     const checked = ref(false);
     const selectedCountry = ref(null);
@@ -110,9 +109,10 @@ export default {
       }
     };
 
+    const route = useRoute();
     // Récupérer l'ID de l'utilisateur depuis la route
     onMounted(async () => {
-      const userId = route.params.id; // Récupérer l'ID de l'utilisateur à afficher
+      const userId = route?.params?.id || null; 
       if (userId) {
         await fetchUserProfileById(userId);
       } else {
