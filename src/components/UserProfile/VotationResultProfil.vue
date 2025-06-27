@@ -28,9 +28,11 @@
               Domaine : {{ place.NomPlace }}<br />
               Critères : {{ getValidCriterias(place).join(', ') }}<br />
               <span v-if="getPraticienFormateurInfos(place)">
-                Praticien formateur : <b>{{ getPraticienFormateurInfos(place) }}</b><br />
+                Praticien formateur :
+                <b>{{ getPraticienFormateurInfos(place) }}</b><br />
                 <span v-if="getPraticienFormateurContact(place)">
-                  Contact : <a :href="'mailto:' + getPraticienFormateurContact(place)" style="color: var(--text-primary); text-decoration: underline;">
+                  Contact :
+                  <a :href="'mailto:' + getPraticienFormateurContact(place)" class="text-primary font-bold" style="text-decoration: underline;">
                     {{ getPraticienFormateurContact(place) }}
                   </a>
                 </span>
@@ -161,9 +163,14 @@ function getValidCriterias(place) {
 // Retourne l'ID du praticien formateur lié à la place et au seat (ex: selectedPraticiensBA23PFP3-1)
 function getPraticienFormateurId(place) {
   // On essaie de déterminer la clé du praticien selon le seatIndex
+  // Correction : fallback sur place.praticiensFormateurs[0] si rien trouvé
   const seat = place.seatIndex;
-  if (!seat) return 'Non défini';
-  // On cherche la première clé commençant par 'selectedPraticien' ou 'selectedPraticiens' et finissant par '-' + seat
+  if (!seat) {
+    if (Array.isArray(place.praticiensFormateurs) && place.praticiensFormateurs.length > 0) {
+      return place.praticiensFormateurs[0];
+    }
+    return '';
+  }
   const keysToTry = [
     `selectedPraticiensBA23PFP3-${seat}`,
     `selectedPraticienBA23PFP3-${seat}`,
@@ -173,33 +180,33 @@ function getPraticienFormateurId(place) {
   for (const key of keysToTry) {
     if (place[key]) return place[key];
   }
-  return 'Non défini';
+  if (Array.isArray(place.praticiensFormateurs) && place.praticiensFormateurs.length > 0) {
+    return place.praticiensFormateurs[0];
+  }
+  return '';
 }
 
-// Retourne "Prénom Nom (mail)" du praticien formateur lié à la place et au seat
+// Retourne "Prénom Nom" du praticien formateur lié à la place et au seat
 function getPraticienFormateurInfos(place) {
   const id = getPraticienFormateurId(place);
-  if (!id || id === 'Non défini') return 'Non défini';
+  if (!id) return '';
   const pract = praticienFormateurs.value && praticienFormateurs.value[id];
-  if (!pract) return `ID: ${id}`;
+  if (!pract) return '';
   const prenom = pract.Prenom ? pract.Prenom.trim() : '';
   const nom = pract.Nom ? pract.Nom.trim() : '';
-  const mail = pract.Mail || '';
-  return `${prenom} ${nom}${mail ? ' (' + mail + ')' : ''}`;
+  return `${prenom} ${nom}`.trim();
 }
 
 // Ajout utilitaire pour le contact du praticien formateur
 function getPraticienFormateurContact(place) {
-  // Essayons d'extraire l'email du praticien formateur si possible
   if (place && place.praticienMail) {
-    return place.praticienMail
+    return place.praticienMail;
   }
-  // fallback : essaye via praticienFormateurs
-  const praticienId = getPraticienFormateurId(place)
+  const praticienId = getPraticienFormateurId(place);
   if (praticienId && praticienFormateurs.value[praticienId]) {
-    return praticienFormateurs.value[praticienId].Mail || praticienFormateurs.value[praticienId].mail || ''
+    return praticienFormateurs.value[praticienId].Mail || praticienFormateurs.value[praticienId].mail || '';
   }
-  return ''
+  return '';
 }
 
 const fetchAssignmentsData = () => {
