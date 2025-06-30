@@ -70,7 +70,7 @@
 
   <!-- Section Événements à venir -->
   <div class="upcoming-events-section">
-    <h3 class="section-title">
+    <h3 class="section-title mb-5">
       <i class="pi pi-calendar text-primary"></i>
       Événements à venir
     </h3>
