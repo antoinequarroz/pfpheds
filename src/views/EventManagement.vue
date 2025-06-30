@@ -65,6 +65,7 @@ import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import { useEventStore } from '@/stores/eventStore';
+import { getDatabase, ref as dbRef, get } from 'firebase/database';
 // Composants custom
 import EventForm from '@/components/Events/EventForm.vue';
 import EventCard from '@/components/Events/EventCard.vue';
@@ -106,17 +107,52 @@ function likeEvent(event) {
     liked: !event.liked
   });
 }
-function registerEvent(event) {
+async function registerEvent(event) {
   if (!userId.value) return;
   
-  // Récupérer les infos de l'utilisateur connecté depuis userState
-  const currentUserInfo = {
-    nom: userState.user?.nom || userState.user?.Nom || '',
-    prenom: userState.user?.prenom || userState.user?.Prenom || '',
-    photoURL: userState.user?.photoURL || userState.user?.PhotoURL || 'https://ui-avatars.com/api/?name=Utilisateur'
-  };
-  
-  eventStore.toggleRegistration(event.id, userId.value, event.registered, currentUserInfo);
+  try {
+    const db = getDatabase();
+    const userRef = dbRef(db, `Users/${userId.value}`);
+    const snapshot = await get(userRef);
+    
+    let currentUserInfo = {
+      nom: '',
+      prenom: '',
+      photoURL: userState.user?.photoURL || 'https://ui-avatars.com/api/?name=Utilisateur'
+    };
+    
+    if (snapshot.exists()) {
+      const userData = snapshot.val();
+      console.log('Données utilisateur Firebase:', userData);
+      
+      currentUserInfo = {
+        nom: userData.Nom || userData.nom || userData.lastName || '',
+        prenom: userData.Prenom || userData.prenom || userData.firstName || '',
+        photoURL: userData.PhotoURL || userData.photoURL || userData.avatar || userState.user?.photoURL || 'https://ui-avatars.com/api/?name=Utilisateur'
+      };
+    } else {
+      console.log('Aucune donnée utilisateur trouvée dans Firebase');
+      // Utiliser les données de Firebase Auth comme fallback
+      currentUserInfo = {
+        nom: userState.user?.displayName?.split(' ')[1] || '',
+        prenom: userState.user?.displayName?.split(' ')[0] || '',
+        photoURL: userState.user?.photoURL || 'https://ui-avatars.com/api/?name=Utilisateur'
+      };
+    }
+    
+    console.log('Infos utilisateur finales:', currentUserInfo);
+    eventStore.toggleRegistration(event.id, userId.value, event.registered, currentUserInfo);
+    
+  } catch (error) {
+    console.error('Erreur lors de la récupération des données utilisateur:', error);
+    // Fallback avec les données Firebase Auth
+    const currentUserInfo = {
+      nom: userState.user?.displayName?.split(' ')[1] || '',
+      prenom: userState.user?.displayName?.split(' ')[0] || '',
+      photoURL: userState.user?.photoURL || 'https://ui-avatars.com/api/?name=Utilisateur'
+    };
+    eventStore.toggleRegistration(event.id, userId.value, event.registered, currentUserInfo);
+  }
 }
 function openEventDetails(event) {
   selectedEvent.value = event;
@@ -148,12 +184,20 @@ onMounted(() => {
   padding-bottom: 2.2rem;
 }
 .main-content {
-  padding: 2em 0.5em 2em 0.5em;
+  padding: 2em 0.5em 8em 0.5em;
   min-width: 0;
+  overflow-y: auto;
+  height: 100vh;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.main-content::-webkit-scrollbar {
+  display: none;
 }
 .main-content-padded {
   padding-left: 2.5rem;
   padding-right: 2.5rem;
+  padding-bottom: 8em;
 }
 /* Header de la page */
 .page-header {

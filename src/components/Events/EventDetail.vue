@@ -129,6 +129,7 @@ function getUserAvatar(uid) {
 .event-detail-content {
   padding: 1.2em;
   min-width: 260px;
+  padding-bottom: 2em;
 }
 .event-detail-date {
   color: #ffc700;
