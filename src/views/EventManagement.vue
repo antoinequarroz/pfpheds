@@ -15,29 +15,29 @@
             <form class="event-form" @submit.prevent="addEvent">
               <div class="form-group">
                 <label>Titre</label>
-                <InputText v-model="newEvent.title" required placeholder="Titre de l'événement" class="w-full" />
+                <InputText v-model="newEvent.title" required placeholder="Titre de l'événement" class="w-full surface-card" />
               </div>
               <div class="form-group">
                 <label>Description</label>
-                <Textarea v-model="newEvent.description" required placeholder="Description" class="w-full" autoResize rows="3" />
+                <Textarea v-model="newEvent.description" required placeholder="Description" class="w-full surface-card" autoResize rows="3" />
               </div>
               <div class="form-group">
                 <label>Date et heure de début</label>
-                <Calendar v-model="newEvent.startDate" showTime hourFormat="24" dateFormat="dd/mm/yy" class="w-full" showIcon />
+                <Calendar v-model="newEvent.startDate" showTime hourFormat="24" dateFormat="dd/mm/yy" class="w-full surface-card" showIcon />
               </div>
               <div class="form-group">
                 <label>Date et heure de fin</label>
-                <Calendar v-model="newEvent.endDate" showTime hourFormat="24" dateFormat="dd/mm/yy" class="w-full" showIcon />
+                <Calendar v-model="newEvent.endDate" showTime hourFormat="24" dateFormat="dd/mm/yy" class="w-full surface-card" showIcon />
               </div>
               <div class="form-group">
                 <label>Type d'événement</label>
-                <Dropdown v-model="newEvent.type" :options="TYPE_OPTIONS" optionLabel="label" optionValue="value" placeholder="Sélectionner le type" class="w-full" />
+                <Dropdown v-model="newEvent.type" :options="TYPE_OPTIONS" optionLabel="label" optionValue="value" placeholder="Sélectionner le type" class="w-full surface-card" />
               </div>
               <div class="form-group" v-if="newEvent.type === 'private'">
                 <label>Rôle dédié</label>
-                <Dropdown v-model="newEvent.role" :options="ROLE_OPTIONS" optionLabel="label" optionValue="value" placeholder="Sélectionner le rôle" class="w-full" />
+                <Dropdown v-model="newEvent.role" :options="ROLE_OPTIONS" optionLabel="label" optionValue="value" placeholder="Sélectionner le rôle" class="w-full surface-card" />
               </div>
-              <Button type="submit" label="Créer" class="p-button-primary w-full mt-2" icon="pi pi-plus-circle" />
+              <Button type="submit" label="Créer" class="p-button-primary w-2 mt-2" icon="pi pi-plus-circle" />
             </form>
           </template>
         </Card>
@@ -219,7 +219,11 @@ h2 {
 }
 .event-form-card {
   margin-bottom: 1.2em;
-}
+  background: var(--surface-card);
+  border-radius: 22px;
+  box-shadow: 0 4px 24px 0 rgba(34,34,60,0.11);
+  padding: 1.2em 1.4em 1.2em 1.4em;
+  }
 .event-list-scrollable {
   flex: 1 1 auto;
   overflow-y: auto;
@@ -334,5 +338,15 @@ h2 {
   h2 {
     text-align: center;
   }
+}
+.form-group label {
+  display: block;
+  margin-bottom: 0.45em;
+  font-weight: 600;
+  color: #ffc700;
+  letter-spacing: 0.01em;
+}
+.form-group {
+  margin-bottom: 1.25em;
 }
 </style>
