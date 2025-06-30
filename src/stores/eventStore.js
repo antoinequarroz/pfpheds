@@ -58,13 +58,31 @@ export const useEventStore = defineStore('event', () => {
   }
 
   // Inscription/désinscription d'un utilisateur à un événement
-  async function toggleRegistration(eventId, userId, registeredList = []) {
+  async function toggleRegistration(eventId, userId, registeredList = [], userInfo = null) {
     let newList;
-    if (registeredList.includes(userId)) {
-      newList = registeredList.filter(id => id !== userId); // Désinscription
+    
+    // Vérifier si l'utilisateur est déjà inscrit (par UID)
+    const isRegistered = registeredList.some(item => 
+      typeof item === 'string' ? item === userId : item.uid === userId
+    );
+    
+    if (isRegistered) {
+      // Désinscription - retirer l'utilisateur
+      newList = registeredList.filter(item => 
+        typeof item === 'string' ? item !== userId : item.uid !== userId
+      );
     } else {
-      newList = [...registeredList, userId]; // Inscription
+      // Inscription - ajouter l'utilisateur avec ses infos complètes
+      const userEntry = userInfo ? {
+        uid: userId,
+        nom: userInfo.nom || '',
+        prenom: userInfo.prenom || '',
+        photoURL: userInfo.photoURL || 'https://ui-avatars.com/api/?name=Utilisateur'
+      } : userId; // Fallback vers UID simple si pas d'infos
+      
+      newList = [...registeredList, userEntry];
     }
+    
     const eventRef = dbRef(db, `events/${eventId}`);
     await update(eventRef, { registered: newList });
   }

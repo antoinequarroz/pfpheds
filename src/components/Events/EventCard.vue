@@ -39,9 +39,9 @@
             <span class="like-count">{{ event.likes }}</span>
           </div>
           <Button icon="pi pi-user-plus"
-            :label="event.registered && event.registered.includes(userId) ? 'Inscrit !' : 'S\'inscrire'"
+            :label="isUserRegistered ? 'Inscrit !' : 'S\'inscrire'"
             class="p-button-rounded event-register-btn event-register-btn-small"
-            :severity="event.registered && event.registered.includes(userId) ? 'success' : 'primary'"
+            :severity="isUserRegistered ? 'success' : 'primary'"
             @click="$emit('register', event)" />
           <Button icon="pi pi-info-circle"
             class=" details-btn"
@@ -55,7 +55,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 import Card from 'primevue/card';
 import Button from 'primevue/button';
 import Tag from 'primevue/tag';
@@ -64,6 +64,11 @@ const props = defineProps({
   userId: { type: String, required: false }
 });
 const hover = ref(false);
+const isUserRegistered = computed(() => {
+  if (props.event.registered && props.event.registered.includes(props.userId)) return true;
+  if (props.event.registered && props.event.registered.find(user => user.uid === props.userId)) return true;
+  return false;
+});
 function formatDate(date) {
   if (!date) return '';
   if (typeof date === 'string') return new Date(date).toLocaleDateString('fr-CH', { year: 'numeric', month: 'long', day: 'numeric' });

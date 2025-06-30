@@ -108,7 +108,15 @@ function likeEvent(event) {
 }
 function registerEvent(event) {
   if (!userId.value) return;
-  eventStore.toggleRegistration(event.id, userId.value, event.registered);
+  
+  // Récupérer les infos de l'utilisateur connecté depuis userState
+  const currentUserInfo = {
+    nom: userState.user?.nom || userState.user?.Nom || '',
+    prenom: userState.user?.prenom || userState.user?.Prenom || '',
+    photoURL: userState.user?.photoURL || userState.user?.PhotoURL || 'https://ui-avatars.com/api/?name=Utilisateur'
+  };
+  
+  eventStore.toggleRegistration(event.id, userId.value, event.registered, currentUserInfo);
 }
 function openEventDetails(event) {
   selectedEvent.value = event;
