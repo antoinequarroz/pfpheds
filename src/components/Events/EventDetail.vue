@@ -37,6 +37,19 @@
         class="p-button-rounded p-button-text p-button-danger"
         :severity="event && event.liked ? 'danger' : undefined"
         @click="$emit('like', event)" />
+
+      <!-- Boutons d'administration (seulement pour le créateur) -->
+      <div v-if="canManageEvent" class="admin-actions">
+        <Button icon="pi pi-pencil"
+          label="Modifier"
+          class="p-button-rounded p-button-warning"
+          @click="$emit('edit', event)" />
+        <Button icon="pi pi-trash"
+          label="Supprimer"
+          class="p-button-rounded p-button-danger"
+          @click="confirmDelete" />
+      </div>
+
       <Button icon="pi pi-times" label="Fermer" class="p-button-text p-button-danger ml-3" @click="$emit('close')" />
     </div>
   </div>
@@ -62,9 +75,14 @@ const isUserRegistered = computed(() => {
   // Vérifier dans les UIDs simples (ancien format)
   if (props.event.registered.includes(props.userId)) return true;
   // Vérifier dans les objets utilisateur (nouveau format)
-  return props.event.registered.some(item => 
+  return props.event.registered.some(item =>
     typeof item === 'object' && item.uid === props.userId
   );
+});
+
+const canManageEvent = computed(() => {
+  // L'utilisateur peut gérer l'événement s'il en est le créateur
+  return props.event && props.userId && props.event.admin === props.userId;
 });
 
 async function fetchParticipantsInfo(registeredData) {
@@ -72,7 +90,7 @@ async function fetchParticipantsInfo(registeredData) {
     participantsInfo.value = [];
     return;
   }
-  
+
   const db = getDatabase();
   const fetches = registeredData.map(async (item) => {
     try {
@@ -86,7 +104,7 @@ async function fetchParticipantsInfo(registeredData) {
           photoURL: item.photoURL || defaultAvatar
         };
       }
-      
+
       // Sinon, c'est un UID simple (ancien format) - récupérer depuis Firebase
       const uid = typeof item === 'string' ? item : item.uid;
       const userRef = dbRef(db, `Users/${uid}`);
@@ -131,6 +149,12 @@ function formatDate(date) {
 function getUserAvatar(uid) {
   // À brancher plus tard (photo réelle)
   return 'https://ui-avatars.com/api/?name=' + uid;
+}
+
+function confirmDelete() {
+  if (confirm(`Voulez-vous vraiment supprimer l'événement "${props.event.title}" ?`)) {
+    emit('delete', props.event);
+  }
 }
 </script>
 
@@ -217,5 +241,10 @@ function getUserAvatar(uid) {
   align-items: center;
   gap: 1em;
   margin-top: 1.8em;
+}
+.admin-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
 }
 </style>

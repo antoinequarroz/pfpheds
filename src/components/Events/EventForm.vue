@@ -39,8 +39,8 @@
           <i class="pi pi-upload"></i>
           {{ form.imageFile ? form.imageFile.name : 'Choisir une image' }}
         </label>
-        <div v-if="form.imagePreview" class="image-preview">
-          <img :src="form.imagePreview" alt="Aperçu" class="preview-img" />
+        <div v-if="form.existingImage || form.imagePreview" class="image-preview">
+          <img :src="form.existingImage || form.imagePreview" alt="Aperçu" class="preview-img" />
           <Button 
             icon="pi pi-times" 
             class="p-button-rounded p-button-danger p-button-sm remove-image-btn"
@@ -58,14 +58,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, reactive, onMounted, watch } from 'vue';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import Button from 'primevue/button';
 
+const props = defineProps({
+  event: { type: Object, default: null },
+  editMode: { type: Boolean, default: false }
+});
+
 const emit = defineEmits(['submit', 'close']);
+
+const fileInput = ref(null);
+const imagePreview = ref(null);
 
 const typeOptions = [
   { label: 'Public', value: 'public' },
@@ -80,33 +88,69 @@ const roleOptions = [
   { label: 'Manuel', value: 'manuel' }
 ];
 
-const form = ref({
+const form = reactive({
   title: '',
   description: '',
-  startDate: '',
-  endDate: '',
-  type: '',
-  role: '',
+  startDate: null,
+  endDate: null,
+  type: 'public',
+  role: null,
   imageFile: null,
-  imagePreview: null
+  existingImage: null
+});
+
+// Pré-remplir le formulaire en mode édition
+onMounted(() => {
+  if (props.editMode && props.event) {
+    form.title = props.event.title || '';
+    form.description = props.event.description || '';
+    form.startDate = props.event.startDate ? new Date(props.event.startDate) : null;
+    form.endDate = props.event.endDate ? new Date(props.event.endDate) : null;
+    form.type = props.event.type || 'public';
+    form.role = props.event.role || null;
+    form.existingImage = props.event.image || null;
+    
+    // Afficher l'image existante
+    if (form.existingImage) {
+      imagePreview.value = form.existingImage;
+    }
+  }
+});
+
+// Surveiller les changements de props
+watch(() => props.event, (newEvent) => {
+  if (props.editMode && newEvent) {
+    form.title = newEvent.title || '';
+    form.description = newEvent.description || '';
+    form.startDate = newEvent.startDate ? new Date(newEvent.startDate) : null;
+    form.endDate = newEvent.endDate ? new Date(newEvent.endDate) : null;
+    form.type = newEvent.type || 'public';
+    form.role = newEvent.role || null;
+    form.existingImage = newEvent.image || null;
+    
+    if (form.existingImage) {
+      imagePreview.value = form.existingImage;
+    }
+  }
 });
 
 function handleImageUpload(event) {
   const file = event.target.files[0];
   if (file) {
-    form.value.imageFile = file;
+    form.imageFile = file;
     const reader = new FileReader();
     reader.onload = (e) => {
-      form.value.imagePreview = e.target.result;
-      console.log('Image preview set:', form.value.imagePreview ? 'OK' : 'FAILED');
+      form.imagePreview = e.target.result;
+      console.log('Image preview set:', form.imagePreview ? 'OK' : 'FAILED');
     };
     reader.readAsDataURL(file);
   }
 }
 
 function removeImage() {
-  form.value.imageFile = null;
-  form.value.imagePreview = null;
+  form.imageFile = null;
+  form.imagePreview = null;
+  form.existingImage = null;
   // Reset the file input
   const fileInput = document.getElementById('event-image');
   if (fileInput) {
@@ -115,15 +159,23 @@ function removeImage() {
 }
 
 function submitForm() {
-  if (!form.value.title || !form.value.description || !form.value.startDate || !form.value.endDate || !form.value.type || (form.value.type === 'private' && !form.value.role)) return;
-  const formData = { ...form.value };
+  if (!form.title || !form.description || !form.startDate || !form.endDate || !form.type || (form.type === 'private' && !form.role)) return;
+  const formData = { ...form };
   if (formData.imageFile) {
     formData.image = formData.imageFile;
     delete formData.imageFile;
     delete formData.imagePreview;
   }
   emit('submit', formData);
-  form.value = { title: '', description: '', startDate: '', endDate: '', type: '', role: '', imageFile: null, imagePreview: null };
+  form.title = '';
+  form.description = '';
+  form.startDate = null;
+  form.endDate = null;
+  form.type = 'public';
+  form.role = null;
+  form.imageFile = null;
+  form.existingImage = null;
+  form.imagePreview = null;
   emit('close');
 }
 </script>
