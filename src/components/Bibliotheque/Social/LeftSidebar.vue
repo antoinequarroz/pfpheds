@@ -271,8 +271,8 @@ export default {
         if (snapshot.exists()) {
           const userData = snapshot.val();
           userInfo = {
-            nom: userData.nom || 'Utilisateur',
-            prenom: userData.prenom || '',
+            nom: userData.Nom || 'Utilisateur',
+            prenom: userData.Prenom || '',
             photoURL: userData.PhotoURL || ''
           };
         }
@@ -318,8 +318,8 @@ export default {
       if (snapshot.exists()) {
         const userData = snapshot.val();
         this.user = {
-          prenom: userData.prenom || "",
-          nom: userData.nom || "",
+          prenom: userData.Prenom || "",
+          nom: userData.Nom || "",
           PhotoURL: userData.PhotoURL || defaultAvatar,
           email: userData.Mail || "",
           id: uid
