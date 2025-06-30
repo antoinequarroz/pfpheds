@@ -52,8 +52,15 @@
 
   <!-- Nouvelle card Messagerie détachée -->
   <div class="messaging-card">
-    <h4>Messagerie</h4>
-    <br>
+    <div class="flex justify-content-between align-items-center mb-3">
+      <h4 class="m-0">Messagerie</h4>
+      <Button 
+        icon="pi pi-arrow-right" 
+        class="p-button-text p-button-sm"
+        @click="goToChat"
+        v-tooltip.top="'Voir tous les chats'"
+      />
+    </div>
     <div class="scrollable-content">
       <div v-if="recentConversations.length === 0" class="text-center text-600 mt-4">
         Aucune conversation récente
@@ -70,10 +77,18 @@
 
   <!-- Section Événements à venir -->
   <div class="upcoming-events-section">
-    <h3 class="section-title mb-5">
-      <i class="pi pi-calendar text-primary"></i>
-      Événements à venir
-    </h3>
+    <div class="flex justify-content-between align-items-center mb-3">
+      <h3 class="section-title m-0">
+        <i class="pi pi-calendar text-primary"></i>
+        Événements à venir
+      </h3>
+      <Button 
+        icon="pi pi-arrow-right" 
+        class="p-button-text p-button-sm"
+        @click="goToEventManagement"
+        v-tooltip.top="'Voir tous les événements'"
+      />
+    </div>
     
     <div v-if="upcomingEvents.length === 0" class="no-events">
       <i class="pi pi-calendar-times text-400"></i>
@@ -144,12 +159,13 @@ import { inject, computed } from 'vue';
 import { useEventStore } from '@/stores/eventStore';
 import EventDetail from '@/components/Events/EventDetail.vue';
 import Dialog from 'primevue/dialog';
+import Button from 'primevue/button';
 
 const defaultAvatar = '../../../public/assets/images/avatar/01.jpg';
 
 export default {
   name: "LeftSidebar",
-  components: { UserCard, Avatar, Toast, EventDetail, Dialog }, 
+  components: { UserCard, Avatar, Toast, EventDetail, Dialog, Button }, 
   setup() {
     const eventStore = useEventStore();
     return {
@@ -418,6 +434,12 @@ export default {
         this.$refs.toast.add({ severity: 'error', summary: 'Erreur', detail: 'Erreur de déconnexion : ' + (error && error.message ? error.message : error), life: 6000 });
       }
     },
+    goToEventManagement() {
+      this.$router.push("/event-management");
+    },
+    goToChat() {
+      this.$router.push("/chat");
+    },
   },
   mounted() {
     const auth = getAuth();
@@ -582,7 +604,7 @@ export default {
 .section-title {
   font-weight: bold;
   font-size: 1.2rem;
-  margin-bottom: 0.5rem;
+
 }
 
 .no-events {
