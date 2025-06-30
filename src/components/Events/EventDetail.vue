@@ -1,6 +1,15 @@
 <template>
   <div class="event-detail-content">
     <h3>{{ event.title }}</h3>
+    
+    <!-- Image de l'événement -->
+    <div class="event-detail-image">
+      <img v-if="event.image" :src="event.image" :alt="event.title" class="event-image" />
+      <div v-else class="event-image-placeholder">
+        <i class="pi pi-calendar"></i>
+      </div>
+    </div>
+    
     <div class="event-detail-date"><i class="pi pi-calendar"></i> {{ formatDate(event.startDate) }}<span v-if="event.endDate"> – {{ formatDate(event.endDate) }}</span></div>
     <div class="event-detail-description">{{ event.description }}</div>
     <div class="event-detail-type">
@@ -130,6 +139,24 @@ function getUserAvatar(uid) {
   padding: 1.2em;
   min-width: 260px;
   padding-bottom: 2em;
+}
+.event-detail-image {
+  margin-bottom: 1em;
+}
+.event-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+.event-image-placeholder {
+  width: 100%;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f0f0f0;
+  border-radius: 10px;
 }
 .event-detail-date {
   color: #ffc700;
