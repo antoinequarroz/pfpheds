@@ -22,9 +22,7 @@
         </span>
       </div>
       <Button icon="pi pi-plus" label="Créer un événement" class="p-button-primary mb-6 ml-5" @click="showCreateDialog = true" />
-      
-      <!-- Bouton temporaire pour corriger l'événement existant -->
-      <Button icon="pi pi-wrench" label="Corriger événement existant" class="p-button-secondary mb-6 ml-2" @click="fixExistingEvent" />
+
       <!-- Grille de cartes événements -->
       <div class="event-card-grid">
         <div
