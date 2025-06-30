@@ -619,8 +619,8 @@ export default {
 
 /* Style des badges de type d'événement */
 .event-type-badge {
-  background-color: var(--primary-50);
   color: var(--primary-color);
+  border: 1px solid var(--primary-color);
   padding: 0.3rem 0.8rem;
   border-radius: 1rem;
   font-size: 0.75rem;
