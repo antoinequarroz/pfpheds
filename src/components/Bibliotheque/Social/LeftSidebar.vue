@@ -78,10 +78,9 @@
   <!-- Section Événements à venir -->
   <div class="upcoming-events-section">
     <div class="flex justify-content-between align-items-center mb-3">
-      <h3 class="section-title m-0">
-        <i class="pi pi-calendar text-primary"></i>
+      <h4 class="section-title m-0">
         Événements à venir
-      </h3>
+      </h4>
       <Button 
         icon="pi pi-arrow-right" 
         class="p-button-text p-button-sm"
@@ -104,18 +103,17 @@
         tabindex="0"
       >
         <div class="flex align-items-center flex-1">
-          <!-- Badge du type d'événement -->
-          <div class="event-type-badge mr-3">
-            <span class="event-type-text">{{ event.type || 'Événement' }}</span>
-          </div>
           
           <!-- Contenu principal -->
           <div class="flex-column flex-1">
             <span class="text-900 font-semibold block">{{ event.title }}</span>
-            <span class="block text-600 text-sm">
-              <i class="pi pi-clock mr-1"></i>
-              {{ formatEventDate(event.startDate) }}
+            <span class="block text-400 text-sm">
+              {{ formatEventDate(event.startDate) }}<span v-if="event.endDate"> – {{ formatEventDate(event.endDate) }}</span>
             </span>
+          </div>
+          <!-- Badge du type d'événement -->
+          <div class="event-type-badge mr-3">
+            <span class="event-type-text">{{ event.type || 'Événement' }}</span>
           </div>
         </div>
         
@@ -603,7 +601,7 @@ export default {
 
 .section-title {
   font-weight: bold;
-  font-size: 1.2rem;
+
 
 }
 
