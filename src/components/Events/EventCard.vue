@@ -4,7 +4,7 @@
       <template #header>
         <div class="event-card-header">
           <div class="event-image-wrapper">
-            <img v-if="event.imageUrl" :src="event.imageUrl" alt="event image" class="event-image" />
+            <img v-if="event.image" :src="event.image" alt="event image" class="event-image" />
             <div v-else class="event-image-placeholder">
               <i class="pi pi-calendar"></i>
             </div>

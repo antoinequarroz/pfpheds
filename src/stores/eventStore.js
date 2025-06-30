@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia';
 import { db } from 'root/firebase';
 import { ref as dbRef, onValue, push, set, update } from 'firebase/database';
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
 import { ref } from 'vue';
 
 export const useEventStore = defineStore('event', () => {
@@ -22,7 +23,8 @@ export const useEventStore = defineStore('event', () => {
             role: ev.role || '',
             likes: ev.likes || 0,
             liked: ev.liked || false,
-            registered: Array.isArray(ev.registered) ? ev.registered : (ev.registered && typeof ev.registered === 'object' ? Object.values(ev.registered) : [])
+            registered: Array.isArray(ev.registered) ? ev.registered : (ev.registered && typeof ev.registered === 'object' ? Object.values(ev.registered) : []),
+            image: ev.image || null
           }))
         : [];
     });
@@ -37,6 +39,36 @@ export const useEventStore = defineStore('event', () => {
     const startDate = event.startDate instanceof Date ? event.startDate.toISOString() : event.startDate;
     const endDate = event.endDate instanceof Date ? event.endDate.toISOString() : event.endDate;
 
+    let imageUrl = null;
+    if (event.image) {
+      console.log('Image détectée pour upload:', event.image);
+      console.log('Type de fichier:', event.image.type);
+      console.log('Taille du fichier:', event.image.size, 'bytes');
+      
+      try {
+        const storage = getStorage();
+        console.log('Storage initialisé');
+        
+        const imageRef = storageRef(storage, `events/${newEventRef.key}/image`);
+        console.log('Référence créée:', `events/${newEventRef.key}/image`);
+        
+        console.log('Début upload...');
+        const uploadTask = await uploadBytes(imageRef, event.image);
+        console.log('Upload terminé:', uploadTask);
+        
+        imageUrl = await getDownloadURL(uploadTask.ref);
+        console.log('Image uploadée avec succès:', imageUrl);
+      } catch (error) {
+        console.error('Erreur lors de l\'upload de l\'image:', error);
+        console.error('Code erreur:', error.code);
+        console.error('Message erreur:', error.message);
+        console.log('L\'événement sera créé sans image');
+        // On continue sans image plutôt que de faire échouer toute la création
+      }
+    } else {
+      console.log('Aucune image fournie pour cet événement');
+    }
+    
     await set(newEventRef, {
       title: event.title,
       description: event.description,
@@ -48,6 +80,7 @@ export const useEventStore = defineStore('event', () => {
       likes: 0,
       liked: false,
       registered: [],
+      image: imageUrl
     });
   }
 
