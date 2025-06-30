@@ -1,10 +1,9 @@
 <template>
   <div class="radar-profil-root">
-    <h3 class="radar-title">Profil de validation par critère</h3>
-    <Radar :data="chartData" :options="chartOptions" :height="radarHeight" />
+
+    <Radar :data="chartData" :options="chartOptions" :height="radarHeight" class="marge" />
     <div class="radar-stats-info">
-      <span class="radar-total">Nombre de stages : <b>{{ props.totalStages }}</b></span>
-      <span class="radar-total">Total validations : <b>{{ Object.values(props.scores).reduce((a,b)=>a+b,0) }}</b></span>
+      <span class="radar-total">Nombre de stages effectués : <b>{{ props.totalStages }}</b></span>
     </div>
     <div class="radar-valid-criteria">
       <span v-for="crit in validatedCriteria" :key="crit.label" class="radar-crit-valid" :class="{'radar-crit-zero': crit.value === 0}">
@@ -159,11 +158,12 @@ window.addEventListener('resize', () => {
 <style scoped>
 .radar-profil-root {
   background: var(--surface-card, #fff);
-  border-radius: 1.1rem;
+  border-radius: 2rem;
   box-shadow: 0 2px 14px rgba(60,60,60,0.16);
-  padding: 1.1rem 0.7rem 0.9rem 0.7rem;
+  padding: 1.1rem 0.7rem 14rem 0.7rem;
   margin: 1.2rem 0 1.2rem 0;
-  max-width: 600px;
+  width: 100%;
+  max-width: 900px;
   margin-left: auto;
   margin-right: auto;
   max-height: 680px;
@@ -172,6 +172,17 @@ window.addEventListener('resize', () => {
   flex-direction: column;
   justify-content: flex-start;
 }
+
+/* Permettre le scroll jusqu'au fond sur mobile/dans petits conteneurs */
+:global(body),
+:global(.main-scroll-area),
+:global(.profile-main-scroll) {
+  overscroll-behavior: contain;
+  scroll-padding-bottom: 320px;
+}
+
+/* Si la page parent n'a pas déjà overflow-y:auto, à ajouter dans le layout principal */
+
 .radar-stats-info {
   text-align: center;
   color: #fff;
@@ -190,25 +201,32 @@ window.addEventListener('resize', () => {
   text-shadow: 0 2px 8px #222b;
 }
 .radar-valid-criteria {
-  margin-top: 0.7rem;
-  text-align: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.1rem 1.7rem; /* espace vertical et horizontal entre les badges */
+  justify-content: center;
+  margin-top: 1.2rem;
+  margin-bottom: 0.7rem;
 }
 .radar-crit-valid {
-  display: inline-block;
-  background: #fff2;
-  color: #fff;
-  border-radius: 1rem;
-  padding: 0.18em 0.7em 0.18em 0.6em;
-  margin: 0 0.13em 0.13em 0;
-  font-size: 1.03em;
-  font-weight: 700;
-  text-shadow: 0 1px 2px #222b;
-  border: 1.5px solid #fff3;
-  transition: background 0.2s, color 0.2s;
+  font-size: 1.08rem;
+  font-weight: 500;
+  background: rgba(255,255,255,0.09);
+  border-radius: 1.1rem;
+  padding: 0.32rem 1.1rem 0.32rem 0.7rem;
+  margin: 0.2rem 0;
+  box-shadow: 0 1px 5px #0001;
+  display: flex;
+  align-items: center;
+  min-width: 110px;
+  justify-content: center;
 }
 .radar-crit-zero {
-  background: #b9000022;
-  color: #fff;
-  border: 1.5px solid #fff3;
+  opacity: 0.7;
+  background: rgba(255,0,0,0.08);
 }
+.marge {
+  margin: 0.8rem;
+  }
+
 </style>

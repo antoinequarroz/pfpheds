@@ -13,11 +13,12 @@
           <CardNameProfile />
           <!-- Affichage du nom et prénom de l'utilisateur -->
           <VotationResultProfil :userId="user.uid" class="w-full "  />
-          <!-- Résumé du stage utilisateur -->
-          <ResumStageUserProfile class="w-full" />
 
           <!-- Radar profil stage + critères validés -->
           <RadarProfil :scores="radarScores" :totalStages="totalStages" />
+          <!-- Résumé du stage utilisateur -->
+          <ResumStageUserProfile class="w-full" />
+
 
           <!-- Section pour changer la photo de profil
           <div class="p-field mt-4 surfaces-card w-full">

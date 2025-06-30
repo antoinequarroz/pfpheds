@@ -33,14 +33,12 @@ import ProfileInfo from '@/components/UserProfile/ProfileInfo.vue';
 import ResumStageUserProfile from '@/components/UserProfile/ResumStageUserProfile.vue';
 import DocumentsUserProfile from '@/components/UserProfile/DocumentsUserProfile.vue';
 import ChatProfil from '@/components/UserProfile/ChatProfil.vue';
-import AppDarkAndLightMode from '@/layout/AppDarkAndLightMode.vue';
 import { useRoute } from 'vue-router';
 
 export default {
   name: 'Profile',
   components: {
     Navbar,
-    AppDarkAndLightMode,
     InputText,
     Button,
     ProfileInfo,
