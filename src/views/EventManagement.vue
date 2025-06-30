@@ -22,6 +22,9 @@
         </span>
       </div>
       <Button icon="pi pi-plus" label="Créer un événement" class="p-button-primary mb-6 ml-5" @click="showCreateDialog = true" />
+      
+      <!-- Bouton temporaire pour corriger l'événement existant -->
+      <Button icon="pi pi-wrench" label="Corriger événement existant" class="p-button-secondary mb-6 ml-2" @click="fixExistingEvent" />
       <!-- Grille de cartes événements -->
       <div class="event-card-grid">
         <div
@@ -48,9 +51,26 @@
     <Dialog v-model:visible="showCreateDialog" modal header="Créer un événement" :style="{ minWidth: '340px', maxWidth: '98vw' }">
       <EventForm @submit="addEventFromForm" @close="showCreateDialog = false" />
     </Dialog>
+    <!-- Modale modification événement -->
+    <Dialog v-model:visible="showEditDialog" modal header="Modifier l'événement" :style="{ minWidth: '340px', maxWidth: '98vw' }">
+      <EventForm 
+        :event="eventToEdit" 
+        :edit-mode="true"
+        @submit="updateEventFromForm" 
+        @close="showEditDialog = false" />
+    </Dialog>
     <!-- Modale détails événement -->
     <Dialog v-model:visible="showDetailDialog" modal :header="selectedEvent?.title || 'Détails événement'">
-      <EventDetail v-if="selectedEvent" :event="selectedEvent" :user-id="userId" @close="showDetailDialog = false" />
+      <EventDetail 
+        v-if="selectedEvent" 
+        :event="selectedEvent" 
+        :user-id="userId" 
+        @register="registerEvent"
+        @like="likeEvent"
+        @edit="editEvent"
+        @delete="deleteEvent"
+        @fixAdmin="fixEventAdmin"
+        @close="showDetailDialog = false" />
     </Dialog>
   </div>
 </template>
@@ -81,8 +101,10 @@ const userId = computed(() => userState?.user?.uid || null);
 
 // Modales
 const showCreateDialog = ref(false);
+const showEditDialog = ref(false);
 const showDetailDialog = ref(false);
 const selectedEvent = ref(null);
+const eventToEdit = ref(null);
 
 // Recherche
 const searchTerm = ref('');
@@ -157,6 +179,74 @@ async function registerEvent(event) {
 function openEventDetails(event) {
   selectedEvent.value = event;
   showDetailDialog.value = true;
+}
+
+function editEvent(event) {
+  eventToEdit.value = event;
+  showEditDialog.value = true;
+  showDetailDialog.value = false; // Fermer la modale de détails
+}
+
+async function updateEventFromForm(eventData) {
+  try {
+    await eventStore.updateEventComplete(eventToEdit.value.id, eventData);
+    showEditDialog.value = false;
+    console.log('Événement mis à jour avec succès');
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour:', error);
+    alert('Erreur lors de la mise à jour de l\'événement');
+  }
+}
+
+async function deleteEvent(event) {
+  if (confirm(`Voulez-vous vraiment supprimer l'événement "${event.title}" ?`)) {
+    try {
+      await eventStore.deleteEvent(event.id);
+      showDetailDialog.value = false;
+      console.log('Événement supprimé avec succès');
+    } catch (error) {
+      console.error('Erreur lors de la suppression:', error);
+      alert('Erreur lors de la suppression de l\'événement');
+    }
+  }
+}
+
+async function fixExistingEvent() {
+  if (!userId.value) {
+    alert('Vous devez être connecté pour corriger un événement');
+    return;
+  }
+  
+  // Trouver tous les événements sans admin
+  const eventsToFix = events.value.filter(event => !event.admin);
+  
+  if (eventsToFix.length > 0) {
+    const confirmFix = confirm(`Voulez-vous vous attribuer la propriété de ${eventsToFix.length} événement(s) sans propriétaire ?`);
+    
+    if (confirmFix) {
+      try {
+        for (const event of eventsToFix) {
+          await eventStore.updateEvent(event.id, { admin: userId.value });
+        }
+        alert(`${eventsToFix.length} événement(s) corrigé(s) ! Vous pouvez maintenant les modifier/supprimer.`);
+      } catch (error) {
+        console.error('Erreur:', error);
+        alert('Erreur lors de la correction des événements');
+      }
+    }
+  } else {
+    alert('Aucun événement à corriger trouvé');
+  }
+}
+
+async function fixEventAdmin(event) {
+  try {
+    await eventStore.updateEvent(event.id, { admin: userId.value });
+    console.log('Propriété de l\'événement attribuée automatiquement');
+  } catch (error) {
+    console.error('Erreur lors de la correction:', error);
+    alert('Erreur lors de la correction de l\'événement');
+  }
 }
 
 // Charger les événements au montage

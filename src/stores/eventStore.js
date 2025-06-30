@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import { db } from 'root/firebase';
-import { ref as dbRef, onValue, push, set, update } from 'firebase/database';
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from 'firebase/storage';
+import { ref as dbRef, onValue, push, set, update, remove } from 'firebase/database';
+import { getStorage, ref as storageRef, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage';
 import { ref } from 'vue';
 
 export const useEventStore = defineStore('event', () => {
@@ -90,6 +90,92 @@ export const useEventStore = defineStore('event', () => {
     await update(eventRef, updates);
   }
 
+  // Fonction pour mettre à jour un événement complet
+  async function updateEventComplete(eventId, updatedData) {
+    try {
+      const eventRef = dbRef(db, `events/${eventId}`);
+      
+      // Gestion de l'image si elle est fournie
+      let imageUrl = updatedData.image;
+      if (updatedData.image && typeof updatedData.image !== 'string') {
+        console.log('Nouvelle image détectée pour update:', updatedData.image);
+        try {
+          const storage = getStorage();
+          const imageRef = storageRef(storage, `events/${eventId}/image`);
+          const uploadTask = await uploadBytes(imageRef, updatedData.image);
+          imageUrl = await getDownloadURL(uploadTask.ref);
+          console.log('Image mise à jour avec succès:', imageUrl);
+        } catch (error) {
+          console.error('Erreur lors de l\'upload de la nouvelle image:', error);
+          imageUrl = updatedData.existingImage || null; // Garde l'ancienne URL si l'upload échoue
+        }
+      } else if (typeof updatedData.image === 'string') {
+        imageUrl = updatedData.image; // URL existante
+      } else if (updatedData.existingImage) {
+        imageUrl = updatedData.existingImage; // Image existante conservée
+      }
+
+      const updateData = {
+        title: updatedData.title,
+        description: updatedData.description,
+        startDate: updatedData.startDate instanceof Date ? updatedData.startDate.toISOString() : updatedData.startDate,
+        endDate: updatedData.endDate instanceof Date ? updatedData.endDate.toISOString() : updatedData.endDate,
+        type: updatedData.type,
+        role: updatedData.role || null
+      };
+
+      // Ajouter l'image seulement si elle existe
+      if (imageUrl) {
+        updateData.image = imageUrl;
+      }
+
+      await update(eventRef, updateData);
+      console.log('Événement mis à jour avec succès');
+      return true;
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour de l\'événement:', error);
+      throw error;
+    }
+  }
+
+  // Fonction pour corriger les événements existants sans champ admin
+  async function fixEventAdmin(eventId, adminUserId) {
+    try {
+      const eventRef = dbRef(db, `events/${eventId}`);
+      await update(eventRef, { admin: adminUserId });
+      console.log(`Événement ${eventId} mis à jour avec admin: ${adminUserId}`);
+      return true;
+    } catch (error) {
+      console.error('Erreur lors de la correction de l\'événement:', error);
+      throw error;
+    }
+  }
+
+  // Fonction pour supprimer un événement
+  async function deleteEvent(eventId) {
+    try {
+      const eventRef = dbRef(db, `events/${eventId}`);
+      
+      // Supprimer l'image de Firebase Storage si elle existe
+      try {
+        const storage = getStorage();
+        const imageRef = storageRef(storage, `events/${eventId}/image`);
+        await deleteObject(imageRef);
+        console.log('Image supprimée de Firebase Storage');
+      } catch (error) {
+        console.log('Aucune image à supprimer ou erreur:', error.message);
+      }
+
+      // Supprimer l'événement de la base de données
+      await remove(eventRef);
+      console.log('Événement supprimé avec succès');
+      return true;
+    } catch (error) {
+      console.error('Erreur lors de la suppression de l\'événement:', error);
+      throw error;
+    }
+  }
+
   // Inscription/désinscription d'un utilisateur à un événement
   async function toggleRegistration(eventId, userId, registeredList = [], userInfo = null) {
     let newList;
@@ -120,5 +206,5 @@ export const useEventStore = defineStore('event', () => {
     await update(eventRef, { registered: newList });
   }
 
-  return { events, listenEvents, addEvent, updateEvent, toggleRegistration };
+  return { events, listenEvents, addEvent, updateEvent, updateEventComplete, deleteEvent, toggleRegistration, fixEventAdmin };
 });

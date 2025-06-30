@@ -49,6 +49,14 @@
           class="p-button-rounded p-button-danger"
           @click="confirmDelete" />
       </div>
+      
+      <!-- Bouton temporaire pour corriger l'événement sans admin -->
+      <div v-if="!event.admin && userId" class="admin-actions">
+        <Button icon="pi pi-pencil"
+          label="Modifier"
+          class="p-button-rounded p-button-warning"
+          @click="fixEventAdmin" />
+      </div>
 
       <Button icon="pi pi-times" label="Fermer" class="p-button-text p-button-danger ml-3" @click="$emit('close')" />
     </div>
@@ -57,13 +65,15 @@
 
 <script setup>
 import Button from 'primevue/button';
-import { ref, watch, onMounted, computed } from 'vue';
+import { ref, watch, onMounted, computed, defineEmits, defineProps } from 'vue';
 import { getDatabase, ref as dbRef, get } from 'firebase/database';
 
 const props = defineProps({
   event: { type: Object, required: true },
   userId: { type: String, required: false }
 });
+
+const emit = defineEmits(['register', 'like', 'close', 'edit', 'delete', 'fixAdmin']);
 
 const defaultAvatar = 'https://ui-avatars.com/api/?name=Utilisateur';
 
@@ -155,6 +165,13 @@ function confirmDelete() {
   if (confirm(`Voulez-vous vraiment supprimer l'événement "${props.event.title}" ?`)) {
     emit('delete', props.event);
   }
+}
+
+async function fixEventAdmin() {
+  // Attribuer automatiquement la propriété et ouvrir l'édition
+  emit('fixAdmin', props.event);
+  // Émettre aussi l'événement d'édition
+  emit('edit', props.event);
 }
 </script>
 
