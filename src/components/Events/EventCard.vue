@@ -21,8 +21,12 @@
         <div class="event-subtitle">
           <span class="event-date">
             <i class="pi pi-calendar"></i>
-            {{ formatDate(event.startDate) }}<span v-if="event.endDate"> – {{ formatDate(event.endDate) }}</span>
+            {{ formatDateTime(event.startDate) }}
           </span>
+          <div v-if="event.lieu" class="event-location-sober event-location-centered">
+            <i class="pi pi-map-marker"></i>
+            <span>{{ event.lieu }}</span>
+          </div>
         </div>
       </template>
       <template #content>
@@ -30,7 +34,6 @@
           {{ truncateText(event.description, 100) }}
         </div>
         <div class="event-card-actions">
-
           <Button icon="pi pi-user-plus"
             :label="isUserRegistered ? 'Inscrit !' : 'S\'inscrire'"
             class="p-button-rounded event-register-btn event-register-btn-small"
@@ -62,10 +65,17 @@ const isUserRegistered = computed(() => {
   if (props.event.registered && props.event.registered.find(user => user.uid === props.userId)) return true;
   return false;
 });
-function formatDate(date) {
+function formatDateTime(date) {
   if (!date) return '';
-  if (typeof date === 'string') return new Date(date).toLocaleDateString('fr-CH', { year: 'numeric', month: 'long', day: 'numeric' });
-  return date.toLocaleDateString('fr-CH', { year: 'numeric', month: 'long', day: 'numeric' });
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return d.toLocaleString('fr-FR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
 }
 function truncateText(text, length) {
   if (!text) return '';
@@ -158,6 +168,25 @@ function truncateText(text, length) {
   font-size: 1em;
   font-weight: 600;
 }
+.event-location-sober {
+  color: #ffc700;
+  font-size: 0.98em;
+  font-weight: 800;
+  margin: 0.15em 0 0.5em 0;
+  display: flex;
+  align-items: center;
+  gap: 0.35em;
+}
+.event-location-centered {
+  justify-content: center;
+  text-align: center;
+  width: 100%;
+}
+.event-location-sober .pi-map-marker {
+  font-size: 0.95em;
+  color: #ffc700;
+  margin-bottom: 1px;
+}
 .event-description {
   text-align: center;
   color: #fff;
@@ -169,7 +198,6 @@ function truncateText(text, length) {
   text-overflow: ellipsis;
   height: calc(3 * 1.5em);
   font-size: 1.04em;
-  opacity: 0.97;
 }
 .event-card-actions {
   display: flex;

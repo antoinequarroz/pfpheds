@@ -17,6 +17,10 @@
       <Calendar v-model="form.endDate" showTime hourFormat="24" dateFormat="dd/mm/yy" class="w-full surface-card" showIcon />
     </div>
     <div class="form-group">
+      <label>Lieu</label>
+      <InputText v-model="form.lieu" placeholder="Lieu de l'événement" class="w-full surface-card" />
+    </div>
+    <div class="form-group">
       <label>Type d'événement</label>
       <Dropdown v-model="form.type" :options="typeOptions" optionLabel="label" optionValue="value" placeholder="Sélectionner le type" class="w-full surface-card" />
     </div>
@@ -90,6 +94,7 @@ const form = ref({
   description: '',
   startDate: '',
   endDate: '',
+  lieu: '',
   type: '',
   role: '',
   imageFile: null,
@@ -104,6 +109,7 @@ onMounted(() => {
     form.value.description = props.event.description || '';
     form.value.startDate = props.event.startDate ? new Date(props.event.startDate) : '';
     form.value.endDate = props.event.endDate ? new Date(props.event.endDate) : '';
+    form.value.lieu = props.event.lieu || '';
     form.value.type = props.event.type || '';
     form.value.role = props.event.role || '';
     form.value.existingImage = props.event.image || null;
@@ -117,6 +123,7 @@ watch(() => props.event, (newEvent) => {
     form.value.description = newEvent.description || '';
     form.value.startDate = newEvent.startDate ? new Date(newEvent.startDate) : '';
     form.value.endDate = newEvent.endDate ? new Date(newEvent.endDate) : '';
+    form.value.lieu = newEvent.lieu || '';
     form.value.type = newEvent.type || '';
     form.value.role = newEvent.role || '';
     form.value.existingImage = newEvent.image || null;
@@ -154,10 +161,9 @@ function submitForm() {
     delete formData.imageFile;
   }
   emit('submit', formData);
-  
   // Ne réinitialiser le formulaire que si ce n'est pas en mode édition
   if (!props.editMode) {
-    form.value = { title: '', description: '', startDate: '', endDate: '', type: '', role: '', imageFile: null, imagePreview: null, existingImage: null };
+    form.value = { title: '', description: '', startDate: '', endDate: '', lieu: '', type: '', role: '', imageFile: null, imagePreview: null, existingImage: null };
   }
   emit('close');
 }

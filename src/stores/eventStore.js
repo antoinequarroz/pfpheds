@@ -24,7 +24,8 @@ export const useEventStore = defineStore('event', () => {
             likes: ev.likes || 0,
             liked: ev.liked || false,
             registered: Array.isArray(ev.registered) ? ev.registered : (ev.registered && typeof ev.registered === 'object' ? Object.values(ev.registered) : []),
-            image: ev.image || null
+            image: ev.image || null,
+            lieu: ev.lieu || ''
           }))
         : [];
     });
@@ -74,6 +75,7 @@ export const useEventStore = defineStore('event', () => {
       description: event.description,
       startDate,
       endDate,
+      lieu: event.lieu || '',
       type: event.type,
       role: event.type === 'private' ? event.role : '',
       admin: event.admin,
@@ -120,6 +122,7 @@ export const useEventStore = defineStore('event', () => {
         description: updatedData.description,
         startDate: updatedData.startDate instanceof Date ? updatedData.startDate.toISOString() : updatedData.startDate,
         endDate: updatedData.endDate instanceof Date ? updatedData.endDate.toISOString() : updatedData.endDate,
+        lieu: updatedData.lieu || '',
         type: updatedData.type,
         role: updatedData.role || null
       };

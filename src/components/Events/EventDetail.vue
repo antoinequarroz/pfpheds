@@ -8,7 +8,16 @@
         <i class="pi pi-calendar"></i>
       </div>
     </div>
-    <div class="event-detail-date"><i class="pi pi-calendar"></i> {{ formatDate(event.startDate) }}<span v-if="event.endDate"> – {{ formatDate(event.endDate) }}</span></div>
+    <div class="event-date-type">
+      <span class="event-date">
+        <i class="pi pi-calendar"></i>
+        {{ formatDateTime(event.startDate) }}<span v-if="event.endDate"> – {{ formatDateTime(event.endDate) }}</span>
+      </span>
+      <div v-if="event.lieu" class="event-location-sober">
+        <i class="pi pi-map-marker"></i>
+        <span>{{ event.lieu }}</span>
+      </div>
+    </div>
     <div class="event-detail-description">{{ event.description }}</div>
     <div class="event-detail-type">
       <span class="event-type-badge" :class="event.type">{{ event.type === 'private' ? 'Privé' : 'Public' }}</span>
@@ -48,7 +57,7 @@
           class="p-button-rounded p-button-warning"
           @click="fixEventAdmin" />
       </div>
-      <Button icon="pi pi-times" label="Fermer" class="p-button-text p-button-danger ml-3" @click="$emit('close')" />
+      <Button icon="pi pi-times" label="Fermer" class="p-button-rounded p-button-danger ml-3" @click="$emit('close')" />
     </div>
   </div>
 </template>
@@ -140,10 +149,17 @@ onMounted(() => {
   fetchParticipantsInfo((props.event && props.event.registered) || []);
 });
 
-function formatDate(date) {
+function formatDateTime(date) {
   if (!date) return '';
-  if (typeof date === 'string') return new Date(date).toLocaleDateString('fr-CH', { year: 'numeric', month: 'long', day: 'numeric' });
-  return date.toLocaleDateString('fr-CH', { year: 'numeric', month: 'long', day: 'numeric' });
+  const d = typeof date === 'string' ? new Date(date) : date;
+  return d.toLocaleString('fr-FR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false
+  });
 }
 
 function getUserAvatar(uid) {
@@ -209,10 +225,29 @@ async function fixEventAdmin() {
   color: #ffc700;
   max-width: 100%;
 }
-.event-detail-date {
-  color: #ffc700;
+.event-date-type {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
   margin-bottom: 0.6em;
+}
+.event-date {
+  color: #ffc700;
   font-weight: 600;
+  font-size: 1.5em;
+}
+.event-location-sober {
+  color: #ffc700;
+  font-size: 1.5em;
+  font-weight: 800;
+  margin: 0.2em 0 0.7em 0;
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+}
+.event-location-sober .pi-map-marker {
+  font-size: 1em;
+  color: #ffc700;
 }
 .event-detail-description {
   margin-bottom: 1.2em;
