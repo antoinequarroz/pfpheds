@@ -1,15 +1,13 @@
 <template>
   <div class="event-detail-content">
     <h3>{{ event.title }}</h3>
-    
     <!-- Image de l'événement -->
-    <div class="event-detail-image">
+    <div class="event-detail-image event-image-wrapper">
       <img v-if="event.image" :src="event.image" :alt="event.title" class="event-image" />
       <div v-else class="event-image-placeholder">
         <i class="pi pi-calendar"></i>
       </div>
     </div>
-    
     <div class="event-detail-date"><i class="pi pi-calendar"></i> {{ formatDate(event.startDate) }}<span v-if="event.endDate"> – {{ formatDate(event.endDate) }}</span></div>
     <div class="event-detail-description">{{ event.description }}</div>
     <div class="event-detail-type">
@@ -32,12 +30,6 @@
         class="p-button-rounded p-button-primary"
         :severity="isUserRegistered ? 'success' : 'primary'"
         @click="$emit('register', event)" />
-      <Button icon="pi pi-heart"
-        :label="event && event.likes ? event.likes.toString() : ''"
-        class="p-button-rounded p-button-text p-button-danger"
-        :severity="event && event.liked ? 'danger' : undefined"
-        @click="$emit('like', event)" />
-
       <!-- Boutons d'administration (seulement pour le créateur) -->
       <div v-if="canManageEvent" class="admin-actions">
         <Button icon="pi pi-pencil"
@@ -49,7 +41,6 @@
           class="p-button-rounded p-button-danger"
           @click="confirmDelete" />
       </div>
-      
       <!-- Bouton temporaire pour corriger l'événement sans admin -->
       <div v-if="!event.admin && userId" class="admin-actions">
         <Button icon="pi pi-pencil"
@@ -57,7 +48,6 @@
           class="p-button-rounded p-button-warning"
           @click="fixEventAdmin" />
       </div>
-
       <Button icon="pi pi-times" label="Fermer" class="p-button-text p-button-danger ml-3" @click="$emit('close')" />
     </div>
   </div>
@@ -177,27 +167,47 @@ async function fixEventAdmin() {
 
 <style scoped>
 .event-detail-content {
-  padding: 1.2em;
-  min-width: 260px;
-  padding-bottom: 2em;
+  max-width: 600px;
+  min-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+  border-radius: 1.2rem;
+  box-shadow: 0 4px 18px 0 #232b4a18;
+  padding: 2.2rem 1.5rem 2.2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
-.event-detail-image {
-  margin-bottom: 1em;
+.event-detail-image.event-image-wrapper {
+  position: relative;
+  width: 100%;
+  height: 12rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.2rem;
+  max-width: 100%;
 }
 .event-image {
   width: 100%;
-  height: 150px;
+  height: 12rem;
   object-fit: cover;
-  border-radius: 10px;
+  border-radius: 0.8rem 0.8rem 0 0;
+  box-shadow: 0 2px 12px #232b4a22;
+  max-width: 100%;
+  display: block;
 }
 .event-image-placeholder {
   width: 100%;
-  height: 150px;
+  height: 12rem;
+  background: linear-gradient(135deg, #ffc70033 60%, #232b4a11 100%);
+  border-radius: 0.8rem 0.8rem 0 0;
   display: flex;
-  justify-content: center;
   align-items: center;
-  background-color: #f0f0f0;
-  border-radius: 10px;
+  justify-content: center;
+  font-size: 2.5em;
+  color: #ffc700;
+  max-width: 100%;
 }
 .event-detail-date {
   color: #ffc700;
@@ -206,7 +216,7 @@ async function fixEventAdmin() {
 }
 .event-detail-description {
   margin-bottom: 1.2em;
-  color: #232b4a;
+  color: #fff;
 }
 .event-detail-type {
   margin-bottom: 1em;

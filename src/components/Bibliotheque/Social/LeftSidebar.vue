@@ -129,7 +129,7 @@
   <Dialog 
     v-model:visible="showEventDetail" 
     :header="selectedEvent?.title || 'Détails de l\'événement'"
-    :style="{ width: '50vw' }"
+    :style="{ width: '600px', maxWidth: '96vw' }"
     :modal="true"
     :closable="true"
     :draggable="false"
@@ -138,7 +138,6 @@
       v-if="selectedEvent"
       :event="selectedEvent"
       @register="handleRegister"
-      @like="handleLike"
       @edit="handleEdit"
       @delete="handleDelete"
     />
@@ -296,17 +295,6 @@ export default {
         console.log('Inscription réussie');
       } catch (error) {
         console.error('Erreur lors de l\'inscription:', error);
-      }
-    },
-    async handleLike(event) {
-      try {
-        await this.eventStore.updateEventFields(event.id, {
-          likes: (event.likes || 0) + 1,
-          liked: true
-        });
-        console.log('Like ajouté');
-      } catch (error) {
-        console.error('Erreur lors du like:', error);
       }
     },
     handleEdit(event) {

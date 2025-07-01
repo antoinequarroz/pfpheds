@@ -30,14 +30,7 @@
           {{ truncateText(event.description, 100) }}
         </div>
         <div class="event-card-actions">
-          <div class="like-btn-group">
-            <Button icon="pi pi-heart"
-              class="p-button-rounded p-button-text event-like-btn like-centered"
-              :severity="event.liked ? 'danger' : undefined"
-              @click="$emit('like', event)"
-            />
-            <span class="like-count">{{ event.likes }}</span>
-          </div>
+
           <Button icon="pi pi-user-plus"
             :label="isUserRegistered ? 'Inscrit !' : 'S\'inscrire'"
             class="p-button-rounded event-register-btn event-register-btn-small"

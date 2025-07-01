@@ -58,7 +58,7 @@
         @close="showEditDialog = false" />
     </Dialog>
     <!-- Modale détails événement -->
-    <Dialog v-model:visible="showDetailDialog" modal :header="selectedEvent?.title || 'Détails événement'">
+    <Dialog v-model:visible="showDetailDialog" modal :header="selectedEvent?.title || 'Détails événement'" :style="{ width: '600px', maxWidth: '96vw' }">
       <EventDetail 
         v-if="selectedEvent" 
         :event="selectedEvent" 
