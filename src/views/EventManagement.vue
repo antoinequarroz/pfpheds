@@ -15,10 +15,27 @@
           </p>
         </header>
       </div>
-      <!-- Barre de recherche -->
-      <div class="search-bar">
+      <!-- Barre de recherche et filtres avancés -->
+      <div class="search-bar" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
         <span class="p-input-icon-left">
           <InputText v-model="searchTerm" placeholder="Rechercher par titre, description ou type" class="search-input style-bar" />
+        </span>
+        <span>
+          <Button 
+            :outlined="!privateOnly" 
+            :severity="privateOnly ? 'danger' : 'secondary'"
+            icon="pi pi-lock" 
+            label="Privé seulement" 
+            class="p-button-sm mr-2"
+            @click="privateOnly = !privateOnly" 
+            :aria-pressed="privateOnly.toString()"
+          />
+        </span>
+        <span v-if="privateOnly">
+          <Dropdown v-model="selectedGroup" :options="privateRolesDropdown" optionLabel="label" optionValue="value" placeholder="Rôle (tous)" class="p-inputtext p-dropdown-sm mr-2" style="min-width:120px;" />
+        </span>
+        <span>
+          <Dropdown v-model="sortOrder" :options="sortOptions" optionLabel="label" optionValue="value" class="p-inputtext p-dropdown-sm" style="min-width:120px;" />
         </span>
       </div>
       <Button icon="pi pi-plus" label="Créer un événement" class="p-button-primary mb-6 ml-5" @click="showCreateDialog = true" />
@@ -82,6 +99,7 @@ import RightSidebar from '@/components/Bibliotheque/Social/RightSidebar.vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
+import Dropdown from 'primevue/dropdown';
 import { useEventStore } from '@/stores/eventStore';
 import { getDatabase, ref as dbRef, get } from 'firebase/database';
 // Composants custom
@@ -106,25 +124,56 @@ const eventToEdit = ref(null);
 
 // Recherche
 const searchTerm = ref('');
+const privateOnly = ref(false);
+const selectedGroup = ref('');
+const sortOrder = ref('asc');
+
+// Options pour Dropdown PrimeVue
+const sortOptions = [
+  { label: 'Plus proche', value: 'asc' },
+  { label: 'Plus lointain', value: 'desc' }
+];
+const privateRoles = computed(() => {
+  const roles = new Set();
+  events.value.forEach(ev => {
+    if (ev.type === 'private' && ev.role) roles.add(ev.role);
+  });
+  return Array.from(roles);
+});
+const privateRolesDropdown = computed(() => [
+  { label: 'Tous', value: '' },
+  ...privateRoles.value.map(r => ({ label: r, value: r }))
+]);
+
 const filteredEvents = computed(() => {
   const now = new Date();
-  if (!searchTerm.value.trim()) {
-    // Ne garder que les événements à venir (endDate ou startDate > maintenant)
-    return events.value.filter(ev => {
-      const eventDate = new Date(ev.endDate || ev.startDate);
-      return eventDate > now || eventDate.toDateString() === now.toDateString();
-    });
-  }
-  const term = searchTerm.value.toLowerCase();
-  return events.value.filter(ev => {
+  let filtered = events.value.filter(ev => {
     const eventDate = new Date(ev.endDate || ev.startDate);
+    // Afficher uniquement les événements futurs ou du jour
     const isFuture = eventDate > now || eventDate.toDateString() === now.toDateString();
-    return isFuture && (
+    if (!isFuture) return false;
+    // Filtre privé
+    if (privateOnly.value && ev.type !== 'private') return false;
+    // Filtre rôle
+    if (privateOnly.value && selectedGroup.value && ev.role !== selectedGroup.value) return false;
+    return true;
+  });
+  // Recherche texte
+  if (searchTerm.value.trim()) {
+    const term = searchTerm.value.toLowerCase();
+    filtered = filtered.filter(ev =>
       (ev.title && ev.title.toLowerCase().includes(term)) ||
       (ev.description && ev.description.toLowerCase().includes(term)) ||
       (ev.type && ev.type.toLowerCase().includes(term))
     );
+  }
+  // Tri par date
+  filtered.sort((a, b) => {
+    const dateA = new Date(a.startDate);
+    const dateB = new Date(b.startDate);
+    return sortOrder.value === 'asc' ? dateA - dateB : dateB - dateA;
   });
+  return filtered;
 });
 
 // Actions
