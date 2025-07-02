@@ -55,26 +55,31 @@
       </div>
     </div>
     <div class="form-actions">
-      <Button type="submit" label="Créer" class="p-button-primary w-full mt-2" icon="pi pi-plus-circle" />
+      <Button v-if="!editMode || canManageEvent" type="submit" :label="editMode ? 'Modifier' : 'Créer'" class="p-button-primary w-full mt-2" :icon="editMode ? 'pi pi-check' : 'pi pi-plus-circle'" />
       <Button type="button" label="Annuler" class="p-button-text w-full mt-2" icon="pi pi-times" @click="$emit('close')" />
+      <Button v-if="canManageEvent" type="button" label="Supprimer" class="p-button-danger w-full mt-2" icon="pi pi-trash" @click="confirmDeleteEvent" />
     </div>
   </form>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue';
+import { ref, onMounted, watch, computed } from 'vue';
 import InputText from 'primevue/inputtext';
 import Textarea from 'primevue/textarea';
 import Calendar from 'primevue/calendar';
 import Dropdown from 'primevue/dropdown';
 import Button from 'primevue/button';
+import { useConfirm } from 'primevue/useconfirm';
 
 const props = defineProps({
   event: { type: Object, default: null },
-  editMode: { type: Boolean, default: false }
+  editMode: { type: Boolean, default: false },
+  userId: { type: String, default: null }
 });
 
-const emit = defineEmits(['submit', 'close']);
+const emit = defineEmits(['submit', 'close', 'delete']);
+
+const confirm = useConfirm();
 
 const typeOptions = [
   { label: 'Public', value: 'public' },
@@ -100,6 +105,10 @@ const form = ref({
   imageFile: null,
   imagePreview: null,
   existingImage: null
+});
+
+const canManageEvent = computed(() => {
+  return props.editMode && props.event && props.userId && props.event.admin === props.userId;
 });
 
 // Pré-remplir le formulaire en mode édition
@@ -151,6 +160,15 @@ function removeImage() {
   if (fileInput) {
     fileInput.value = '';
   }
+}
+
+function confirmDeleteEvent() {
+  confirm.require({
+    message: "Supprimer définitivement cet événement ?",
+    header: "Confirmation de suppression",
+    icon: "pi pi-exclamation-triangle",
+    accept: () => emit('delete', event?.id),
+  });
 }
 
 function submitForm() {

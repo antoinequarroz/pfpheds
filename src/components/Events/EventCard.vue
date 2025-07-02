@@ -23,9 +23,9 @@
             <i class="pi pi-calendar"></i>
             {{ formatDateTime(event.startDate) }}
           </span>
-          <div v-if="event.lieu" class="event-location-sober event-location-centered">
-            <i class="pi pi-map-marker"></i>
-            <span>{{ event.lieu }}</span>
+          <div v-if="event.lieu" class="event-location-sober">
+            <i class="pi pi-map-marker" style="color:#ffc700;font-size:1.1em;margin-right:6px;"></i>
+            <span style="color:#ffc700;font-weight:800">{{ event.lieu }}</span>
           </div>
         </div>
       </template>
@@ -175,17 +175,11 @@ function truncateText(text, length) {
   margin: 0.15em 0 0.5em 0;
   display: flex;
   align-items: center;
-  gap: 0.35em;
-}
-.event-location-centered {
   justify-content: center;
-  text-align: center;
-  width: 100%;
 }
 .event-location-sober .pi-map-marker {
-  font-size: 0.95em;
+  font-size: 1em;
   color: #ffc700;
-  margin-bottom: 1px;
 }
 .event-description {
   text-align: center;

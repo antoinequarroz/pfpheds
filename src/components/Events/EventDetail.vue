@@ -14,8 +14,8 @@
         {{ formatDateTime(event.startDate) }}<span v-if="event.endDate"> – {{ formatDateTime(event.endDate) }}</span>
       </span>
       <div v-if="event.lieu" class="event-location-sober">
-        <i class="pi pi-map-marker"></i>
-        <span>{{ event.lieu }}</span>
+        <i class="pi pi-map-marker" style="color:#ffc700;font-size:1.2em;margin-right:8px;"></i>
+        <span style="color:#ffc700;font-weight:800">{{ event.lieu }}</span>
       </div>
     </div>
     <div class="event-detail-description">{{ event.description }}</div>
@@ -39,25 +39,9 @@
         class="p-button-rounded p-button-primary"
         :severity="isUserRegistered ? 'success' : 'primary'"
         @click="$emit('register', event)" />
-      <!-- Boutons d'administration (seulement pour le créateur) -->
-      <div v-if="canManageEvent" class="admin-actions">
-        <Button icon="pi pi-pencil"
-          label="Modifier"
-          class="p-button-rounded p-button-warning"
-          @click="$emit('edit', event)" />
-        <Button icon="pi pi-trash"
-          label="Supprimer"
-          class="p-button-rounded p-button-danger"
-          @click="confirmDelete" />
-      </div>
-      <!-- Bouton temporaire pour corriger l'événement sans admin -->
-      <div v-if="!event.admin && userId" class="admin-actions">
-        <Button icon="pi pi-pencil"
-          label="Modifier"
-          class="p-button-rounded p-button-warning"
-          @click="fixEventAdmin" />
-      </div>
-      <Button icon="pi pi-times" label="Fermer" class="p-button-rounded p-button-danger ml-3" @click="$emit('close')" />
+      <Button v-if="canManageEvent" icon="pi pi-pencil" label="Modifier" class="p-button-rounded p-button-warning mr-2" @click="$emit('edit', event)" />
+      <Button v-if="canManageEvent" icon="pi pi-trash" label="Supprimer" class="p-button-rounded p-button-danger mr-2" @click="confirmDelete" />
+      <Button icon="pi pi-share-alt" label="Partager" class="p-button-rounded p-button-info" @click="confirmShare" />
     </div>
   </div>
 </template>
@@ -66,10 +50,14 @@
 import Button from 'primevue/button';
 import { ref, watch, onMounted, computed, defineEmits, defineProps } from 'vue';
 import { getDatabase, ref as dbRef, get } from 'firebase/database';
+import { useNewsFeedStore } from '@/stores/newsFeedStore';
+import { useToast } from 'primevue/usetoast';
+import { useConfirm } from 'primevue/useconfirm';
 
 const props = defineProps({
   event: { type: Object, required: true },
-  userId: { type: String, required: false }
+  userId: { type: String, required: true },
+  userProfile: { type: Object, required: false }
 });
 
 const emit = defineEmits(['register', 'like', 'close', 'edit', 'delete', 'fixAdmin']);
@@ -93,6 +81,10 @@ const canManageEvent = computed(() => {
   // L'utilisateur peut gérer l'événement s'il en est le créateur
   return props.event && props.userId && props.event.admin === props.userId;
 });
+
+const newsFeedStore = useNewsFeedStore();
+const toast = useToast();
+const confirm = useConfirm();
 
 async function fetchParticipantsInfo(registeredData) {
   if (!registeredData || registeredData.length === 0) {
@@ -168,9 +160,38 @@ function getUserAvatar(uid) {
 }
 
 function confirmDelete() {
-  if (confirm(`Voulez-vous vraiment supprimer l'événement "${props.event.title}" ?`)) {
-    emit('delete', props.event);
+  confirm.require({
+    message: "Supprimer définitivement cet événement ?",
+    header: "Confirmation de suppression",
+    icon: "pi pi-exclamation-triangle",
+    accept: () => emit('delete', props.event.id),
+  });
+}
+
+async function shareEvent() {
+  try {
+    console.log('shareEvent called', props.event, props.userId, props.userProfile);
+    const user = {
+      uid: props.userId,
+      nom: props.userProfile?.nom || '',
+      prenom: props.userProfile?.prenom || '',
+      photoURL: props.userProfile?.photoURL || ''
+    };
+    await newsFeedStore.shareEvent(props.event, user);
+    toast.add({ severity: 'success', summary: 'Partagé', detail: "Événement partagé dans le fil d'actualité !", life: 3500 });
+  } catch (e) {
+    console.error('Erreur partage:', e);
+    toast.add({ severity: 'error', summary: 'Erreur', detail: 'Échec du partage.', life: 3500 });
   }
+}
+
+function confirmShare() {
+  confirm.require({
+    message: 'Partager cet événement dans le fil d\'actualité ?',
+    header: 'Partager',
+    icon: 'pi pi-share-alt',
+    accept: shareEvent
+  });
 }
 
 async function fixEventAdmin() {
@@ -243,7 +264,7 @@ async function fixEventAdmin() {
   margin: 0.2em 0 0.7em 0;
   display: flex;
   align-items: center;
-  gap: 0.4em;
+  justify-content: center;
 }
 .event-location-sober .pi-map-marker {
   font-size: 1em;
