@@ -107,13 +107,24 @@ const eventToEdit = ref(null);
 // Recherche
 const searchTerm = ref('');
 const filteredEvents = computed(() => {
-  if (!searchTerm.value.trim()) return events.value;
+  const now = new Date();
+  if (!searchTerm.value.trim()) {
+    // Ne garder que les événements à venir (endDate ou startDate > maintenant)
+    return events.value.filter(ev => {
+      const eventDate = new Date(ev.endDate || ev.startDate);
+      return eventDate > now || eventDate.toDateString() === now.toDateString();
+    });
+  }
   const term = searchTerm.value.toLowerCase();
-  return events.value.filter(ev =>
-    (ev.title && ev.title.toLowerCase().includes(term)) ||
-    (ev.description && ev.description.toLowerCase().includes(term)) ||
-    (ev.type && ev.type.toLowerCase().includes(term))
-  );
+  return events.value.filter(ev => {
+    const eventDate = new Date(ev.endDate || ev.startDate);
+    const isFuture = eventDate > now || eventDate.toDateString() === now.toDateString();
+    return isFuture && (
+      (ev.title && ev.title.toLowerCase().includes(term)) ||
+      (ev.description && ev.description.toLowerCase().includes(term)) ||
+      (ev.type && ev.type.toLowerCase().includes(term))
+    );
+  });
 });
 
 // Actions

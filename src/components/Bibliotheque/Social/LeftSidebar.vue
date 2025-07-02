@@ -197,6 +197,7 @@ export default {
       );
     },
     upcomingEvents() {
+      const now = new Date();
       const userId = this.user.id;
       
       if (!userId || !this.eventStore.events) {
@@ -205,12 +206,9 @@ export default {
       
       // Filtrer les événements où l'utilisateur est inscrit
       const userEvents = this.eventStore.events.filter(event => {
-        if (!event.registered || !Array.isArray(event.registered)) {
-          return false;
-        }
-        
-        // Vérifier si l'utilisateur est inscrit (compatibilité ancien/nouveau format)
-        return event.registered.some(registration => {
+        // Vérification inscription utilisateur (compatibilité formats)
+        if (!event.registered) return false;
+        const isRegistered = event.registered.some(registration => {
           if (typeof registration === 'string') {
             return registration === userId;
           } else if (typeof registration === 'object' && registration.uid) {
@@ -218,24 +216,13 @@ export default {
           }
           return false;
         });
+        if (!isRegistered) return false;
+        const eventDate = new Date(event.endDate || event.startDate);
+        return eventDate > now || eventDate.toDateString() === now.toDateString();
       });
-      
-      // Filtrer les événements futurs et les trier par date
-      const now = new Date();
-      const thirtyDaysAgo = new Date(now.getTime() - (30 * 24 * 60 * 60 * 1000));
-      
       return userEvents
-        .filter(event => {
-          // Utiliser endDate si disponible, sinon startDate
-          const eventDate = new Date(event.endDate || event.startDate);
-          
-          // Inclure les événements futurs OU récents (30 derniers jours) pour les tests
-          return eventDate > now || 
-                 (eventDate.toDateString() === now.toDateString()) ||
-                 (eventDate > thirtyDaysAgo);
-        })
         .sort((a, b) => new Date(a.startDate) - new Date(b.startDate))
-        .slice(0, 3); // Limiter à 3 événements maximum
+        .slice(0, 5);
     },
   },
   methods: {
