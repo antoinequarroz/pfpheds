@@ -88,6 +88,7 @@
         v-tooltip.top="'Voir tous les événements'"
       />
     </div>
+
     
     <div v-if="upcomingEvents.length === 0" class="no-events">
       <i class="pi pi-calendar-times text-400"></i>
