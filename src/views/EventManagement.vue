@@ -20,25 +20,29 @@
         <span class="p-input-icon-left">
           <InputText v-model="searchTerm" placeholder="Rechercher par titre, description ou type" class="search-input style-bar" />
         </span>
+
+      </div>
+      <div class="filter-bar" style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+
+      <Button icon="pi pi-plus" label="Créer un événement" class="p-button-primary mb-6 ml-5" @click="showCreateDialog = true" />
         <span>
-          <Button 
-            :outlined="!privateOnly" 
+          <Button
+            :outlined="!privateOnly"
             :severity="privateOnly ? 'danger' : 'secondary'"
-            icon="pi pi-lock" 
-            label="Privé seulement" 
-            class="p-button-sm mr-2"
-            @click="privateOnly = !privateOnly" 
+            icon="pi pi-lock"
+            label="Privé seulement"
+            class="p-button-sm mr-2 same-width-btn"
+            @click="privateOnly = !privateOnly"
             :aria-pressed="privateOnly.toString()"
           />
         </span>
         <span v-if="privateOnly">
-          <Dropdown v-model="selectedGroup" :options="privateRolesDropdown" optionLabel="label" optionValue="value" placeholder="Rôle (tous)" class="p-inputtext p-dropdown-sm mr-2" style="min-width:120px;" />
+          <Dropdown v-model="selectedGroup" :options="privateRolesDropdown" optionLabel="label" optionValue="value" placeholder="Rôle (tous)" class="p-inputtext p-dropdown-sm same-width-btn event-dropdown" />
         </span>
         <span>
-          <Dropdown v-model="sortOrder" :options="sortOptions" optionLabel="label" optionValue="value" class="p-inputtext p-dropdown-sm" style="min-width:120px;" />
+          <Dropdown v-model="sortOrder" :options="sortOptions" optionLabel="label" optionValue="value" class="p-inputtext p-dropdown-sm same-width-btn event-dropdown" />
         </span>
       </div>
-      <Button icon="pi pi-plus" label="Créer un événement" class="p-button-primary mb-6 ml-5" @click="showCreateDialog = true" />
 
       <!-- Grille de cartes événements -->
       <div class="event-card-grid">
@@ -405,6 +409,32 @@ onMounted(() => {
   text-align: center;
   grid-column: 1/-1;
 }
+.same-width-btn {
+  min-width: 160px !important;
+  max-width: 180px;
+  flex-shrink: 0;
+  height: 38px !important;
+  line-height: 36px !important;
+  padding: 0 1rem !important;
+  font-size: 1rem;
+  border-radius: 6px;
+}
+.event-dropdown {
+  --width: 160px;
+  width: 160px !important;
+  min-width: 160px !important;
+  max-width: 180px;
+  box-sizing: border-box;
+  height: 38px !important;
+  line-height: 36px !important;
+  font-size: 1rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+}
+.event-toolbar {
+  margin-bottom: 2rem;
+}
 @media (max-width: 1400px) {
   .event-layout,
   .event-layout-padded {
@@ -455,6 +485,19 @@ onMounted(() => {
   .event-card-col {
     width: 100%;
     min-width: 0;
+  }
+}
+@media (max-width: 700px) {
+  .event-toolbar {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .same-width-btn, .event-dropdown {
+    min-width: 120px !important;
+    max-width: 100%;
+    width: 100% !important;
+    height: 36px !important;
+    font-size: 0.97rem;
   }
 }
 </style>
