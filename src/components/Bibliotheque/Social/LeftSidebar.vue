@@ -372,6 +372,7 @@ export default {
   color: var(--primary-color);
 }
 
+
 .event-list {
   list-style: none;
   padding: 0;
