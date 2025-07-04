@@ -35,12 +35,6 @@
             <span>Documents PFP</span>
           </li>
         </ul>
-        <ul>
-          <li @click="goToTools">
-            <i class="pi pi-globe link-icon"></i>
-            <span>Outils</span>
-          </li>
-        </ul>
       </div>
     </div>
 
@@ -229,9 +223,6 @@ export default {
     },
     goToDocumentPFP() {
       this.$router.push("/documents_pfp");
-    },
-    goToTools() {
-      this.$router.push("/mobile-outils");
     },
     async goToLogout() {
       const auth = getAuth();

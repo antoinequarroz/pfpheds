@@ -21,7 +21,6 @@
                 @click="viewAssignmentDetails(assignment)"
               />
             </div>
-
           </div>
 
           <!-- Bloc d'informations de l'affectation -->
