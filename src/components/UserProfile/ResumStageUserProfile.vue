@@ -72,7 +72,7 @@
 
       </div>
       <div v-else>
-        Chargement des places...
+        Chargement des places....
       </div>
     </div>
 
