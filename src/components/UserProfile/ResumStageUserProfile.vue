@@ -396,6 +396,7 @@ import {
   getDownloadURL,
   deleteObject
 } from "firebase/storage";
+import RadarProfil from '@/components/UserProfile/RadarProfil.vue'
 
 const toast = useToast();
 const route = useRoute();
