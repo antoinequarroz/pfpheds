@@ -247,6 +247,7 @@ const routes = [
     name: 'Game', 
     meta: { requiresAuth: true } 
   },
+
 ];
 
 // Create router instance
