@@ -9,7 +9,7 @@
           class="surfaces-card shadow-2 mb-3 flex flex-column gap-2"
           style="min-height: 120px; border-radius: 2rem; background: var(--surface-card);"
         >
-          <!-- Ligne du titre + bouton Voir les détails aligné à droite -->
+          <!-- En-tête de la carte avec titre et bouton -->
           <div class="flex align-items-center justify-content-between mb-2" style="height: 32px;">
             <h4 class="m-0">Formation Pratique attribuée</h4>
             <Button
