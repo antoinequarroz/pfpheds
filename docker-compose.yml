@@ -27,6 +27,7 @@ services:
     ports:
       - "3000:3000"
 
+
   # proxy:
   #   image: nginx:stable-alpine
   #   container_name: proxy
@@ -39,6 +40,7 @@ services:
   #     - backend
   #   networks:
   #     - appnet
+
 
 networks:
   appnet:
