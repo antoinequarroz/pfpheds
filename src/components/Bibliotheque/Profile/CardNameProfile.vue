@@ -7,8 +7,6 @@
     class="mb-4"
   />
   <!-- XP BAR -->
-
-
   <XPBar
     v-if="userGamification && userGamification.xp !== undefined && userGamification.xpToNext !== undefined"
     :xp="userGamification.xp"

@@ -54,8 +54,11 @@ const maisonColor = computed(() => maisonData.value.color);
 const bandeauStyle = computed(() => ({
   background: `url('${maisonData.value.pattern}') center/cover, linear-gradient(90deg, ${maisonData.value.color} 80%, #222 100%)`,
   position: 'relative',
-  minHeight: '120px',
-  overflow: 'hidden'
+  minHeight: '220px',
+  borderRadius: '1.3rem',
+  overflow: 'hidden',
+  boxShadow: '0 2px 12px 0 #0008',
+  marginBottom: '2rem'
 }));
 
 </script>
