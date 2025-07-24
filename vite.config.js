@@ -65,6 +65,7 @@ export default defineConfig({
       includeAssets: ['favicon.ico', 'robots.txt', 'apple-touch-icon.png'],
       devOptions: {
         enabled: true,
+        suppressLogs: true
       },
     }),
   ],

@@ -25,26 +25,26 @@ const maisons = {
   harmonis: {
     name: 'Harmonis',
     color: '#608E62',
-    pattern: '/assets/maisons/FondHarmonis.png',
-    blason: '/assets/maisons/Harmonis.png'
+    pattern: new URL('@/assets/maisons/FondHarmonis.png', import.meta.url).href,
+    blason: new URL('@/assets/maisons/Harmonis.png', import.meta.url).href
   },
   elaris: {
     name: 'Elaris',
     color: '#B15E56',
-    pattern: '/assets/maisons/FondElaris.png',
-    blason: '/assets/maisons/Elaris.png'
+    pattern: new URL('@/assets/maisons/FondElaris.png', import.meta.url).href,
+    blason: new URL('@/assets/maisons/Elaris.png', import.meta.url).href
   },
   doloris: {
     name: 'Doloris',
     color: '#D4B25B',
-    pattern: '/assets/maisons/FondDoloris.png',
-    blason: '/assets/maisons/Doloris.png'
+    pattern: new URL('@/assets/maisons/FondDoloris.png', import.meta.url).href,
+    blason: new URL('@/assets/maisons/Doloris.png', import.meta.url).href
   },
   solencia: {
     name: 'Solencia',
     color: '#668DA3',
-    pattern: '/assets/maisons/FondSolencia.png',
-    blason: '/assets/maisons/Solencia.png'
+    pattern: new URL('@/assets/maisons/FondSolencia.png', import.meta.url).href,
+    blason: new URL('@/assets/maisons/Solencia.png', import.meta.url).href
   }
 };
 
@@ -75,10 +75,6 @@ const bandeauStyle = computed(() => ({
     flex-direction: column;
     align-items: flex-start;
     padding: 1.2rem;
-  }
-  .blason-filigrane {
-    right: 1rem;
-    height: 60px;
   }
 }
 </style>
