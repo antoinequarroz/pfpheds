@@ -1,12 +1,14 @@
 <template>
-  <!-- BANDEAU MAISON GAMIFICATION -->
+  <!-- BANDEAU MAISON GAMIFICATION
   <BandeauMaison
     v-if="userGamification && userGamification.maison && userGamification.niveau"
     :maison="userGamification.maison"
     :niveau="userGamification.niveau"
     class="mb-4"
   />
-  <!-- XP BAR -->
+
+  -->
+  <!-- XP BAR
   <XPBar
     v-if="userGamification && userGamification.xp !== undefined && userGamification.xpToNext !== undefined"
     :xp="userGamification.xp"
@@ -15,6 +17,7 @@
     :maison="userGamification.maison"
     class="mb-4"
   />
+   -->
   <!-- FIN BANDEAU MAISON + XP -->
   <div class="mb-4 card-profile-responsive">
     <div class="avatar-wrapper">
