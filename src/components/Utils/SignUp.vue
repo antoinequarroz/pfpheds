@@ -7,13 +7,13 @@
             <div class="text-center">
               <h2 class="fw-bold">Bienvenue sur la plateforme de formation pratique de la HEdS</h2>
             </div>
-            <img src="../../../public/assets/images/element/05.svg" class="mt-5" alt="">
+            <img src="@/assets/icons/svg/element/05.svg" class="mt-5" alt="">
           </div>
         </div>
         <div class="col-12 col-lg-6 m-auto">
           <div class="row my-5">
             <div class="col-sm-10 col-xl-8 m-auto">
-              <img src="../../../public/assets/images/element/03.svg" class="h-40px mb-2" alt="">
+              <img src="@/assets/icons/svg/element/03.svg" class="h-40px mb-2" alt="">
               <h2>Créez votre compte !</h2>
               <p class="lead mb-4">Ravi de vous voir! Veuillez vous inscrire avec votre compte.</p>
               <form>

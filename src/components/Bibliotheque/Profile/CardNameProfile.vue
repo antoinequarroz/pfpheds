@@ -89,7 +89,7 @@ import Button from 'primevue/button';
 import BandeauMaison from '@/components/Profile/BandeauMaison.vue'
 import XPBar from '@/components/Profile/XPBar.vue'
 
-const defaultAvatar = '../../../public/assets/images/avatar/01.jpg';
+const defaultAvatar = '@/assets/images/avatar/01.jpg';
 
 // Profil consulté (celui affiché)
 const user = ref({

@@ -133,7 +133,7 @@ import { onAuthStateChanged } from "firebase/auth";
 
 
 // Importez le logo de l'école (ajustez le chemin si nécessaire)
-import schoolLogo from '../../..//public/assets/images/markerheds.png';
+import schoolLogo from '@/assets/images/markerheds.png';
 
 /*
   Définition des dimensions naturelles de l'image du logo.

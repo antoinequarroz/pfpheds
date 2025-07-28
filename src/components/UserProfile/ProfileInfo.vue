@@ -75,7 +75,7 @@ import RadarProfil from '@/components/UserProfile/RadarProfil.vue';
 const toast = useToast();
 
 // Définition d'un avatar par défaut
-const defaultAvatar = '../../../public/assets/images/avatar/01.jpg';
+const defaultAvatar = '@/assets/images/avatar/01.jpg';
 
 // Réactive l'objet utilisateur
 const user = ref({

@@ -8,7 +8,7 @@
               <div class="text-center">
                 <h2 class="fw-bold">Bienvenue sur la plateforme</h2>
               </div>
-              <img src="../../../public/assets/images/element/02.svg" class="mt-5" alt="">
+              <img src="@/assets/icons/svg/element/02.svg" class="mt-5" alt="">
             </div>
           </div>
           <div class="col-12 col-lg-6 m-auto">

@@ -146,7 +146,7 @@ const isHidden = ref(false);
           </div>
           <div class="flex lg:justify-content-center mb-5">
             <div class="py-3 pr-8 pl-3 w-30rem hidden lg:block">
-              <img src="/public/assets/images/heds/plateforme/login.png" alt="Image" class="w-full mr-8 shadow" style="border-radius: 10px;">
+              <img src="/assets/images/heds/plateforme/login.png" alt="Image" class="w-full mr-8 shadow" style="border-radius: 10px;">
             </div>
             <div class="flex flex-column align-items-center w-2rem">
               <span class="bg-primary-500 text-0 flex align-items-center justify-content-center border-circle"
@@ -160,7 +160,7 @@ const isHidden = ref(false);
                 <div class="mb-2 line-height-3">Récupérer son mot de passe en cas d'oubli.
                 </div>
               </div>
-              <img src="/public/assets/images/heds/plateforme/login.png" alt="Image"
+              <img src="/assets/images/heds/plateforme/login.png" alt="Image"
                    class="w-full mt-3 block lg:hidden shadow" style="border-radius: 10px;"/>
             </div>
           </div>
@@ -171,7 +171,7 @@ const isHidden = ref(false);
               <div class="pt-3 border-top-1 border-300">
                 <div class="mb-2 line-height-3">Ajouter au panier les places de stages désirées.</div>
               </div>
-              <img src="/public/assets/images/heds/plateforme/institution.png" alt="Image"
+              <img src="/assets/images/heds/plateforme/institution.png" alt="Image"
                    class="w-full mt-3 block lg:hidden" />
             </div>
             <div class="flex flex-column align-items-center w-2rem flex-order-0 lg:flex-order-1">
@@ -180,12 +180,12 @@ const isHidden = ref(false);
               <div class="h-full bg-primary-500" style="width: 2px; min-height: 4rem"></div>
             </div>
             <div class="py-3 pl-8 pr-3 w-30rem hidden lg:block flex-order-2">
-              <img src="/public/assets/images/heds/plateforme/institution.png" alt="Image" class="w-full mr-8 shadow" style="border-radius: 10px;">
+              <img src="/assets/images/heds/plateforme/institution.png" alt="Image" class="w-full mr-8 shadow" style="border-radius: 10px;">
             </div>
           </div>
           <div class="flex justify-content-center">
             <div class="py-3 pr-8 pl-3 w-30rem hidden lg:block">
-              <img src="/public/assets/images/heds/plateforme/profil.png" alt="Image" class="w-full mr-8 shadow" style="border-radius: 10px;">
+              <img src="/assets/images/heds/plateforme/profil.png" alt="Image" class="w-full mr-8 shadow" style="border-radius: 10px;">
             </div>
             <div class="flex flex-column align-items-center w-2rem">
               <span class="bg-primary-500 text-0 flex align-items-center justify-content-center border-circle"
@@ -199,7 +199,7 @@ const isHidden = ref(false);
                 <div class="mb-2 line-height-3">Modifier vos informations personnelles.
                 </div>
               </div>
-              <img src="/public/demo/images/blocks/feature/feature-timeline-3.png" alt="Image"
+              <img src="/demo/images/blocks/feature/feature-timeline-3.png" alt="Image"
                    class="w-full mt-3 block lg:hidden" />
             </div>
           </div>
@@ -211,7 +211,7 @@ const isHidden = ref(false);
                 <div class="mb-2 line-height-3">Une FAQ est disponible aussi pour tout type de question
                 </div>
               </div>
-              <img src="/public/demo/images/blocks/feature/feature-timeline-4.png" alt="Image"
+              <img src="/assets/images/heds/plateforme/chat.png" alt="Image"
                    class="w-full mt-3 block lg:hidden" />
             </div>
             <div class="flex flex-column align-items-center w-2rem flex-order-0 lg:flex-order-1">
@@ -220,7 +220,7 @@ const isHidden = ref(false);
               <div class="h-full bg-primary-500" style="width: 2px; min-height: 4rem"></div>
             </div>
             <div class="py-3 pl-8 pr-3 w-30rem hidden lg:block flex-order-2">
-              <img src="/public/assets/images/heds/plateforme/chat.png" alt="Image" class="w-full mr-8 shadow" style="border-radius: 10px;">
+              <img src="/assets/images/heds/plateforme/chat.png" alt="Image" class="w-full mr-8 shadow" style="border-radius: 10px;">
             </div>
           </div>
         </div>

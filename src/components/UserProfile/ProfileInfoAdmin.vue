@@ -70,7 +70,7 @@ import ProfileAdminRightSidebar from '@/components/Bibliotheque/Profile/ProfileA
 import LeftSidebar from '@/components/Bibliotheque/Social/LeftSidebar.vue';
 import RadarProfil from '@/components/UserProfile/RadarProfil.vue'
 
-const defaultAvatar = '../../../public/assets/images/avatar/01.jpg';
+const defaultAvatar = '@/assets/images/avatar/01.jpg';
 
 const user = ref({
   uid: '',

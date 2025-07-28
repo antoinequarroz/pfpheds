@@ -62,7 +62,7 @@ export default {
       { icon: 'pi-bell', label: 'Notifications', badge: true },
     ];
 
-    const defaultAvatar = '../../../public/assets/images/avatar/01.jpg';
+    const defaultAvatar = '@/assets/images/avatar/01.jpg';
 
     const user = reactive({
       nom: '',
@@ -76,7 +76,7 @@ export default {
       userAvatar: ''
     });
 
-    const logo = '../../../public/assets/images/hespicto.png';
+    const logo = '@/assets/images/hespicto.png';
     const userAvatar = ref(defaultAvatar);
 
     const toggleSidebar = () => {};

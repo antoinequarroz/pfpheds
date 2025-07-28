@@ -159,7 +159,7 @@ import EventDetail from '@/components/Events/EventDetail.vue';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 
-const defaultAvatar = '../../../public/assets/images/avatar/01.jpg';
+const defaultAvatar = '@/assets/images/avatar/01.jpg';
 
 export default {
   name: "LeftSidebar",

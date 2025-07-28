@@ -58,7 +58,7 @@ export default {
     const activeTab = ref(0);
 
     // Chemin vers l'avatar par défaut
-    const defaultAvatar = '../../../public/assets/images/avatar/01.jpg';
+    const defaultAvatar = '@/assets/images/avatar/01.jpg';
 
     // Objet réactif pour stocker les informations de l'utilisateur sélectionné
     const user = reactive({
