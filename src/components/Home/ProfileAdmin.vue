@@ -36,10 +36,10 @@ import { getDatabase, ref as dbRef, get } from 'firebase/database';
 import { useRoute, useRouter } from 'vue-router';
 
 import Navbar from '@/components/Utils/Navbar.vue';
-import ProfileInfoAdmin from '@/components/UserProfile/ProfileInfoAdmin.vue';
-import ResumStageUserProfile from '@/components/UserProfile/ResumStageUserProfile.vue';
-import DocumentsUserProfile from '@/components/UserProfile/DocumentsUserProfile.vue';
-import ChatProfil from '@/components/UserProfile/ChatProfil.vue';
+import ProfileInfoAdmin from '@/features/user/ProfileInfoAdmin.vue';
+import ResumStageUserProfile from '@/features/user/ResumStageUserProfile.vue';
+import DocumentsUserProfile from '@/features/user/DocumentsUserProfile.vue';
+import ChatProfil from '@/features/user/ChatProfil.vue';
 
 export default {
   name: 'ProfilAdmin',

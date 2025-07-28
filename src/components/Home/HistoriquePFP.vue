@@ -75,7 +75,7 @@ import { useRouter } from "vue-router";
 import Button from "primevue/button";
 import Navbar from "@/components/Utils/Navbar.vue";
 import CardNameProfile from '@/components/Bibliotheque/Profile/CardNameProfile.vue'
-import ResumStageUserProfile from '@/components/UserProfile/ResumStageUserProfile.vue'
+import ResumStageUserProfile from '@/features/user/ResumStageUserProfile.vue'
 
 
 // Références pour les données

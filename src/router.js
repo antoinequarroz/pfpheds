@@ -1,276 +1,150 @@
 import { createRouter, createWebHistory } from 'vue-router';
-import { ref as dbRef, get as dbGet } from 'firebase/database';
-import { onAuthStateChanged } from 'firebase/auth';
-import { db, auth } from '../firebase'; // Import your Firebase configuration
 
-// Import your components
-import Map from "@/components/Home/Map.vue";
-import GanttView from "@/components/Home/GanttView.vue";
-import Institution from "@/components/Home/Institution.vue";
-import Place from "@/components/Home/Place.vue";
-import Profile from "@/components/Home/Profile.vue";
-import Error404 from "@/components/Utils/Error404.vue";
-import InstitutionList from "@/components/Dashboard/DashboardList/InstitutionList.vue";
-import EtudiantList from "@/components/Dashboard/DashboardList/EtudiantList.vue";
-import InstitutionForm from "@/components/Dashboard/DashboardForms/InstitutionForm.vue";
-import EtudiantForm from "@/components/Dashboard/DashboardForms/EtudiantForm.vue";
-import EtudiantFormModif from "@/components/Dashboard/DashboardForms/EtudiantFormModif.vue";
-import InstitutionDetails from "@/components/Dashboard/DashboardDetails/InstitutionDetails.vue";
-import InstitutionFormModif from "@/components/Dashboard/DashboardForms/InstitutionFormModif.vue";
-import EtudiantDetails from "@/components/Dashboard/DashboardDetails/EtudiantDetails.vue";
-import PlaceDetails from "@/components/Dashboard/DashboardDetails/PlaceDetails.vue";
-import PFPDetails from "@/components/Dashboard/DashboardDetails/PFPDetails.vue";
-import VotationView from "@/components/Dashboard/DashboardDetails/VotationView.vue";
-import VotationPreview from "@/components/Dashboard/DashboardDetails/Votation_preview.vue";
-import Validation from "@/components/Dashboard/DashboardDetails/Validation.vue";
-import Reception from "@/components/Dashboard/DashboardDetails/Reception.vue";
-import NewUserForm from "@/components/Dashboard/DashboardForms/NewUserForm.vue";
-import NewUserFormModif from "@/components/Dashboard/DashboardForms/NewUserFormModif.vue";
-import UserList from "@/components/Dashboard/DashboardList/UserList.vue";
-import EnseignentForm from "@/components/Dashboard/DashboardForms/EnseignentForm.vue";
-import EnseignentFormModif from "@/components/Dashboard/DashboardForms/EnseignentFormModif.vue";
-import EnseignentList from "@/components/Dashboard/DashboardList/EnseignentList.vue";
-import PraticienFormateurForm from "@/components/Dashboard/DashboardForms/PraticienFormateurForm.vue";
-import PraticienFormateurFormModif from "@/components/Dashboard/DashboardForms/PraticienFormateurFormModif.vue";
-import PraticienFormateurList from "@/components/Dashboard/DashboardList/PraticienFormateurList.vue";
-import Faq from "@/components/Home/Faq.vue";
-import NewPassword from '@/views/pages/auth/NewPassword.vue'
-import SignUp from "@/components/Utils/SignUp.vue";
-import TermsOfUse from "@/components/Utils/TermsOfUse.vue";
-import InfoExterne from "@/components/Utils/InfoExterne.vue";
-import HomePage from '@/views/pages/HomePage.vue';
-import Login from '@/views/pages/auth/Login.vue';
-import Register from '@/views/pages/auth/Register.vue';
-import DashbordAdmin from '@/views/dashboards/DashbordAdmin.vue';
-import ListUser from '@/views/user-management/ListUser.vue';
-import InstitutionView from '@/components/Institutions/InstitutionView.vue';
-import Management_votation from '@/components/Dashboard/DashboardDetails/Management_votation.vue';
-import Management_votation_lese from '@/components/Dashboard/DashboardDetails/Management_votation_lese.vue';
-import Management_votation_etudiants from '@/components/Dashboard/DashboardDetails/Management_votation_etudiants.vue';
-import ManagementPlace from '@/components/Dashboard/DashboardDetails/Management_place.vue';
-import OffreDePlace from '@/components/Dashboard/DashboardDetails/OffreDePlac3BA22PFP4.vue';
-import ManagementPlacesSafe from '@/components/Dashboard/DashboardDetails/ManagementPlacesSafe.vue';
-import VotationLese from '@/components/Dashboard/DashboardDetails/VotationLese.vue';
-import StageRepartitionBA2 from '@/components/Dashboard/DashboardDetails/StageRepartitionBA2.vue';
-import ResultPreviewVotation from '@/components/Dashboard/DashboardDetails/ResultPreviewVotation.vue';
-import StatsPlacePFP from '@/components/Dashboard/DashboardDetails/StatsPlacePFP.vue';
-import PlacesAssignment from '@/components/Dashboard/DashboardDetails/PlacesAssignment.vue';
-import PlacesAssigned from '@/components/Dashboard/DashboardDetails/PlacesAssigned.vue';
-import ManagementPFPEnCours from '@/components/Dashboard/DashboardDetails/ManagementPFPEnCours.vue';
-import ManagementRepondant from '@/components/Dashboard/DashboardDetails/Management_repondant.vue';
-import InfoRepondant from '@/components/Dashboard/DashboardDetails/Info_repondant.vue';
-import LoginHome from '@/components/Utils/LoginHome.vue';
-import LoginHome2 from '@/components/Utils/LoginHome2.vue'
-import NewsFeed from '@/components/Social/NewsFeed.vue';
-import HashtagPage from '@/components/Social/HashtagPage.vue';
-import CommunityManagement from '@/components/Social/CommunityManagement.vue';
-import ManageOneCommunity from '@/components/Social/ManageOneCommunity.vue';
-import MentionGroupPage from '@/components/Social/MentionGroupPage.vue';
-import HistoriquePFP from '@/components/Home/HistoriquePFP.vue'
-import DocumentsPFP from '@/components/Home/DocumentsPFP.vue'
-import Index from '@/views/apps/tasklist/Index.vue'
-import IndexChat from '@/views/apps/chat/IndexChat.vue'
-import CommunityInfo from '@/components/Social/CommunityInfo.vue'; // Import du composant Infos
-import ListComponent from '@/components/Bibliotheque/SoundBox/ListComponent.vue'
-import ProfileAdmin from '@/components/Home/ProfileAdmin.vue'
-import SettingView from '@/components/Home/SettingView.vue'
-import SearchResults from '@/components/Utils/SearchResults.vue'
-import AffectationStageEtudiant from '@/components/Dashboard/DashboardForms/AffectationStageEtudiant.vue'
-import CreateContentMobile from '@/components/Bibliotheque/Social/CreateContentMobile.vue';
-import Ventriglisse3D from '@/ventriglisse3d/Ventriglisse3D.vue';
-import QrCodeGenerator from '@/components/QrCodeGenerator.vue'
-import MobileLangApps from '@/views/MobileLangApps.vue';
-import Outils from '@/views/Outils.vue';
-import Game from '@/views/Game.vue';
+// --- Dashboard (Admin) ---
+import AdminSidebar from '@/features/dashboard/Dashboard/DashboardList/AdminSidebar.vue';
+import InstitutionList from '@/features/dashboard/Dashboard/DashboardList/InstitutionList.vue';
+import EtudiantList from '@/features/dashboard/Dashboard/DashboardList/EtudiantList.vue';
+import EnseignentList from '@/features/dashboard/Dashboard/DashboardList/EnseignentList.vue';
+import PraticienFormateurList from '@/features/dashboard/Dashboard/DashboardList/PraticienFormateurList.vue';
+import UserList from '@/features/dashboard/Dashboard/DashboardList/UserList.vue';
+import InstitutionForm from '@/features/dashboard/Dashboard/DashboardForms/InstitutionForm.vue';
+import InstitutionFormModif from '@/features/dashboard/Dashboard/DashboardForms/InstitutionFormModif.vue';
+import EtudiantForm from '@/features/dashboard/Dashboard/DashboardForms/EtudiantForm.vue';
+import EtudiantFormModif from '@/features/dashboard/Dashboard/DashboardForms/EtudiantFormModif.vue';
+import EnseignentForm from '@/features/dashboard/Dashboard/DashboardForms/EnseignentForm.vue';
+import EnseignentFormModif from '@/features/dashboard/Dashboard/DashboardForms/EnseignentFormModif.vue';
+import PraticienFormateurForm from '@/features/dashboard/Dashboard/DashboardForms/PraticienFormateurForm.vue';
+import PraticienFormateurFormModif from '@/features/dashboard/Dashboard/DashboardForms/PraticienFormateurFormModif.vue';
+import NewUserForm from '@/features/dashboard/Dashboard/DashboardForms/NewUserForm.vue';
+import NewUserFormModif from '@/features/dashboard/Dashboard/DashboardForms/NewUserFormModif.vue';
+
+// --- Dashboard Details ---
+import InstitutionDetails from '@/features/dashboard/Dashboard/DashboardDetails/InstitutionDetails.vue';
+import EtudiantDetails from '@/features/dashboard/Dashboard/DashboardDetails/EtudiantDetails.vue';
+import PlaceDetails from '@/features/dashboard/Dashboard/DashboardDetails/PlaceDetails.vue';
+import PFPDetails from '@/features/dashboard/Dashboard/DashboardDetails/PFPDetails.vue';
+import VotationView from '@/features/dashboard/Dashboard/DashboardDetails/VotationView.vue';
+import VotationPreview from '@/features/dashboard/Dashboard/DashboardDetails/Votation_preview.vue';
+import Validation from '@/features/dashboard/Dashboard/DashboardDetails/Validation.vue';
+import Reception from '@/features/dashboard/Dashboard/DashboardDetails/Reception.vue';
+import Management_votation from '@/features/dashboard/Dashboard/DashboardDetails/Management_votation.vue';
+import Management_votation_lese from '@/features/dashboard/Dashboard/DashboardDetails/Management_votation_lese.vue';
+import Management_votation_etudiants from '@/features/dashboard/Dashboard/DashboardDetails/Management_votation_etudiants.vue';
+import ManagementPlace from '@/features/dashboard/Dashboard/DashboardDetails/Management_place.vue';
+import OffreDePlace from '@/features/dashboard/Dashboard/DashboardDetails/OffreDePlac3BA22PFP4.vue';
+import ManagementPlacesSafe from '@/features/dashboard/Dashboard/DashboardDetails/ManagementPlacesSafe.vue';
+import VotationLese from '@/features/dashboard/Dashboard/DashboardDetails/VotationLese.vue';
+import StageRepartitionBA2 from '@/features/dashboard/Dashboard/DashboardDetails/StageRepartitionBA2.vue';
+import ResultPreviewVotation from '@/features/dashboard/Dashboard/DashboardDetails/ResultPreviewVotation.vue';
+import StatsPlacePFP from '@/features/dashboard/Dashboard/DashboardDetails/StatsPlacePFP.vue';
+import PlacesAssignment from '@/features/dashboard/Dashboard/DashboardDetails/PlacesAssignment.vue';
+import PlacesAssigned from '@/features/dashboard/Dashboard/DashboardDetails/PlacesAssigned.vue';
+import ManagementPFPEnCours from '@/features/dashboard/Dashboard/DashboardDetails/ManagementPFPEnCours.vue';
+import ManagementRepondant from '@/features/dashboard/Dashboard/DashboardDetails/Management_repondant.vue';
+import Info_repondant from '@/features/dashboard/Dashboard/DashboardDetails/Info_repondant.vue';
+import InfoRepondantEtudiants from '@/features/dashboard/Dashboard/DashboardDetails/InfoRepondantEtudiants.vue';
+import InfoRepondantSignature from '@/features/dashboard/Dashboard/DashboardDetails/InfoRepondantSignature.vue';
+
+// --- Events ---
+import EventCard from '@/features/events/Events/EventCard.vue';
+import EventDetail from '@/features/events/Events/EventDetail.vue';
+import EventForm from '@/features/events/Events/EventForm.vue';
+
+// --- Pages ---
+import HomePage from '@/features/pages/pages/HomePage.vue';
+import Login from '@/features/pages/pages/auth/Login.vue';
+import Register from '@/features/pages/pages/auth/Register.vue';
+import NewPassword from '@/features/pages/pages/auth/NewPassword.vue';
+import NotFound from '@/features/pages/pages/NotFound.vue';
+
+// --- Views ---
+import EventManagement from '@/views/EventManagement.vue';
 import NotesWorkspace from '@/views/NotesWorkspace.vue';
-import ChatBotSI from '@/views/ChatBotSI.vue'
+import ChatBotSI from '@/views/ChatBotSI.vue';
+import Game from '@/views/Game.vue';
+import MobileLangApps from '@/views/MobileLangApps.vue';
+import MobileOutils from '@/views/MobileOutils.vue';
+import MobileSearch from '@/views/MobileSearch.vue';
+import Outils from '@/views/Outils.vue';
+import ResetPassword from '@/views/ResetPassword.vue';
+import TemplateTest from '@/views/TemplateTest.vue';
 
-// Define your routes
 const routes = [
-  { path: '/', component: LoginHome, name: 'LoginHome',   props: true   }, // Fil d'actualité
-  { path: '/home', component: LoginHome, name: 'LoginHome',   props: true   }, // Fil d'actualité
-  { path: '/home2', component: LoginHome2, name: 'LoginHome2',   props: true   }, // Fil d'actualité
-
-  { path: '/feed', component: NewsFeed, name: 'NewsFeed',   props: true, meta: { requiresAuth: true } }, // Fil d'actualité
-  { path: '/mention/:group', component: MentionGroupPage, name: 'MentionGroupPage', props: true, meta: { requiresAuth: true, requiredRole: true }},
-  { path: '/hashtag/:hashtag', component: HashtagPage, name: 'HashtagPage', props: true, meta: { requiresAuth: true } },
-  { path: '/home', component: HomePage, name: 'HomePage' },
-  { path: '/terms_of_use', component: TermsOfUse, name: 'TermsOfUse', meta: { requiresAuth: true } },
-  { path: '/map', component: Map, name: 'Map', meta: { requiresAuth: true } },
-  { path: '/institution', component: Institution, name: 'Institution', meta: { requiresAuth: true } },
-  { path: '/place', component: Place, name: 'Place', meta: { requiresAuth: true } },
-  { path: '/place', component: Place, name: 'Place', meta: { requiresAuth: true } },
-  { path: '/profilAdmin/:id', component: ProfileAdmin, name: 'ProfileAdmin', meta: { requiresAuth: true, requiredRole: ['admin']  } ,},
-  { path: '/settings', component: SettingView, name: 'SettingView', meta: { requiresAuth: true}},
-  { path: '/gantt', component: GanttView, name: 'GanttView', meta: { requiresAuth: true}},
-
-  {
-    path: '/profile/:id',
-    name: 'Profile',
-    component: Profile,
-    meta: { requiresAuth: true }// Le composant qui gère l'affichage d'un profil utilisateur
-  },
-  { path: '/admin', component: DashbordAdmin, name: 'DashbordAdmin' , meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] }}, // à remodifier
-  { path: '/institution_list', component: InstitutionList, name: 'InstitutionList', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/etudiant_list', component: EtudiantList, name: 'EtudiantList',  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/institution_form', component: InstitutionForm, name: 'InstitutionForm', props: true,  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/institution_form_modif/:id', component: InstitutionFormModif, name: 'InstitutionFormModif', props: true,  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/etudiant_form', component: EtudiantForm, name: 'EtudiantForm', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/etudiant/:etuId/modif', component: EtudiantFormModif, name: 'EtudiantFormModif', props: true, meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/institution/:id', component: InstitutionView, name: 'InstitutionView', props: true, meta: { requiresAuth: true } },
-  { path: '/place_details', component: PlaceDetails, name: 'place-details', meta: { requiresAuth: true } },
-  { path: '/pfp_details', component: PFPDetails, name: 'pfp-details', meta: { requiresAuth: true } },
-  { path: '/etudiant/:id/details', component: EtudiantDetails, name: 'EtudiantDetails', props: true, meta: { requiresAuth: true } },
-  { path: '/new_user_form', component: NewUserForm, name: 'NewUserForm',  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/new_user_form_modif/:userId', component: NewUserFormModif, name: 'NewUserFormModif', props: true,  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/user_list', component: UserList, name: 'UserList',  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/enseignent_form', component: EnseignentForm, name: 'EnseignentForm',  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/enseignent_form_modif/:enseignantId', component: EnseignentFormModif, name: 'EnseignentFormModif', props: true,  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/enseignent_list', component: EnseignentList, name: 'EnseignentList',  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/praticien_formateur_form', component: PraticienFormateurForm, name: 'PraticienFormateurForm', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/praticien_formateur_form_modif/:praticienFormateurId', component: PraticienFormateurFormModif, name: 'PraticienFormateurFormModif', props: true, meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/praticien_formateur_list', component: PraticienFormateurList, name: 'PraticienFormateurList', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/info_externe', component: InfoExterne, name: 'InfoExterne', meta: { requiresAuth: true } },
-  { path: '/faq', component: Faq, name: 'Faq', meta: { requiresAuth: true } },
-  { path: '/votation_preview', component: VotationPreview, name: 'VotationPreview', meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/validation', component: Validation, name: 'Validation', meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/reception', component: Reception, name: 'Reception', meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/votation', component: VotationView, name: 'VotationView', meta: { requiresAuth: true } },
-  { path: '/management_votation', component: Management_votation, name: 'Management_votation', meta: { requiresAuth: true, requiredRole: 'admin' } }, // Protect this route
-  { path: '/info_repondant', component: InfoRepondant, name: 'InfoRepondant', meta: { requiresAuth: true, requiredRole: ['admin', 'enseignant'] } },
-  { path: '/management_votation_lese', component: Management_votation_lese, name: 'Management_votation_lese', meta: { requiresAuth: true, requiredRole: 'lese' } }, // Protect this route
-  { path: '/management_votation_etudiants', component: Management_votation_etudiants, name: 'Management_votation_etudiants', meta: { requiresAuth: true, requiredRole: 'admin' } }, // Protect this route
-  { path: '/management_places', component: ManagementPlace, name: 'Management_places',meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/management_offre', component: OffreDePlace, name: 'Management_offre',meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/result_preview_votation', component: ResultPreviewVotation, name: 'ResultPreviewVotation',meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/stats_place_pfp', component: StatsPlacePFP, name: 'StatsPlacePFP',meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/places_assignment', component: PlacesAssignment, name: 'PlacesAssignment',meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/places_assigned', component: PlacesAssigned, name: 'PlacesAssigned',meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/management_pfpencours', component: ManagementPFPEnCours, name: 'ManagementPFPEnCours',meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/management_repondant', component: ManagementRepondant, name: 'Management_repondant', meta: { requiresAuth: true, requiredRole: 'admin' } },
-
-  { path: '/stage_repartition', component: StageRepartitionBA2, name: 'StageRepartitionBA2',meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/management_places_safe', component: ManagementPlacesSafe, name: 'ManagementPlacesSafe',meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/institution_details/:id', component: InstitutionDetails, name: 'InstitutionDetails', props: true, meta: { requiresAuth: true } },
-  { path: '/:pathMatch(.*)*', component: Error404, name: 'Error404' },
-  { path: '/listUser', component: ListUser, name: 'ListUser', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/votation_lese', component: VotationLese, name: 'VotationLese', meta: { requiresAuth: true, requiredRole: 'lese' } },
-  { path: '/historique_pfp', component: HistoriquePFP, name: 'HistoriquePFP', meta: { requiresAuth: true } },
-  { path: '/documents_pfp', component: DocumentsPFP, name: 'DocumentsPFP', meta: { requiresAuth: true } },
-  { path: '/tasklist', component: Index, name: 'Index', meta: { requiresAuth: true, requiredRole: ['editor', 'admin'] } },
-  { path: '/chat', component: IndexChat, name: 'IndexChat', meta: { requiresAuth: true } },
-  { path : '/affectation_stage_etudiant', component: AffectationStageEtudiant, name: 'AffectationStageEtudiant', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  // Auth & Main
+  { path: '/', component: HomePage, name: 'HomePage' },
+  { path: '/login', component: Login, name: 'Login' },
+  { path: '/register', component: Register, name: 'Register' },
   { path: '/new-password', component: NewPassword, name: 'NewPassword' },
 
+  // Dashboard/Admin
+  { path: '/admin', component: AdminSidebar, name: 'AdminSidebar' },
+  { path: '/institution_list', component: InstitutionList },
+  { path: '/etudiant_list', component: EtudiantList },
+  { path: '/enseignent_list', component: EnseignentList },
+  { path: '/praticien_formateur_list', component: PraticienFormateurList },
+  { path: '/user_list', component: UserList },
+  { path: '/institution_form', component: InstitutionForm },
+  { path: '/institution_form_modif', component: InstitutionFormModif },
+  { path: '/etudiant_form', component: EtudiantForm },
+  { path: '/etudiant_form_modif', component: EtudiantFormModif },
+  { path: '/enseignent_form', component: EnseignentForm },
+  { path: '/enseignent_form_modif', component: EnseignentFormModif },
+  { path: '/praticien_formateur_form', component: PraticienFormateurForm },
+  { path: '/praticien_formateur_form_modif', component: PraticienFormateurFormModif },
+  { path: '/new_user_form', component: NewUserForm },
+  { path: '/new_user_form_modif', component: NewUserFormModif },
 
-  {
-    path: '/list', // Chemin pour ListComponent
-    name: 'ListComponent',
-    component: ListComponent,  meta: { requiresAuth: true, requiredRole: ['editor', 'admin'] }
-  },
-  { path: '/communities', component: CommunityManagement, name: 'CommunityManagement', props: true, meta: { requiresAuth: true } },
-  {
-    path: '/communities/:id',
-    name: 'ManageOneCommunity',
-    component: ManageOneCommunity,
-    props: true
-  },
+  // Dashboard Details
+  { path: '/institution_details', component: InstitutionDetails },
+  { path: '/etudiant_details', component: EtudiantDetails },
+  { path: '/place_details', component: PlaceDetails },
+  { path: '/pfp_details', component: PFPDetails },
+  { path: '/votation', component: VotationView },
+  { path: '/votation_preview', component: VotationPreview },
+  { path: '/validation', component: Validation },
+  { path: '/reception', component: Reception },
+  { path: '/management_votation', component: Management_votation },
+  { path: '/management_votation_lese', component: Management_votation_lese },
+  { path: '/management_votation_etudiants', component: Management_votation_etudiants },
+  { path: '/management_places', component: ManagementPlace },
+  { path: '/offre_de_place', component: OffreDePlace },
+  { path: '/management_places_safe', component: ManagementPlacesSafe },
+  { path: '/votation_lese', component: VotationLese },
+  { path: '/stage_repartition', component: StageRepartitionBA2 },
+  { path: '/result_preview_votation', component: ResultPreviewVotation },
+  { path: '/stats_place_pfp', component: StatsPlacePFP },
+  { path: '/places_assignment', component: PlacesAssignment },
+  { path: '/places_asssigned', component: PlacesAssigned },
+  { path: '/management_pfpencours', component: ManagementPFPEnCours },
+  { path: '/management_repondant', component: ManagementRepondant },
+  { path: '/info_repondant', component: Info_repondant },
+  { path: '/info_repondant_etudiants', component: InfoRepondantEtudiants },
+  { path: '/info_repondant_signature', component: InfoRepondantSignature },
 
-  {
-    path: '/communities/info/:id',
-    name: 'CommunityInfo',
-    component: CommunityInfo // Définition de la route Infos
-  },
-  {
-    path: '/template-test',
-    name: 'TemplateTest',
-    component: () => import('@/views/TemplateTest.vue')
-  },
-  {
-    path: '/validate-pfp1a',
-    name: 'ValidatePFP1A',
-    component: () => import('@/components/Dashboard/DashboardDetails/ValidatePFP1A.vue'),
-    meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] }
-  },
-  {
-    path: '/create',
-    name: 'CreateContentMobile',
-    component: CreateContentMobile,
-    meta: { mobileOnly: true }
-  },
-  {
-    path: '/ventriglisse3d',
-    name: 'Ventriglisse3D',
-    component: Ventriglisse3D,
-    meta: { requiresAuth: false }
-  },
-  {
-    path: '/mobile-outils',
-    name: 'MobileOutils',
-    component: () => import('./views/MobileOutils.vue'),
-    meta: { mobileOnly: true }
-  },
-  {
-    path: '/mobile-search',
-    name: 'MobileSearch',
-    component: () => import('./views/MobileSearch.vue'),
-    meta: { mobileOnly: true }
-  },
+  // Events
+  { path: '/events', component: EventCard },
+  { path: '/events/:id', component: EventDetail, props: true },
+  { path: '/events/new', component: EventForm },
 
-  {
-    path: '/qr',
-    name: 'QrCodeGenerator',
-    component: QrCodeGenerator,
-  },
-  {
-    path: '/event-management',
-    name: 'EventManagement',
-    component: () => import('@/views/EventManagement.vue'),
-    meta: { requiresAuth: false }
-  },
-  {
-    path: '/lang-apps',
-    component: MobileLangApps,
-    name: 'MobileLangApps',
-    meta: { mobileOnly: true }
-  },
-  {
-    path: '/notes',
-    name: 'NotesWorkspace',
-    component: NotesWorkspace,
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/outils',
-    component: Outils,
-    name: 'Outils',
-    meta: { requiresAuth: true }
-  },
-  {
-    path: '/game',
-    component: Game,
-    name: 'Game',
-    meta: { requiresAuth: true }
-  },
+  // Views
+  { path: '/event-management', component: EventManagement },
+  { path: '/notes-workspace', component: NotesWorkspace },
+  { path: '/chatbot', component: ChatBotSI },
+  { path: '/game', component: Game },
+  { path: '/mobile-lang-apps', component: MobileLangApps },
+  { path: '/mobile-outils', component: MobileOutils },
+  { path: '/mobile-search', component: MobileSearch },
+  { path: '/outils', component: Outils },
+  { path: '/reset-password', component: ResetPassword },
+  { path: '/template-test', component: TemplateTest },
 
-  {
-    path: '/chatbotsi',
-    component: ChatBotSI,
-    name: 'ChatBotSI',
-    meta: { requiresAuth: true, requiredRole: ['admin', 'chatbotSi'] }
-  },
-  {
-    path: '/notes',
-    name: 'NotesWorkspace',
-    component: () => import('./views/NotesWorkspace.vue')
-  },
-
+  // 404
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
 ];
 
-// Create router instance
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 });
 
 // Ajouter un guard de navigation
@@ -280,14 +154,15 @@ router.beforeEach(async (to, from, next) => {
   // Vérifiez si l'état d'authentification est déjà récupéré
   if (!isAuthStateChecked) {
     await new Promise((resolve) => {
-      onAuthStateChanged(auth, (user) => {
-        isAuthStateChecked = true;
-        resolve(user); // Continue une fois que l'état est chargé
-      });
+      // onAuthStateChanged(auth, (user) => {
+      //   isAuthStateChecked = true;
+      //   resolve(user); // Continue une fois que l'état est chargé
+      // });
+      resolve(null);
     });
   }
 
-  const user = auth.currentUser;
+  const user = null; // auth.currentUser;
 
   // Gestion spécifique pour la route "/"
   if (to.path === '/') {
@@ -304,39 +179,39 @@ router.beforeEach(async (to, from, next) => {
     if (user) {
       const userId = user.uid;
       console.log(userId);
-      const rolesRef = dbRef(db, `Users/${userId}/Roles`);
-      const snapshot = await dbGet(rolesRef);
-      const roles = snapshot.val();
-      console.log(roles);
+      // const rolesRef = dbRef(db, `Users/${userId}/Roles`);
+      // const snapshot = await dbGet(rolesRef);
+      // const roles = snapshot.val();
+      // console.log(roles);
 
-      if (roles) {
-        const userRoles = Object.keys(roles).filter(role => roles[role]); // Récupération des rôles actifs de l'utilisateur
+      // if (roles) {
+      //   const userRoles = Object.keys(roles).filter(role => roles[role]); // Récupération des rôles actifs de l'utilisateur
 
-        if (to.meta.requiredRole) {
-          const requiredRoles = Array.isArray(to.meta.requiredRole)
-            ? to.meta.requiredRole
-            : [to.meta.requiredRole]; // Assurez-vous que `requiredRole` est un tableau
+      //   if (to.meta.requiredRole) {
+      //     const requiredRoles = Array.isArray(to.meta.requiredRole)
+      //       ? to.meta.requiredRole
+      //       : [to.meta.requiredRole]; // Assurez-vous que `requiredRole` est un tableau
 
-          // Vérifiez si l'utilisateur a au moins un des rôles requis
-          if (requiredRoles.some(role => userRoles.includes(role))) {
-            return next(); // Autoriser l'accès
-          } else {
-            import('primevue/usetoast').then(({ useToast }) => {
-              const toast = useToast();
-              toast.add({ severity: 'error', summary: 'Accès refusé', detail: "Vous n'avez pas les permissions requises.", life: 4000 });
-            });
-            return next('/'); // Redirigez vers une page par défaut
-          }
-        } else {
-          return next(); // Aucune vérification de rôle requise, autorisez l'accès
-        }
-      } else {
-        import('primevue/usetoast').then(({ useToast }) => {
-          const toast = useToast();
-          toast.add({ severity: 'error', summary: 'Accès refusé', detail: 'Aucun rôle trouvé.', life: 4000 });
-        });
-        return next('/home'); // Redirigez vers une page par défaut
-      }
+      //     // Vérifiez si l'utilisateur a au moins un des rôles requis
+      //     if (requiredRoles.some(role => userRoles.includes(role))) {
+      //       return next(); // Autoriser l'accès
+      //     } else {
+      //       import('primevue/usetoast').then(({ useToast }) => {
+      //         const toast = useToast();
+      //         toast.add({ severity: 'error', summary: 'Accès refusé', detail: "Vous n'avez pas les permissions requises.", life: 4000 });
+      //       });
+      //       return next('/'); // Redirigez vers une page par défaut
+      //     }
+      //   } else {
+      //     return next(); // Aucune vérification de rôle requise, autorisez l'accès
+      //   }
+      // } else {
+      //   import('primevue/usetoast').then(({ useToast }) => {
+      //     const toast = useToast();
+      //     toast.add({ severity: 'error', summary: 'Accès refusé', detail: 'Aucun rôle trouvé.', life: 4000 });
+      //   });
+      //   return next('/home'); // Redirigez vers une page par défaut
+      // }
     } else {
       import('primevue/usetoast').then(({ useToast }) => {
         const toast = useToast();

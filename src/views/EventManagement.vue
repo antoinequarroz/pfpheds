@@ -109,9 +109,9 @@ import Dropdown from 'primevue/dropdown';
 import { useEventStore } from '@/stores/eventStore';
 import { getDatabase, ref as dbRef, get } from 'firebase/database';
 // Composants custom
-import EventForm from '@/components/Events/EventForm.vue';
-import EventCard from '@/components/Events/EventCard.vue';
-import EventDetail from '@/components/Events/EventDetail.vue';
+import EventForm from '@/features/events/Events/EventForm.vue';
+import EventCard from '@/features/events/Events/EventCard.vue';
+import EventDetail from '@/features/events/Events/EventDetail.vue';
 
 // Pinia store
 const eventStore = useEventStore();

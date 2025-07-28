@@ -152,10 +152,10 @@ import Toast from "primevue/toast";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 import { getDatabase, ref as dbRef, get, update, onValue } from "firebase/database";
 import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
-import UserCard from '@/views/apps/chat/UserCard.vue';
+import UserCard from '@/features/apps/apps/chat/UserCard.vue';
 import { inject, computed } from 'vue';
 import { useEventStore } from '@/stores/eventStore';
-import EventDetail from '@/components/Events/EventDetail.vue';
+import EventDetail from '@/features/events/Events/EventDetail.vue';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 

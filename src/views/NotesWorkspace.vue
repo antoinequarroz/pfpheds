@@ -88,9 +88,9 @@
 <script setup>
 import Navbar from '../components/Utils/Navbar.vue'
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import NotebookSidebar from '../components/Notes/NotebookSidebar.vue'
-import PageList from '../components/Notes/PageList.vue'
-import TiptapSimpleEditor from '@/components/Notes/TiptapSimpleEditor.vue'
+import NotebookSidebar from '@/features/notes/Notes/NotebookSidebar.vue'
+import PageList from '@/features/notes/Notes/PageList.vue'
+import TiptapSimpleEditor from '@/features/notes/Notes/TiptapSimpleEditor.vue'
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
