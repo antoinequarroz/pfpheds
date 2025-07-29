@@ -8,52 +8,58 @@ import { db, auth } from '../firebase'; // Import your Firebase configuration
 // ========================================
 import LoginHome from '@/views/auth/LoginHome.vue'; // avec firebase
 import LoginHome2 from '@/views/auth/LoginHome2.vue' // avec supabase
-import NewPassword from '@/views/auth/NewPassword.vue' // avec supabase
+import NewPasswordView from '@/views/auth/NewPasswordView.vue' // avec supabase
+import LoginView from '@/views/auth/LoginView.vue';
+import RegisterView from '@/views/auth/RegisterView.vue';
+import ForgotPasswordView from '@/views/auth/ForgotPasswordView.vue';
+import VerificationView from '@/views/auth/VerificationView.vue';
+import LockScreenView from '@/views/auth/LockScreenView.vue';
+import AccessView from '@/views/auth/AccessView.vue';
+import AuthErrorView from '@/views/auth/AuthErrorView.vue';
 
 // ========================================
 // PAGES PRINCIPALES & NAVIGATION
 // ========================================
-import Map from "@/components/Home/Map.vue";
-import Institution from "@/components/Home/Institution.vue";
-import Place from "@/components/Home/Place.vue";
-import GanttView from "@/components/Home/GanttView.vue";
-import Faq from "@/components/Home/Faq.vue";
-import TermsOfUse from "@/components/Utils/TermsOfUse.vue";
-import InfoExterne from "@/components/Utils/InfoExterne.vue";
-import HistoriquePFP from '@/components/Home/HistoriquePFP.vue'
-import DocumentsPFP from '@/components/Home/DocumentsPFP.vue'
+import Map from "@/views/home/MapView.vue";
+import Institution from "@/views/institutions/InstitutionListView.vue";
+import Place from "@/views/institutions/PlaceListView.vue";
+import Faq from "@/views/home/FaqView.vue";
+import TermsOfUse from "@/views/home/TermsView.vue";
+import InfoExterne from "@/views/home/InfoExterneView.vue";
+import HistoriquePFP from '@/views/home/HistoryView.vue'
+import DocumentsPFP from '@/views/home/DocumentsView.vue'
 
 // ========================================
 // PROFILS & UTILISATEURS
 // ========================================
-import Profile from "@/components/Home/Profile.vue";
-import ProfileAdmin from '@/components/Home/ProfileAdmin.vue'
-import SettingView from '@/components/Home/SettingView.vue'
+import Profile from "@/views/users/ProfileView.vue";
+import ProfileAdmin from '@/views/admin/ProfileAdminView.vue'
+import SettingView from '@/views/users/SettingsView.vue'
 
 // ========================================
 // DASHBOARD & ADMINISTRATION
 // ========================================
-import DashbordAdmin from '@/views/dashboards/DashbordAdmin.vue';
+import DashboardView from '@/views/admin/DashboardView.vue';
 
 // ========================================
 // SOCIAL & COMMUNICATION
 // ========================================
-import NewsFeed from '@/components/Social/NewsFeed.vue';
-import MentionGroupPage from '@/components/Social/MentionGroupPage.vue';
-import HashtagPage from '@/components/Social/HashtagPage.vue';
-import CommunityManagement from '@/components/Social/CommunityManagement.vue';
-import ManageOneCommunity from '@/components/Social/ManageOneCommunity.vue';
-import CommunityInfo from '@/components/Social/CommunityInfo.vue'; // Import du composant Infos
+import FeedView from '@/views/social/FeedView.vue';
+import MentionView from '@/views/social/MentionView.vue';
+import HashtagView from '@/views/social/HashtagView.vue';
+import CommunitiesView from '@/views/social/CommunitiesView.vue';
+import CommunityView from '@/views/social/CommunityView.vue';
+import CommunityInfoView from '@/views/social/CommunityInfoView.vue';
 
 // ========================================
 // GESTION UTILISATEURS - LISTES
 // ========================================
 import ListUser from '@/views/user-management/ListUser.vue';
-import UserList from "@/components/Dashboard/DashboardList/UserList.vue";
-import EtudiantList from "@/components/Dashboard/DashboardList/EtudiantList.vue";
-import EnseignentList from "@/components/Dashboard/DashboardList/EnseignentList.vue";
-import PraticienFormateurList from "@/components/Dashboard/DashboardList/PraticienFormateurList.vue";
-import InstitutionList from "@/components/Dashboard/DashboardList/InstitutionList.vue";
+import UserListView from "@/views/admin/users/UserListView.vue";
+import StudentListView from "@/views/admin/users/StudentListView.vue";
+import TeacherListView from "@/views/admin/users/TeacherListView.vue";
+import TrainerListView from "@/views/admin/users/TrainerListView.vue";
+import InstitutionListView from "@/views/admin/institutions/InstitutionListView.vue";
 
 // ========================================
 // FORMULAIRES DE CRÉATION/MODIFICATION
@@ -74,7 +80,7 @@ import AffectationStageEtudiant from '@/components/Dashboard/DashboardForms/Affe
 // INSTITUTIONS & DÉTAILS
 // ========================================
 import InstitutionView from '@/components/Institutions/InstitutionView.vue';
-import InstitutionDetails from "@/components/Dashboard/DashboardDetails/InstitutionDetails.vue";
+import InstitutionDetailsView from "@/views/admin/institutions/InstitutionDetailsView.vue";
 import EtudiantDetails from "@/components/Dashboard/DashboardDetails/EtudiantDetails.vue";
 import PlaceDetails from "@/components/Dashboard/DashboardDetails/PlaceDetails.vue";
 import PFPDetails from "@/components/Dashboard/DashboardDetails/PFPDetails.vue";
@@ -82,20 +88,20 @@ import PFPDetails from "@/components/Dashboard/DashboardDetails/PFPDetails.vue";
 // ========================================
 // VOTATIONS & GESTION
 // ========================================
-import VotationView from "@/components/Dashboard/DashboardDetails/VotationView.vue";
+import VotationView from "@/views/admin/votations/VotationView.vue";
 import VotationPreview from "@/components/Dashboard/DashboardDetails/Votation_preview.vue";
 import VotationLese from '@/components/Dashboard/DashboardDetails/VotationLese.vue';
-import Management_votation from '@/components/Dashboard/DashboardDetails/Management_votation.vue';
+import VotationManagementView from '@/views/admin/votations/VotationManagementView.vue';
 import Management_votation_lese from '@/components/Dashboard/DashboardDetails/Management_votation_lese.vue';
 import Management_votation_etudiants from '@/components/Dashboard/DashboardDetails/Management_votation_etudiants.vue';
 
 // ========================================
 // GESTION DES PLACES & STAGES
 // ========================================
-import ManagementPlace from '@/components/Dashboard/DashboardDetails/Management_place.vue';
+import PlaceManagementView from '@/views/admin/places/PlaceManagementView.vue';
 import ManagementPlacesSafe from '@/components/Dashboard/DashboardDetails/ManagementPlacesSafe.vue';
 import OffreDePlace from '@/components/Dashboard/DashboardDetails/OffreDePlac3BA22PFP4.vue';
-import PlacesAssignment from '@/components/Dashboard/DashboardDetails/PlacesAssignment.vue';
+import PlaceAssignmentView from '@/views/admin/places/PlaceAssignmentView.vue';
 import PlacesAssigned from '@/components/Dashboard/DashboardDetails/PlacesAssigned.vue';
 import StageRepartitionBA2 from '@/components/Dashboard/DashboardDetails/StageRepartitionBA2.vue';
 import ManagementPFPEnCours from '@/components/Dashboard/DashboardDetails/ManagementPFPEnCours.vue';
@@ -103,16 +109,16 @@ import ManagementPFPEnCours from '@/components/Dashboard/DashboardDetails/Manage
 // ========================================
 // VALIDATION & RÉCEPTION
 // ========================================
-import Validation from "@/components/Dashboard/DashboardDetails/Validation.vue";
-import Reception from "@/components/Dashboard/DashboardDetails/Reception.vue";
+import ValidationView from "@/views/admin/validation/ValidationView.vue";
+import ReceptionView from "@/views/admin/validation/ReceptionView.vue";
 import InfoRepondant from '@/components/Dashboard/DashboardDetails/Info_repondant.vue';
 import ManagementRepondant from '@/components/Dashboard/DashboardDetails/Management_repondant.vue';
 
 // ========================================
 // STATISTIQUES & RÉSULTATS
 // ========================================
-import ResultPreviewVotation from '@/components/Dashboard/DashboardDetails/ResultPreviewVotation.vue';
-import StatsPlacePFP from '@/components/Dashboard/DashboardDetails/StatsPlacePFP.vue';
+import VotationResultsView from '@/views/admin/votations/VotationResultsView.vue';
+import PlaceStatsView from '@/views/admin/places/PlaceStatsView.vue';
 
 // ========================================
 // APPLICATIONS & OUTILS
@@ -151,7 +157,14 @@ const routes = [
   { path: '/', component: LoginHome, name: 'LoginHome', props: true },
   { path: '/home', component: LoginHome, name: 'LoginHome', props: true },
   { path: '/home2', component: LoginHome2, name: 'LoginHome2', props: true },
-  { path: '/new-password', component: NewPassword, name: 'NewPassword' },
+  { path: '/new-password', component: NewPasswordView, name: 'NewPassword' },
+  { path: '/login', component: LoginView, name: 'LoginView' },
+  { path: '/register', component: RegisterView, name: 'RegisterView' },
+  { path: '/forgot-password', component: ForgotPasswordView, name: 'ForgotPasswordView' },
+  { path: '/verification', component: VerificationView, name: 'VerificationView' },
+  { path: '/lock-screen', component: LockScreenView, name: 'LockScreenView' },
+  { path: '/access', component: AccessView, name: 'AccessView' },
+  { path: '/auth-error', component: AuthErrorView, name: 'AuthErrorView' },
 
   // ========================================
   // PAGES PRINCIPALES & NAVIGATION
@@ -159,10 +172,11 @@ const routes = [
   { path: '/map', component: Map, name: 'Map', meta: { requiresAuth: true } },
   { path: '/institution', component: Institution, name: 'Institution', meta: { requiresAuth: true } },
   { path: '/place', component: Place, name: 'Place', meta: { requiresAuth: true } },
-  { path: '/gantt', component: GanttView, name: 'GanttView', meta: { requiresAuth: true } },
   { path: '/faq', component: Faq, name: 'Faq', meta: { requiresAuth: true } },
   { path: '/terms_of_use', component: TermsOfUse, name: 'TermsOfUse', meta: { requiresAuth: true } },
   { path: '/info_externe', component: InfoExterne, name: 'InfoExterne', meta: { requiresAuth: true } },
+  { path: '/history', component: HistoriquePFP, name: 'HistoriquePFP', meta: { requiresAuth: true } },
+  { path: '/documents', component: DocumentsPFP, name: 'DocumentsPFP', meta: { requiresAuth: true } },
 
   // ========================================
   // PROFILS & UTILISATEURS
@@ -174,27 +188,27 @@ const routes = [
   // ========================================
   // DASHBOARD & ADMINISTRATION
   // ========================================
-  { path: '/admin', component: DashbordAdmin, name: 'DashbordAdmin', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/admin', component: DashboardView, name: 'DashboardView', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
 
   // ========================================
   // SOCIAL & COMMUNICATION
   // ========================================
-  { path: '/feed', component: NewsFeed, name: 'NewsFeed', props: true, meta: { requiresAuth: true } },
-  { path: '/mention/:group', component: MentionGroupPage, name: 'MentionGroupPage', props: true, meta: { requiresAuth: true, requiredRole: true } },
-  { path: '/hashtag/:hashtag', component: HashtagPage, name: 'HashtagPage', props: true, meta: { requiresAuth: true } },
-  { path: '/communities', component: CommunityManagement, name: 'CommunityManagement', props: true, meta: { requiresAuth: true } },
-  { path: '/communities/:id', component: ManageOneCommunity, name: 'ManageOneCommunity', props: true },
-  { path: '/communities/info/:id', component: CommunityInfo, name: 'CommunityInfo' },
+  { path: '/feed', component: FeedView, name: 'FeedView', props: true, meta: { requiresAuth: true } },
+  { path: '/mention/:group', component: MentionView, name: 'MentionView', props: true, meta: { requiresAuth: true, requiredRole: true } },
+  { path: '/hashtag/:hashtag', component: HashtagView, name: 'HashtagView', props: true, meta: { requiresAuth: true } },
+  { path: '/communities', component: CommunitiesView, name: 'CommunitiesView', props: true, meta: { requiresAuth: true } },
+  { path: '/communities/:id', component: CommunityView, name: 'CommunityView', props: true },
+  { path: '/communities/info/:id', component: CommunityInfoView, name: 'CommunityInfoView' },
 
   // ========================================
   // GESTION UTILISATEURS - LISTES
   // ========================================
   { path: '/listUser', component: ListUser, name: 'ListUser', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/user_list', component: UserList, name: 'UserList', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/etudiant_list', component: EtudiantList, name: 'EtudiantList', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/enseignent_list', component: EnseignentList, name: 'EnseignentList', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/praticien_formateur_list', component: PraticienFormateurList, name: 'PraticienFormateurList', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/institution_list', component: InstitutionList, name: 'InstitutionList', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/user_list', component: UserListView, name: 'UserListView', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/etudiant_list', component: StudentListView, name: 'StudentListView', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/enseignent_list', component: TeacherListView, name: 'TeacherListView', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/praticien_formateur_list', component: TrainerListView, name: 'TrainerListView', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/institution_list', component: InstitutionListView, name: 'InstitutionListView', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
 
   // ========================================
   // FORMULAIRES DE CRÉATION/MODIFICATION
@@ -215,7 +229,7 @@ const routes = [
   // INSTITUTIONS & DÉTAILS
   // ========================================
   { path: '/institution/:id', component: InstitutionView, name: 'InstitutionView', props: true, meta: { requiresAuth: true } },
-  { path: '/institution_details/:id', component: InstitutionDetails, name: 'InstitutionDetails', props: true, meta: { requiresAuth: true } },
+  { path: '/institution_details/:id', component: InstitutionDetailsView, name: 'InstitutionDetails', props: true, meta: { requiresAuth: true } },
   { path: '/etudiant/:id/details', component: EtudiantDetails, name: 'EtudiantDetails', props: true, meta: { requiresAuth: true } },
   { path: '/place_details', component: PlaceDetails, name: 'place-details', meta: { requiresAuth: true } },
   { path: '/pfp_details', component: PFPDetails, name: 'pfp-details', meta: { requiresAuth: true } },
@@ -226,17 +240,17 @@ const routes = [
   { path: '/votation', component: VotationView, name: 'VotationView', meta: { requiresAuth: true } },
   { path: '/votation_preview', component: VotationPreview, name: 'VotationPreview', meta: { requiresAuth: true, requiredRole: 'admin' } },
   { path: '/votation_lese', component: VotationLese, name: 'VotationLese', meta: { requiresAuth: true, requiredRole: 'lese' } },
-  { path: '/management_votation', component: Management_votation, name: 'Management_votation', meta: { requiresAuth: true, requiredRole: 'admin' } },
+  { path: '/votation_management', component: VotationManagementView, name: 'VotationManagementView', meta: { requiresAuth: true, requiredRole: 'admin' } },
   { path: '/management_votation_lese', component: Management_votation_lese, name: 'Management_votation_lese', meta: { requiresAuth: true, requiredRole: 'lese' } },
   { path: '/management_votation_etudiants', component: Management_votation_etudiants, name: 'Management_votation_etudiants', meta: { requiresAuth: true, requiredRole: 'admin' } },
 
   // ========================================
   // GESTION DES PLACES & STAGES
   // ========================================
-  { path: '/management_places', component: ManagementPlace, name: 'Management_places', meta: { requiresAuth: true, requiredRole: 'admin' } },
+  { path: '/management_places', component: PlaceManagementView, name: 'PlaceManagementView', meta: { requiresAuth: true, requiredRole: 'admin' } },
   { path: '/management_places_safe', component: ManagementPlacesSafe, name: 'ManagementPlacesSafe', meta: { requiresAuth: true, requiredRole: 'admin' } },
   { path: '/management_offre', component: OffreDePlace, name: 'Management_offre', meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/places_assignment', component: PlacesAssignment, name: 'PlacesAssignment', meta: { requiresAuth: true, requiredRole: 'admin' } },
+  { path: '/places_assignment', component: PlaceAssignmentView, name: 'PlaceAssignmentView', meta: { requiresAuth: true, requiredRole: 'admin' } },
   { path: '/places_assigned', component: PlacesAssigned, name: 'PlacesAssigned', meta: { requiresAuth: true, requiredRole: 'admin' } },
   { path: '/stage_repartition', component: StageRepartitionBA2, name: 'StageRepartitionBA2', meta: { requiresAuth: true, requiredRole: 'admin' } },
   { path: '/management_pfpencours', component: ManagementPFPEnCours, name: 'ManagementPFPEnCours', meta: { requiresAuth: true, requiredRole: 'admin' } },
@@ -246,16 +260,16 @@ const routes = [
   // ========================================
   // VALIDATION & RÉCEPTION
   // ========================================
-  { path: '/validation', component: Validation, name: 'Validation', meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/reception', component: Reception, name: 'Reception', meta: { requiresAuth: true, requiredRole: 'admin' } },
+  { path: '/validation', component: ValidationView, name: 'ValidationView', meta: { requiresAuth: true, requiredRole: 'admin' } },
+  { path: '/reception', component: ReceptionView, name: 'ReceptionView', meta: { requiresAuth: true, requiredRole: 'admin' } },
   { path: '/info_repondant', component: InfoRepondant, name: 'InfoRepondant', meta: { requiresAuth: true, requiredRole: ['admin', 'enseignant'] } },
   { path: '/management_repondant', component: ManagementRepondant, name: 'Management_repondant', meta: { requiresAuth: true, requiredRole: 'admin' } },
 
   // ========================================
   // STATISTIQUES & RÉSULTATS
   // ========================================
-  { path: '/result_preview_votation', component: ResultPreviewVotation, name: 'ResultPreviewVotation', meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/stats_place_pfp', component: StatsPlacePFP, name: 'StatsPlacePFP', meta: { requiresAuth: true, requiredRole: 'admin' } },
+  { path: '/result_preview_votation', component: VotationResultsView, name: 'VotationResultsView', meta: { requiresAuth: true, requiredRole: 'admin' } },
+  { path: '/stats_place_pfp', component: PlaceStatsView, name: 'PlaceStatsView', meta: { requiresAuth: true, requiredRole: 'admin' } },
 
   // ========================================
   // APPLICATIONS & OUTILS
