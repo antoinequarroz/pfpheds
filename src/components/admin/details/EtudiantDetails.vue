@@ -142,7 +142,7 @@
 <script>
 import { db } from '../../../../firebase.js';
 import { ref, get } from "firebase/database";
-import Navbar from '@/components/Utils/Navbar.vue';
+import Navbar from '@/components/common/utils/Navbar.vue';
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import Button from 'primevue/button';

@@ -100,7 +100,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { getAuth, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "firebase/auth";
 import { ref as dbRef, get } from "firebase/database";
-import { db } from '../../../firebase.js';
+import { db } from '../../../../firebase.js';
 import SwitchColor from '@/components/ui/buttons/SwitchColor.vue';
 import ButtonNavbar from '@/components/ui/buttons/ButtonNavbar.vue';
 import Dialog from 'primevue/dialog';

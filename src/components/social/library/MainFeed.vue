@@ -12,14 +12,14 @@
         <!-- Déplacement de StoriesBar -->
         <!-- <StoriesBar v-if="showEditAndStories" /> -->
       </div>
-      <InfiniteScroll :loading="loading" @load-more="loadMorePosts">
+      <InfinityScroll :loading="loading" @load-more="loadMorePosts">
         <PostItem
           v-for="post in filteredPosts"
           :key="post.id"
           :post="post"
           :currentUser="localCurrentUser"
         />
-      </InfiniteScroll>
+      </InfinityScroll>
     </div>
     <template v-else>
       <!-- Desktop: structure actuelle -->
@@ -53,14 +53,14 @@
           @remove-media="removeMedia"
         />
         <StoriesBar v-if="showEditAndStories" />
-        <InfiniteScroll :loading="loading" @load-more="loadMorePosts">
+        <InfinityScroll :loading="loading" @load-more="loadMorePosts">
           <PostItem
             v-for="post in filteredPosts"
             :key="post.id"
             :post="post"
             :currentUser="localCurrentUser"
           />
-        </InfiniteScroll>
+        </InfinityScroll>
       </div>
     </template>
   </div>
@@ -75,14 +75,14 @@
 import { ref, onMounted, onUnmounted, computed, watch } from "vue";
 import { db, auth } from "../../../../firebase.js";
 import { onAuthStateChanged } from "firebase/auth";
-import InfiniteScroll from "@/components/Social/InfiniteScroll.vue";
-import PostItem from "@/components/Social/PostItem.vue";
+import InfinityScroll from '@/components/social/library/InfinityScroll.vue'
+import PostItem from '@/components/social/library/PostItem.vue'
 import Tag from "primevue/tag";
 import Button from "primevue/button";
 import FileUpload from "primevue/fileupload";
-import FilterComponent from "@/components/Social/FilterComponent.vue";
+import FilterComponent from '@/components/social/library/FilterComponent.vue'
 import TextAreaComponent from "./TextAreaComponent.vue"; // <-- Import du nouveau composant
-import CreatePostDialog from '@/components/Social/CreatePostDialog.vue';
+import CreatePostDialog from '@/components/social/library/CreatePostDialog.vue'
 import { useRouter } from 'vue-router';
 import HeaderIcons from '@/components/common/utils/HeaderIcons.vue'
 
@@ -112,7 +112,7 @@ export default {
   components: {
     HeaderIcons,
     StoriesBar,
-    InfiniteScroll,
+    InfinityScroll,
     PostItem,
     Tag,
     Button,

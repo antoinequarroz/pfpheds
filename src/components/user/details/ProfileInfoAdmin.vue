@@ -63,12 +63,12 @@ import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage
 import Button from 'primevue/button';
 import { useToast } from 'primevue/usetoast';
 
-import CardNameProfile from '@/components/Bibliotheque/Profile/CardNameProfile.vue';
-import ResumStageUserProfile from '@/components/UserProfile/ResumStageUserProfile.vue';
-import VotationResultProfil from '@/components/UserProfile/VotationResultProfil.vue';
-import ProfileAdminRightSidebar from '@/components/Bibliotheque/Profile/ProfileAdminRightSidebar.vue';
-import LeftSidebar from '@/components/Bibliotheque/Social/LeftSidebar.vue';
-import RadarProfil from '@/components/UserProfile/RadarProfil.vue'
+import CardNameProfile from '@/components/user/library/CardNameProfile.vue'
+import ResumStageUserProfile from '@/components/user/details/ResumStageUserProfile.vue'
+import VotationResultProfil from '@/components/user/details/VotationResultProfil.vue'
+import ProfileAdminRightSidebar from '@/components/user/library/ProfileAdminRightSidebar.vue'
+import LeftSidebar from '@/components/social/library/LeftSidebar.vue'
+import RadarProfil from '@/components/user/details/RadarProfil.vue'
 
 const defaultAvatar = '../../../public/assets/images/avatar/01.jpg';
 

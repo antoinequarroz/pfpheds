@@ -74,8 +74,7 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import { useRouter } from "vue-router";
 import Button from "primevue/button";
 import Navbar from "@/components/common/utils/Navbar.vue";
-import CardNameProfile from '@/components/user/library/CardNameProfile.vue'
-import ResumStageUserProfile from '@/components/UserProfile/ResumStageUserProfile.vue'
+
 
 
 // Références pour les données

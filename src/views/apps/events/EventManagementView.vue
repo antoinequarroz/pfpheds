@@ -1,4 +1,4 @@
-﻿<template>
+<template>
   <Navbar />
   <div class="event-layout event-layout-padded">
     <!-- Sidebar gauche -->
@@ -99,9 +99,9 @@
 <script setup>
 // Imports Vue/Pinia/PrimeVue
 import { ref, computed, onMounted, inject } from 'vue';
-import Navbar from '@/components/Utils/Navbar.vue';
-import LeftSidebar from '@/components/Bibliotheque/Social/LeftSidebar.vue';
-import RightSidebar from '@/components/Bibliotheque/Social/RightSidebar.vue';
+import Navbar from '@/components/common/utils/Navbar.vue';
+import LeftSidebar from '@/components/social/library/LeftSidebar.vue';
+import RightSidebar from '@/components/social/library/RightSidebar.vue';
 import Button from 'primevue/button';
 import Dialog from 'primevue/dialog';
 import InputText from 'primevue/inputtext';

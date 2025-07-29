@@ -29,10 +29,10 @@ import { getDatabase, ref as dbRef, get } from 'firebase/database';
 import Navbar from '@/components/common/utils/Navbar.vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import ProfileInfo from '@/components/UserProfile/ProfileInfo.vue';
-import ResumStageUserProfile from '@/components/UserProfile/ResumStageUserProfile.vue';
-import DocumentsUserProfile from '@/components/UserProfile/DocumentsUserProfile.vue';
-import ChatProfil from '@/components/UserProfile/ChatProfil.vue';
+import ProfileInfo from '@/components/user/details/ProfileInfo.vue'
+import ResumStageUserProfile from '@/components/user/details/ResumStageUserProfile.vue'
+import DocumentsUserProfile from '@/components/user/details/DocumentsUserProfile.vue'
+import ChatProfil from '@/components/user/details/ChatProfil.vue'
 import { useRoute } from 'vue-router';
 
 export default {

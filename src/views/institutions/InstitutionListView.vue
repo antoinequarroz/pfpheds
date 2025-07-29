@@ -64,13 +64,13 @@
 </template>
 
 <script>
-import { db } from '../../../../firebase.js';
+import { db } from '../../../firebase.js';
 import { ref, onValue, remove } from "firebase/database";
 import DataTable from 'primevue/datatable';
 import Column from 'primevue/column';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import Navbar from '@/components/Utils/Navbar.vue';
+import Navbar from '@/components/common/utils/Navbar.vue'
 import { useToast } from 'primevue/usetoast';
 
 export default {

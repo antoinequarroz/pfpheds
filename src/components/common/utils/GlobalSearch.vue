@@ -41,7 +41,7 @@
 <script setup>
 import { ref, watch, computed } from 'vue';
 import { useRouter } from 'vue-router';
-import { db } from '../../../firebase';
+import { db } from '../../../../firebase';
 import { ref as firebaseRef, get } from 'firebase/database';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';

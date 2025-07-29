@@ -39,7 +39,7 @@
 import { ref, onMounted } from "vue";
 import { onBeforeRouteUpdate, useRoute, useRouter } from "vue-router";
 import Navbar from "@/components/common/utils/Navbar.vue";
-import CommunityFeed from "@/components/Social/CommunityFeed.vue";
+import CommunityFeed from '@/components/social/library/CommunityFeed.vue'
 import LeftSidebar from '@/components/social/library/LeftSidebar.vue';
 import RightSidebar from '@/components/social/library/RightSidebar.vue';
 import { db, auth } from "root/firebase.js";

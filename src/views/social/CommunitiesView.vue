@@ -27,9 +27,9 @@ import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 
 import Navbar from '@/components/common/utils/Navbar.vue';
-import CreateNewCommunity from '@/components/Social/CreateNewCommunity.vue';
-import CommunitiesList from '@/components/Social/CommunitiesList.vue';
-import PublicCommunitiesList from '@/components/Social/PublicCommunitiesList.vue';
+import CreateNewCommunity from '@/components/social/library/CreateNewCommunity.vue'
+import CommunitiesList from '@/components/social/library/CommunitiesList.vue'
+import PublicCommunitiesList from '@/components/social/library/PublicCommunitiesList.vue'
 import Toast from 'primevue/toast';
 
 import { db, auth } from "../../../firebase";

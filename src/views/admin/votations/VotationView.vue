@@ -332,7 +332,7 @@ import Column from 'primevue/column';
 import RadioButton from 'primevue/radiobutton';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
-import ValidatedCriteriaSection from '@/components/UserProfile/ValidatedCriteriaSection.vue';
+import ValidatedCriteriaSection from '@/components/user/details/ValidatedCriteriaSection.vue'
 import CardNameProfile from '@/components/user/library/CardNameProfile.vue';
 import { ref, onValue, update, set, remove } from "firebase/database";
 import { db } from 'root/firebase';

@@ -185,7 +185,7 @@
 </template>
 
 <script>
-import Navbar from '@/components/Utils/Navbar.vue';
+import Navbar from '@/components/common/utils/Navbar.vue';
 import { db, auth, storage } from '../../../../firebase.js';
 import { ref as dbRef, onValue, update } from 'firebase/database';
 

@@ -22,8 +22,8 @@
 import { ref as dbRef, onValue } from "firebase/database";
 import { db, auth } from '../../../firebase';
 import { onAuthStateChanged } from 'firebase/auth';
-import UserProfile from '@/components/Social/UserProfile.vue';
-import PostItem from '@/components/Social/PostItem.vue';
+import UserProfile from '@/components/admin/details/UserProfile.vue'
+import PostItem from '@/components/social/library/PostItem.vue'
 
 export default {
   name: 'MentionGroupPage',

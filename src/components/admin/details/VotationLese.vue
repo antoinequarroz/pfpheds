@@ -227,12 +227,12 @@
 </template>
 
 <script>
-import Navbar from '@/components/Utils/Navbar.vue'
+import Navbar from '@/components/common/utils/Navbar.vue'
 import DataTable from 'primevue/datatable'
 import Column from 'primevue/column'
 import RadioButton from 'primevue/radiobutton'
 import Dialog from 'primevue/dialog'
-import ValidatedCriteriaSection from '@/components/UserProfile/ValidatedCriteriaSection.vue'
+import ValidatedCriteriaSection from '@/components/user/details/ValidatedCriteriaSection.vue'
 import { onValue, ref, remove, set, update } from 'firebase/database'
 import { db } from 'root/firebase'
 import { getAuth } from 'firebase/auth'

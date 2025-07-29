@@ -66,11 +66,11 @@ import { useToast } from 'primevue/usetoast';
 
 // Importation des composants utilisés
 import CardNameProfile from '@/components/user/library/CardNameProfile.vue';
-import ResumStageUserProfile from '@/components/UserProfile/ResumStageUserProfile.vue';
+import ResumStageUserProfile from '@/components/user/details/ResumStageUserProfile.vue'
 import LeftSidebar from '@/components/social/library/LeftSidebar.vue';
 import RightSidebar from '@/components/social/library/RightSidebar.vue';
-import VotationResultProfil from '@/components/UserProfile/VotationResultProfil.vue';
-import RadarProfil from '@/components/UserProfile/RadarProfil.vue';
+import VotationResultProfil from '@/components/user/details/VotationResultProfil.vue'
+import RadarProfil from '@/components/user/details/RadarProfil.vue'
 
 const toast = useToast();
 

@@ -203,7 +203,7 @@
 
 <script setup>
 import { ref, onMounted, computed } from "vue";
-import { db, auth } from '../../../firebase.js'; // adapte le chemin si besoin
+import { db, auth } from '../../../../firebase.js'; // adapte le chemin si besoin
 import { onAuthStateChanged } from "firebase/auth";
 
 // Variable pour vérifier le rôle de l'utilisateur

@@ -111,8 +111,10 @@ import ManagementPFPEnCours from '@/components/admin/details/ManagementPFPEnCour
 // ========================================
 import ValidationView from "@/views/admin/validation/ValidationView.vue";
 import ReceptionView from "@/views/admin/validation/ReceptionView.vue";
-import InfoRepondant from '@/components/admin/details/Info_repondant.vue';
-import ManagementRepondant from '@/components/admin/details/Management_repondant.vue';
+import InfoRepondant from "@/components/admin/details/Info_repondant.vue";
+import ManagementRepondant from "@/components/admin/details/Management_repondant.vue";
+// import StatsPlacePFP from '@/components/admin/details/StatsPlacePFP.vue';
+// import ResultPreviewVotation from '@/components/admin/details/ResultPreviewVotation.vue';
 
 // ========================================
 // STATISTIQUES & RÉSULTATS
@@ -124,7 +126,9 @@ import PlaceStatsView from '@/views/admin/places/PlaceStatsView.vue';
 // APPLICATIONS & OUTILS
 // ========================================
 import Index from '@/views/apps/tasklist/Index.vue'
-import IndexChat from '@/views/apps/chat/IndexChat.vue'
+import IndexChat from "@/views/apps/chat/IndexChat.vue";
+import ChatBox from "@/views/apps/chat/ChatBox.vue";
+import ChatSidebar from "@/views/apps/chat/ChatSidebar.vue";
 import CalendarView from '@/views/apps/calendar/CalendarView.vue';
 import FilesView from '@/views/apps/files/FilesView.vue';
 import MailIndex from '@/views/apps/mail/Index.vue';
