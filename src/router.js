@@ -87,87 +87,50 @@ import ChatBotSI from '@/views/ChatBotSI.vue'
 
 // Define your routes
 const routes = [
+  // ========================================
+  // AUTHENTIFICATION & ACCUEIL
+  // ========================================
   { path: '/', component: LoginHome, name: 'LoginHome',   props: true   }, // Fil d'actualité
   { path: '/home', component: LoginHome, name: 'LoginHome',   props: true   }, // Fil d'actualité
   { path: '/home2', component: LoginHome2, name: 'LoginHome2',   props: true   }, // Fil d'actualité
-
-  { path: '/feed', component: NewsFeed, name: 'NewsFeed',   props: true, meta: { requiresAuth: true } }, // Fil d'actualité
-  { path: '/mention/:group', component: MentionGroupPage, name: 'MentionGroupPage', props: true, meta: { requiresAuth: true, requiredRole: true }},
-  { path: '/hashtag/:hashtag', component: HashtagPage, name: 'HashtagPage', props: true, meta: { requiresAuth: true } },
   { path: '/home', component: HomePage, name: 'HomePage' },
-  { path: '/terms_of_use', component: TermsOfUse, name: 'TermsOfUse', meta: { requiresAuth: true } },
+  { path: '/new-password', component: NewPassword, name: 'NewPassword' },
+
+  // ========================================
+  // PAGES PRINCIPALES & NAVIGATION
+  // ========================================
   { path: '/map', component: Map, name: 'Map', meta: { requiresAuth: true } },
   { path: '/institution', component: Institution, name: 'Institution', meta: { requiresAuth: true } },
   { path: '/place', component: Place, name: 'Place', meta: { requiresAuth: true } },
   { path: '/place', component: Place, name: 'Place', meta: { requiresAuth: true } },
-  { path: '/profilAdmin/:id', component: ProfileAdmin, name: 'ProfileAdmin', meta: { requiresAuth: true, requiredRole: ['admin']  } ,},
-  { path: '/settings', component: SettingView, name: 'SettingView', meta: { requiresAuth: true}},
   { path: '/gantt', component: GanttView, name: 'GanttView', meta: { requiresAuth: true}},
+  { path: '/faq', component: Faq, name: 'Faq', meta: { requiresAuth: true } },
+  { path: '/terms_of_use', component: TermsOfUse, name: 'TermsOfUse', meta: { requiresAuth: true } },
+  { path: '/info_externe', component: InfoExterne, name: 'InfoExterne', meta: { requiresAuth: true } },
 
+  // ========================================
+  // PROFILS & UTILISATEURS
+  // ========================================
   {
     path: '/profile/:id',
     name: 'Profile',
     component: Profile,
     meta: { requiresAuth: true }// Le composant qui gère l'affichage d'un profil utilisateur
   },
+  { path: '/profilAdmin/:id', component: ProfileAdmin, name: 'ProfileAdmin', meta: { requiresAuth: true, requiredRole: ['admin']  } ,},
+  { path: '/settings', component: SettingView, name: 'SettingView', meta: { requiresAuth: true}},
+
+  // ========================================
+  // DASHBOARD & ADMINISTRATION
+  // ========================================
   { path: '/admin', component: DashbordAdmin, name: 'DashbordAdmin' , meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] }}, // à remodifier
-  { path: '/institution_list', component: InstitutionList, name: 'InstitutionList', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/etudiant_list', component: EtudiantList, name: 'EtudiantList',  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/institution_form', component: InstitutionForm, name: 'InstitutionForm', props: true,  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/institution_form_modif/:id', component: InstitutionFormModif, name: 'InstitutionFormModif', props: true,  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/etudiant_form', component: EtudiantForm, name: 'EtudiantForm', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/etudiant/:etuId/modif', component: EtudiantFormModif, name: 'EtudiantFormModif', props: true, meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/institution/:id', component: InstitutionView, name: 'InstitutionView', props: true, meta: { requiresAuth: true } },
-  { path: '/place_details', component: PlaceDetails, name: 'place-details', meta: { requiresAuth: true } },
-  { path: '/pfp_details', component: PFPDetails, name: 'pfp-details', meta: { requiresAuth: true } },
-  { path: '/etudiant/:id/details', component: EtudiantDetails, name: 'EtudiantDetails', props: true, meta: { requiresAuth: true } },
-  { path: '/new_user_form', component: NewUserForm, name: 'NewUserForm',  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/new_user_form_modif/:userId', component: NewUserFormModif, name: 'NewUserFormModif', props: true,  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/user_list', component: UserList, name: 'UserList',  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/enseignent_form', component: EnseignentForm, name: 'EnseignentForm',  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/enseignent_form_modif/:enseignantId', component: EnseignentFormModif, name: 'EnseignentFormModif', props: true,  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/enseignent_list', component: EnseignentList, name: 'EnseignentList',  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/praticien_formateur_form', component: PraticienFormateurForm, name: 'PraticienFormateurForm', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/praticien_formateur_form_modif/:praticienFormateurId', component: PraticienFormateurFormModif, name: 'PraticienFormateurFormModif', props: true, meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/praticien_formateur_list', component: PraticienFormateurList, name: 'PraticienFormateurList', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/info_externe', component: InfoExterne, name: 'InfoExterne', meta: { requiresAuth: true } },
-  { path: '/faq', component: Faq, name: 'Faq', meta: { requiresAuth: true } },
-  { path: '/votation_preview', component: VotationPreview, name: 'VotationPreview', meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/validation', component: Validation, name: 'Validation', meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/reception', component: Reception, name: 'Reception', meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/votation', component: VotationView, name: 'VotationView', meta: { requiresAuth: true } },
-  { path: '/management_votation', component: Management_votation, name: 'Management_votation', meta: { requiresAuth: true, requiredRole: 'admin' } }, // Protect this route
-  { path: '/info_repondant', component: InfoRepondant, name: 'InfoRepondant', meta: { requiresAuth: true, requiredRole: ['admin', 'enseignant'] } },
-  { path: '/management_votation_lese', component: Management_votation_lese, name: 'Management_votation_lese', meta: { requiresAuth: true, requiredRole: 'lese' } }, // Protect this route
-  { path: '/management_votation_etudiants', component: Management_votation_etudiants, name: 'Management_votation_etudiants', meta: { requiresAuth: true, requiredRole: 'admin' } }, // Protect this route
-  { path: '/management_places', component: ManagementPlace, name: 'Management_places',meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/management_offre', component: OffreDePlace, name: 'Management_offre',meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/result_preview_votation', component: ResultPreviewVotation, name: 'ResultPreviewVotation',meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/stats_place_pfp', component: StatsPlacePFP, name: 'StatsPlacePFP',meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/places_assignment', component: PlacesAssignment, name: 'PlacesAssignment',meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/places_assigned', component: PlacesAssigned, name: 'PlacesAssigned',meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/management_pfpencours', component: ManagementPFPEnCours, name: 'ManagementPFPEnCours',meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/management_repondant', component: ManagementRepondant, name: 'Management_repondant', meta: { requiresAuth: true, requiredRole: 'admin' } },
 
-  { path: '/stage_repartition', component: StageRepartitionBA2, name: 'StageRepartitionBA2',meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/management_places_safe', component: ManagementPlacesSafe, name: 'ManagementPlacesSafe',meta: { requiresAuth: true, requiredRole: 'admin' } },
-  { path: '/institution_details/:id', component: InstitutionDetails, name: 'InstitutionDetails', props: true, meta: { requiresAuth: true } },
-  { path: '/:pathMatch(.*)*', component: Error404, name: 'Error404' },
-  { path: '/listUser', component: ListUser, name: 'ListUser', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/votation_lese', component: VotationLese, name: 'VotationLese', meta: { requiresAuth: true, requiredRole: 'lese' } },
-  { path: '/historique_pfp', component: HistoriquePFP, name: 'HistoriquePFP', meta: { requiresAuth: true } },
-  { path: '/documents_pfp', component: DocumentsPFP, name: 'DocumentsPFP', meta: { requiresAuth: true } },
-  { path: '/tasklist', component: Index, name: 'Index', meta: { requiresAuth: true, requiredRole: ['editor', 'admin'] } },
-  { path: '/chat', component: IndexChat, name: 'IndexChat', meta: { requiresAuth: true } },
-  { path : '/affectation_stage_etudiant', component: AffectationStageEtudiant, name: 'AffectationStageEtudiant', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
-  { path: '/new-password', component: NewPassword, name: 'NewPassword' },
-
-
-  {
-    path: '/list', // Chemin pour ListComponent
-    name: 'ListComponent',
-    component: ListComponent,  meta: { requiresAuth: true, requiredRole: ['editor', 'admin'] }
-  },
+  // ========================================
+  // SOCIAL & COMMUNICATION
+  // ========================================
+  { path: '/feed', component: NewsFeed, name: 'NewsFeed',   props: true, meta: { requiresAuth: true } }, // Fil d'actualité
+  { path: '/mention/:group', component: MentionGroupPage, name: 'MentionGroupPage', props: true, meta: { requiresAuth: true, requiredRole: true }},
+  { path: '/hashtag/:hashtag', component: HashtagPage, name: 'HashtagPage', props: true, meta: { requiresAuth: true } },
   { path: '/communities', component: CommunityManagement, name: 'CommunityManagement', props: true, meta: { requiresAuth: true } },
   {
     path: '/communities/:id',
@@ -175,34 +138,107 @@ const routes = [
     component: ManageOneCommunity,
     props: true
   },
-
   {
     path: '/communities/info/:id',
     name: 'CommunityInfo',
     component: CommunityInfo // Définition de la route Infos
+  },
+
+  // ========================================
+  // GESTION UTILISATEURS - LISTES
+  // ========================================
+  { path: '/listUser', component: ListUser, name: 'ListUser', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/user_list', component: UserList, name: 'UserList',  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/etudiant_list', component: EtudiantList, name: 'EtudiantList',  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/enseignent_list', component: EnseignentList, name: 'EnseignentList',  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/praticien_formateur_list', component: PraticienFormateurList, name: 'PraticienFormateurList', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/institution_list', component: InstitutionList, name: 'InstitutionList', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+
+  // ========================================
+  // FORMULAIRES DE CRÉATION/MODIFICATION
+  // ========================================
+  { path: '/new_user_form', component: NewUserForm, name: 'NewUserForm',  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/new_user_form_modif/:userId', component: NewUserFormModif, name: 'NewUserFormModif', props: true,  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/etudiant_form', component: EtudiantForm, name: 'EtudiantForm', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/etudiant/:etuId/modif', component: EtudiantFormModif, name: 'EtudiantFormModif', props: true, meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/enseignent_form', component: EnseignentForm, name: 'EnseignentForm',  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/enseignent_form_modif/:enseignantId', component: EnseignentFormModif, name: 'EnseignentFormModif', props: true,  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/praticien_formateur_form', component: PraticienFormateurForm, name: 'PraticienFormateurForm', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/praticien_formateur_form_modif/:praticienFormateurId', component: PraticienFormateurFormModif, name: 'PraticienFormateurFormModif', props: true, meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/institution_form', component: InstitutionForm, name: 'InstitutionForm', props: true,  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/institution_form_modif/:id', component: InstitutionFormModif, name: 'InstitutionFormModif', props: true,  meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path : '/affectation_stage_etudiant', component: AffectationStageEtudiant, name: 'AffectationStageEtudiant', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+
+  // ========================================
+  // INSTITUTIONS & DÉTAILS
+  // ========================================
+  { path: '/institution/:id', component: InstitutionView, name: 'InstitutionView', props: true, meta: { requiresAuth: true } },
+  { path: '/institution_details/:id', component: InstitutionDetails, name: 'InstitutionDetails', props: true, meta: { requiresAuth: true } },
+  { path: '/etudiant/:id/details', component: EtudiantDetails, name: 'EtudiantDetails', props: true, meta: { requiresAuth: true } },
+  { path: '/place_details', component: PlaceDetails, name: 'place-details', meta: { requiresAuth: true } },
+  { path: '/pfp_details', component: PFPDetails, name: 'pfp-details', meta: { requiresAuth: true } },
+
+  // ========================================
+  // VOTATIONS & GESTION
+  // ========================================
+  { path: '/votation', component: VotationView, name: 'VotationView', meta: { requiresAuth: true } },
+  { path: '/votation_preview', component: VotationPreview, name: 'VotationPreview', meta: { requiresAuth: true, requiredRole: 'admin' } },
+  { path: '/votation_lese', component: VotationLese, name: 'VotationLese', meta: { requiresAuth: true, requiredRole: 'lese' } },
+  { path: '/management_votation', component: Management_votation, name: 'Management_votation', meta: { requiresAuth: true, requiredRole: 'admin' } }, // Protect this route
+  { path: '/management_votation_lese', component: Management_votation_lese, name: 'Management_votation_lese', meta: { requiresAuth: true, requiredRole: 'lese' } }, // Protect this route
+  { path: '/management_votation_etudiants', component: Management_votation_etudiants, name: 'Management_votation_etudiants', meta: { requiresAuth: true, requiredRole: 'admin' } }, // Protect this route
+
+  // ========================================
+  // GESTION DES PLACES & STAGES
+  // ========================================
+  { path: '/management_places', component: ManagementPlace, name: 'Management_places',meta: { requiresAuth: true, requiredRole: 'admin' } },
+  { path: '/management_places_safe', component: ManagementPlacesSafe, name: 'ManagementPlacesSafe',meta: { requiresAuth: true, requiredRole: 'admin' } },
+  { path: '/management_offre', component: OffreDePlace, name: 'Management_offre',meta: { requiresAuth: true, requiredRole: 'admin' } },
+  { path: '/places_assignment', component: PlacesAssignment, name: 'PlacesAssignment',meta: { requiresAuth: true, requiredRole: 'admin' } },
+  { path: '/places_assigned', component: PlacesAssigned, name: 'PlacesAssigned',meta: { requiresAuth: true, requiredRole: 'admin' } },
+  { path: '/stage_repartition', component: StageRepartitionBA2, name: 'StageRepartitionBA2',meta: { requiresAuth: true, requiredRole: 'admin' } },
+  { path: '/management_pfpencours', component: ManagementPFPEnCours, name: 'ManagementPFPEnCours',meta: { requiresAuth: true, requiredRole: 'admin' } },
+  { path: '/historique_pfp', component: HistoriquePFP, name: 'HistoriquePFP', meta: { requiresAuth: true } },
+  { path: '/documents_pfp', component: DocumentsPFP, name: 'DocumentsPFP', meta: { requiresAuth: true } },
+
+  // ========================================
+  // VALIDATION & RÉCEPTION
+  // ========================================
+  { path: '/validation', component: Validation, name: 'Validation', meta: { requiresAuth: true, requiredRole: 'admin' } },
+  { path: '/reception', component: Reception, name: 'Reception', meta: { requiresAuth: true, requiredRole: 'admin' } },
+  { path: '/info_repondant', component: InfoRepondant, name: 'InfoRepondant', meta: { requiresAuth: true, requiredRole: ['admin', 'enseignant'] } },
+  { path: '/management_repondant', component: ManagementRepondant, name: 'Management_repondant', meta: { requiresAuth: true, requiredRole: 'admin' } },
+
+  // ========================================
+  // STATISTIQUES & RÉSULTATS
+  // ========================================
+  { path: '/result_preview_votation', component: ResultPreviewVotation, name: 'ResultPreviewVotation',meta: { requiresAuth: true, requiredRole: 'admin' } },
+  { path: '/stats_place_pfp', component: StatsPlacePFP, name: 'StatsPlacePFP',meta: { requiresAuth: true, requiredRole: 'admin' } },
+
+  // ========================================
+  // APPLICATIONS & OUTILS
+  // ========================================
+  { path: '/tasklist', component: Index, name: 'Index', meta: { requiresAuth: true, requiredRole: ['editor', 'admin'] } },
+  { path: '/chat', component: IndexChat, name: 'IndexChat', meta: { requiresAuth: true } },
+  {
+    path: '/list', // Chemin pour ListComponent
+    name: 'ListComponent',
+    component: ListComponent,  meta: { requiresAuth: true, requiredRole: ['editor', 'admin'] }
   },
   {
     path: '/template-test',
     name: 'TemplateTest',
     component: () => import('@/views/TemplateTest.vue')
   },
-  {
-    path: '/validate-pfp1a',
-    name: 'ValidatePFP1A',
-    component: () => import('@/components/Dashboard/DashboardDetails/ValidatePFP1A.vue'),
-    meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] }
-  },
+
+  // ========================================
+  // MOBILE SPÉCIFIQUE
+  // ========================================
   {
     path: '/create',
     name: 'CreateContentMobile',
-    component: CreateContentMobile,
+    component: () => import('@/components/Bibliotheque/Social/CreateContentMobile.vue'),
     meta: { mobileOnly: true }
-  },
-  {
-    path: '/ventriglisse3d',
-    name: 'Ventriglisse3D',
-    component: Ventriglisse3D,
-    meta: { requiresAuth: false }
   },
   {
     path: '/mobile-outils',
@@ -217,15 +253,25 @@ const routes = [
     meta: { mobileOnly: true }
   },
 
+  // ========================================
+  // ROUTES SPÉCIALES & LAZY LOADING
+  // ========================================
   {
-    path: '/qr',
-    name: 'QrCodeGenerator',
-    component: QrCodeGenerator,
+    path: '/validate-pfp1a',
+    name: 'ValidatePFP1A',
+    component: () => import('@/components/Dashboard/DashboardDetails/ValidatePFP1A.vue'),
+    meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] }
   },
   {
-    path: '/event-management',
-    name: 'EventManagement',
-    component: () => import('@/views/EventManagement.vue'),
+    path: '/ventriglisse3d',
+    name: 'Ventriglisse3D',
+    component: Ventriglisse3D,
+    meta: { requiresAuth: false }
+  },
+  {
+    path: '/qr',
+    name: 'QRCodePage',
+    component: () => import('@/components/QrCodeGenerator.vue'),
     meta: { requiresAuth: false }
   },
   {
@@ -252,7 +298,6 @@ const routes = [
     name: 'Game',
     meta: { requiresAuth: true }
   },
-
   {
     path: '/chatbotsi',
     component: ChatBotSI,
@@ -265,6 +310,10 @@ const routes = [
     component: () => import('./views/NotesWorkspace.vue')
   },
 
+  // ========================================
+  // ERREURS & CATCH-ALL
+  // ========================================
+  { path: '/:pathMatch(.*)*', component: Error404, name: 'Error404' }
 ];
 
 // Create router instance
