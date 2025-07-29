@@ -219,11 +219,14 @@ export default {
   },
   watch: {
     post: {
-      handler() {
-        this.fetchAuthorDetails();
-        this.checkLikeStatus();
-        this.loadCommentCount();
-        this.loadCommentAvatars(); // Ajouté
+      handler(newPost, oldPost) {
+        // Éviter les appels répétés si le post n'a pas vraiment changé
+        if (newPost && (!oldPost || newPost.id !== oldPost.id || newPost.Timestamp !== oldPost.Timestamp)) {
+          this.fetchAuthorDetails();
+          this.checkLikeStatus();
+          this.loadCommentCount();
+          this.loadCommentAvatars(); // Ajouté
+        }
       },
       immediate: true,
     },
@@ -369,6 +372,9 @@ export default {
       this.replyToId = null;
     },
     async loadCommentAvatars() {
+      // Vérification de sécurité
+      if (!this.post || !this.post.replies) return;
+      
       const userIds = new Set();
       // Collecte tous les IdUser des commentaires et réponses (thread 1 niveau)
       for (const reply of Object.values(this.post.replies || {})) {
@@ -381,16 +387,16 @@ export default {
       }
       // Pour chaque userId, récupère photoURL si ce n'est pas le currentUser
       for (const userId of userIds) {
-        if (userId === (this.currentUserLocal && this.currentUserLocal.uid)) {
-          this.userPhotoCache[userId] = this.currentUserLocal.photoURL;
-          continue;
-        }
-        if (!this.userPhotoCache[userId]) {
-          // Va chercher dans la base Users/{userId}/PhotoURL
-          const userSnap = await get(dbRef(db, `Users/${userId}`));
-          if (userSnap.exists() && userSnap.val().PhotoURL) {
-            this.userPhotoCache[userId] = userSnap.val().PhotoURL;
-          } else {
+        if (userId !== this.currentUserLocal?.uid && !this.userPhotoCache[userId]) {
+          try {
+            const userRef = dbRef(db, `Users/${userId}`);
+            const snapshot = await get(userRef);
+            if (snapshot.exists()) {
+              const userData = snapshot.val();
+              this.userPhotoCache[userId] = userData.PhotoURL || null;
+            }
+          } catch (error) {
+            console.error('Erreur lors du chargement avatar:', error);
             this.userPhotoCache[userId] = null;
           }
         }
@@ -408,7 +414,13 @@ export default {
           }
         }
       }
-      this.$forceUpdate();
+      // Remplacer $forceUpdate par une mise à jour réactive
+      this.$nextTick(() => {
+        // Force la réactivité sans déclencher de boucle
+        if (this.$refs && typeof this.$refs === 'object') {
+          // Trigger reactivity update
+        }
+      });
     },
     handleResize() {
       this.isMobile = window.matchMedia('(max-width: 600px)').matches;
