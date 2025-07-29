@@ -4,19 +4,15 @@ import { onAuthStateChanged } from 'firebase/auth';
 import { db, auth } from '../firebase'; // Import your Firebase configuration
 
 // ========================================
-// AUTHENTIFICATION & ACCUEIL
+// AUTHENTIFICATION & ACCUEIL // View
 // ========================================
-import LoginHome from '@/components/Utils/LoginHome.vue';
-import LoginHome2 from '@/components/Utils/LoginHome2.vue'
-import NewPassword from '@/views/pages/auth/NewPassword.vue'
-import Login from '@/views/pages/auth/Login.vue';
-import Register from '@/views/pages/auth/Register.vue';
-import SignUp from "@/components/Utils/SignUp.vue";
+import LoginHome from '@/views/auth/LoginHome.vue'; // avec firebase
+import LoginHome2 from '@/views/auth/LoginHome2.vue' // avec supabase
+import NewPassword from '@/views/auth/NewPassword.vue' // avec supabase
 
 // ========================================
 // PAGES PRINCIPALES & NAVIGATION
 // ========================================
-import HomePage from '@/views/pages/HomePage.vue';
 import Map from "@/components/Home/Map.vue";
 import Institution from "@/components/Home/Institution.vue";
 import Place from "@/components/Home/Place.vue";
@@ -155,7 +151,6 @@ const routes = [
   { path: '/', component: LoginHome, name: 'LoginHome', props: true },
   { path: '/home', component: LoginHome, name: 'LoginHome', props: true },
   { path: '/home2', component: LoginHome2, name: 'LoginHome2', props: true },
-  { path: '/home', component: HomePage, name: 'HomePage' },
   { path: '/new-password', component: NewPassword, name: 'NewPassword' },
 
   // ========================================
