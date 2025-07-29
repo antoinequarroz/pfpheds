@@ -136,7 +136,7 @@
   </template>
   
   <script>
-  import Navbar from '@/components/Utils/Navbar.vue';
+  import Navbar from '@/components/common/utils/Navbar.vue';
   
   export default {
     name: "SettingView",

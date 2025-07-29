@@ -26,7 +26,7 @@
 import { ref, onMounted, computed } from "vue";
 import { useRouter } from "vue-router";
 
-import Navbar from '@/components/Utils/Navbar.vue';
+import Navbar from '@/components/common/utils/Navbar.vue';
 import CreateNewCommunity from '@/components/Social/CreateNewCommunity.vue';
 import CommunitiesList from '@/components/Social/CommunitiesList.vue';
 import PublicCommunitiesList from '@/components/Social/PublicCommunitiesList.vue';

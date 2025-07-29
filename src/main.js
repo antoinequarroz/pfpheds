@@ -107,9 +107,7 @@ import TreeSelect from 'primevue/treeselect';
 import TreeTable from 'primevue/treetable';
 import VirtualScroller from 'primevue/virtualscroller';
 
-
-
-import BlockViewer from '@/components/BlockViewer.vue';
+import BlockViewer from '@/components/ui/BlockViewer.vue';
 
 import '@/assets/styles/styles.scss';
 import "primeflex/primeflex.css";

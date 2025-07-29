@@ -137,7 +137,7 @@ import { db, auth } from '../../../firebase.js';
 import { ref as firebaseRef, onValue } from "firebase/database";
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import Navbar from '@/components/Utils/Navbar.vue';
+import Navbar from '@/components/common/utils/Navbar.vue';
 import { onAuthStateChanged } from "firebase/auth";
 
 

@@ -139,7 +139,7 @@ import { ref, onMounted } from 'vue'
 import { db, auth } from 'root/firebase.js'
 import { ref as dbRef, onValue, set } from 'firebase/database'
 import { onAuthStateChanged } from 'firebase/auth'
-import Navbar from '@/components/Utils/Navbar.vue'
+import Navbar from '@/components/common/utils/Navbar.vue'
 import EditFileDocPFP from '@/components/Home/EditFileDocPFP.vue'
 import AddFileDocPFP from '@/components/Home/AddFileDocPFP.vue'
 

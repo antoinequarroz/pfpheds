@@ -14,9 +14,9 @@
 
 <script setup>
 import PageTemplate from '@/components/Template/PageTemplate.vue'
-import LeftSidebar from '@/components/Bibliotheque/Social/LeftSidebar.vue'
-import MainFeed from '@/components/Bibliotheque/Social/MainFeed.vue'
-import RightSidebar from '@/components/Bibliotheque/Social/RightSidebar.vue'
+import LeftSidebar from '@/components/social/library/LeftSidebar.vue'
+import MainFeed from '@/components/social/library/MainFeed.vue'
+import RightSidebar from '@/components/social/library/RightSidebar.vue'
 </script>
 
 <style scoped>

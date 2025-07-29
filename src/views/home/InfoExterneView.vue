@@ -35,7 +35,7 @@
 import { ref } from 'vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
-import Navbar from '@/components/Utils/Navbar.vue';
+import Navbar from '@/components/common/utils/Navbar.vue';
 import { useToast } from 'primevue/usetoast';
 
 export default {

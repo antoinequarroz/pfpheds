@@ -70,7 +70,7 @@ import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import IconField from 'primevue/iconfield';
 import InputIcon from 'primevue/inputicon';
-import Navbar from '@/components/Utils/Navbar.vue';
+import Navbar from '@/components/common/utils/Navbar.vue';
 
 export default {
   name: "PraticienFormateurList",

@@ -57,6 +57,43 @@ Cette structure sépare clairement les **pages complètes** (views) des **compos
     └── ReceptionView.vue    # 📥 Réception
 ```
 
+### 📱 **views/apps/** - Applications et outils
+```
+├── chat/                       # 💬 Application de chat
+│   ├── IndexChat.vue           # 💬 Interface principale
+│   ├── ChatBox.vue             # 💬 Boîte de discussion
+│   ├── ChatSidebar.vue         # 📋 Sidebar conversations
+│   └── UserCard.vue            # 👤 Carte utilisateur
+├── mail/                       # 📧 Application de messagerie
+│   ├── Index.vue               # 📧 Interface principale
+│   ├── ComposeNew.vue          # ✍️ Composer message
+│   ├── Detail.vue              # 🔍 Détails message
+│   └── Reply.vue               # ↩️ Répondre
+├── tasklist/                   # 📋 Gestion des tâches
+│   ├── Index.vue               # 📋 Interface principale
+│   ├── List.vue                # 📝 Liste des tâches
+│   └── CreateTaskDialog.vue    # ➕ Création tâche
+├── calendar/                   # 📅 Application calendrier
+│   └── CalendarView.vue        # 📅 Vue calendrier
+├── files/                      # 📁 Gestionnaire de fichiers
+│   └── FilesView.vue           # 📁 Gestion fichiers
+├── notes/                      # 📝 Application de notes
+│   └── NotesWorkspaceView.vue  # 📝 Espace de travail
+├── events/                     # 🎉 Gestion des événements
+│   └── EventManagementView.vue # 🎉 Gestion événements
+├── blog/                       # 📝 Application de blog
+│   ├── Detail.vue              # 📖 Détail article
+│   ├── Edit.vue                # ✏️ Édition article
+│   └── List.vue                # 📋 Liste articles
+└── tools/                      # 🔧 Outils et utilitaires
+    ├── ToolsView.vue           # 🔧 Interface outils
+    ├── GameView.vue            # 🎮 Jeu intégré
+    ├── ChatBotView.vue         # 🤖 ChatBot SI
+    ├── MobileToolsView.vue     # 📱 Outils mobile
+    ├── MobileLangAppsView.vue  # 🌐 Apps langues
+    └── MobileSearchView.vue    # 🔍 Recherche mobile
+```
+
 ### 🏠 **views/home/** - Pages d'accueil et navigation principale
 ```
 ├── MapView.vue              # 🗺️ Carte interactive (ex: components/Home/Map.vue)
@@ -120,6 +157,16 @@ Cette structure sépare clairement les **pages complètes** (views) des **compos
 | `/result_preview_votation` | VotationResultsView | Résultats votation |
 | `/validation` | ValidationView | Validation |
 | `/reception` | ReceptionView | Réception |
+| **📱 APPLICATIONS** | | |
+| `/chat` | IndexChat | Interface de chat |
+| `/mail` | Index | Interface de messagerie |
+| `/tasklist` | Index | Gestion des tâches |
+| `/calendar` | CalendarView | Calendrier |
+| `/files` | FilesView | Gestionnaire de fichiers |
+| `/notes` | NotesWorkspaceView | Application de notes |
+| `/events` | EventManagementView | Gestion des événements |
+| `/blog` | List | Application de blog |
+| `/tools` | ToolsView | Outils et utilitaires |
 | **🏠 PAGES PRINCIPALES** | | |
 | `/map` | MapView | Carte interactive |
 | `/institution` | InstitutionListView | Liste des institutions |

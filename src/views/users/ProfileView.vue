@@ -26,7 +26,7 @@
 <script>
 import { ref, reactive, onMounted } from 'vue';
 import { getDatabase, ref as dbRef, get } from 'firebase/database';
-import Navbar from '@/components/Utils/Navbar.vue';
+import Navbar from '@/components/common/utils/Navbar.vue';
 import InputText from 'primevue/inputtext';
 import Button from 'primevue/button';
 import ProfileInfo from '@/components/UserProfile/ProfileInfo.vue';

@@ -21,11 +21,11 @@
 
 <script>
 import { ref } from 'vue';
-import LeftSidebar from '@/components/Bibliotheque/Social/LeftSidebar.vue'
-import MainFeed from '@/components/Bibliotheque/Social/MainFeed.vue'
-import RightSidebar from '@/components/Bibliotheque/Social/RightSidebar.vue'
-import Navbar from '@/components/Utils/Navbar.vue'
-import MobileBottomNav from '@/components/Utils/MobileBottomNav.vue'
+import LeftSidebar from '@/components/social/library/LeftSidebar.vue'
+import MainFeed from '@/components/social/library/MainFeed.vue'
+import RightSidebar from '@/components/social/library/RightSidebar.vue'
+import Navbar from '@/components/common/utils/Navbar.vue'
+import MobileBottomNav from '@/components/common/utils/MobileBottomNav.vue'
 
 export default {
   components: {

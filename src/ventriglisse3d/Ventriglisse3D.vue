@@ -60,7 +60,7 @@ import wallLeftImg from './assets/cafte1.png';
 import wallRightImg from './assets/cafte2.png';
 import cafeteriaImg from './assets/cafte3.png';
 import Dialog from 'primevue/dialog';
-import Navbar from '@/components/Utils/Navbar.vue';
+import Navbar from '@/components/common/utils/Navbar.vue';
 
 // Liste modifiable par l'utilisateur
 const defaultParticipants = [

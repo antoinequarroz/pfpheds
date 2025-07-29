@@ -64,55 +64,55 @@ import InstitutionListView from "@/views/admin/institutions/InstitutionListView.
 // ========================================
 // FORMULAIRES DE CRÉATION/MODIFICATION
 // ========================================
-import NewUserForm from "@/components/Dashboard/DashboardForms/NewUserForm.vue";
-import NewUserFormModif from "@/components/Dashboard/DashboardForms/NewUserFormModif.vue";
-import EtudiantForm from "@/components/Dashboard/DashboardForms/EtudiantForm.vue";
-import EtudiantFormModif from "@/components/Dashboard/DashboardForms/EtudiantFormModif.vue";
-import EnseignentForm from "@/components/Dashboard/DashboardForms/EnseignentForm.vue";
-import EnseignentFormModif from "@/components/Dashboard/DashboardForms/EnseignentFormModif.vue";
-import PraticienFormateurForm from "@/components/Dashboard/DashboardForms/PraticienFormateurForm.vue";
-import PraticienFormateurFormModif from "@/components/Dashboard/DashboardForms/PraticienFormateurFormModif.vue";
-import InstitutionForm from "@/components/Dashboard/DashboardForms/InstitutionForm.vue";
-import InstitutionFormModif from "@/components/Dashboard/DashboardForms/InstitutionFormModif.vue";
-import AffectationStageEtudiant from '@/components/Dashboard/DashboardForms/AffectationStageEtudiant.vue'
+import NewUserForm from "@/components/admin/forms/NewUserForm.vue";
+import NewUserFormModif from "@/components/admin/forms/NewUserFormModif.vue";
+import EtudiantForm from "@/components/admin/forms/EtudiantForm.vue";
+import EtudiantFormModif from "@/components/admin/forms/EtudiantFormModif.vue";
+import EnseignentForm from "@/components/admin/forms/EnseignentForm.vue";
+import EnseignentFormModif from "@/components/admin/forms/EnseignentFormModif.vue";
+import PraticienFormateurForm from "@/components/admin/forms/PraticienFormateurForm.vue";
+import PraticienFormateurFormModif from "@/components/admin/forms/PraticienFormateurFormModif.vue";
+import InstitutionForm from "@/components/admin/forms/InstitutionForm.vue";
+import InstitutionFormModif from "@/components/admin/forms/InstitutionFormModif.vue";
+import AffectationStageEtudiant from '@/components/admin/forms/AffectationStageEtudiant.vue'
 
 // ========================================
 // INSTITUTIONS & DÉTAILS
 // ========================================
 import InstitutionView from '@/components/Institutions/InstitutionView.vue';
 import InstitutionDetailsView from "@/views/admin/institutions/InstitutionDetailsView.vue";
-import EtudiantDetails from "@/components/Dashboard/DashboardDetails/EtudiantDetails.vue";
-import PlaceDetails from "@/components/Dashboard/DashboardDetails/PlaceDetails.vue";
-import PFPDetails from "@/components/Dashboard/DashboardDetails/PFPDetails.vue";
+import EtudiantDetails from "@/components/admin/details/EtudiantDetails.vue";
+import PlaceDetails from "@/components/admin/details/PlaceDetails.vue";
+import PFPDetails from "@/components/admin/details/PFPDetails.vue";
 
 // ========================================
 // VOTATIONS & GESTION
 // ========================================
 import VotationView from "@/views/admin/votations/VotationView.vue";
-import VotationPreview from "@/components/Dashboard/DashboardDetails/Votation_preview.vue";
-import VotationLese from '@/components/Dashboard/DashboardDetails/VotationLese.vue';
+import VotationPreview from "@/components/admin/details/Votation_preview.vue";
+import VotationLese from '@/components/admin/details/VotationLese.vue';
 import VotationManagementView from '@/views/admin/votations/VotationManagementView.vue';
-import Management_votation_lese from '@/components/Dashboard/DashboardDetails/Management_votation_lese.vue';
-import Management_votation_etudiants from '@/components/Dashboard/DashboardDetails/Management_votation_etudiants.vue';
+import Management_votation_lese from '@/components/admin/details/Management_votation_lese.vue';
+import Management_votation_etudiants from '@/components/admin/details/Management_votation_etudiants.vue';
 
 // ========================================
 // GESTION DES PLACES & STAGES
 // ========================================
 import PlaceManagementView from '@/views/admin/places/PlaceManagementView.vue';
-import ManagementPlacesSafe from '@/components/Dashboard/DashboardDetails/ManagementPlacesSafe.vue';
-import OffreDePlace from '@/components/Dashboard/DashboardDetails/OffreDePlac3BA22PFP4.vue';
+import ManagementPlacesSafe from '@/components/admin/details/ManagementPlacesSafe.vue';
+import OffreDePlace from '@/components/admin/details/OffreDePlac3BA22PFP4.vue';
 import PlaceAssignmentView from '@/views/admin/places/PlaceAssignmentView.vue';
-import PlacesAssigned from '@/components/Dashboard/DashboardDetails/PlacesAssigned.vue';
-import StageRepartitionBA2 from '@/components/Dashboard/DashboardDetails/StageRepartitionBA2.vue';
-import ManagementPFPEnCours from '@/components/Dashboard/DashboardDetails/ManagementPFPEnCours.vue';
+import PlacesAssigned from '@/components/admin/details/PlacesAssigned.vue';
+import StageRepartitionBA2 from '@/components/admin/details/StageRepartitionBA2.vue';
+import ManagementPFPEnCours from '@/components/admin/details/ManagementPFPEnCours.vue';
 
 // ========================================
 // VALIDATION & RÉCEPTION
 // ========================================
 import ValidationView from "@/views/admin/validation/ValidationView.vue";
 import ReceptionView from "@/views/admin/validation/ReceptionView.vue";
-import InfoRepondant from '@/components/Dashboard/DashboardDetails/Info_repondant.vue';
-import ManagementRepondant from '@/components/Dashboard/DashboardDetails/Management_repondant.vue';
+import InfoRepondant from '@/components/admin/details/Info_repondant.vue';
+import ManagementRepondant from '@/components/admin/details/Management_repondant.vue';
 
 // ========================================
 // STATISTIQUES & RÉSULTATS
@@ -125,29 +125,27 @@ import PlaceStatsView from '@/views/admin/places/PlaceStatsView.vue';
 // ========================================
 import Index from '@/views/apps/tasklist/Index.vue'
 import IndexChat from '@/views/apps/chat/IndexChat.vue'
-import ListComponent from '@/components/Bibliotheque/SoundBox/ListComponent.vue'
-import SearchResults from '@/components/Utils/SearchResults.vue'
-import Outils from '@/views/Outils.vue';
-import Game from '@/views/Game.vue';
-import NotesWorkspace from '@/views/NotesWorkspace.vue';
-import ChatBotSI from '@/views/ChatBotSI.vue'
-
-// ========================================
-// MOBILE SPÉCIFIQUE
-// ========================================
-import CreateContentMobile from '@/components/Bibliotheque/Social/CreateContentMobile.vue';
-import MobileLangApps from '@/views/MobileLangApps.vue';
-
-// ========================================
-// COMPOSANTS SPÉCIAUX & UTILITAIRES
-// ========================================
+import CalendarView from '@/views/apps/calendar/CalendarView.vue';
+import FilesView from '@/views/apps/files/FilesView.vue';
+import MailIndex from '@/views/apps/mail/Index.vue';
+import NotesWorkspaceView from '@/views/apps/notes/NotesWorkspaceView.vue';
+import EventManagementView from '@/views/apps/events/EventManagementView.vue';
+import ToolsView from '@/views/apps/tools/ToolsView.vue';
+import GameView from '@/views/apps/tools/GameView.vue';
+import ChatBotView from '@/views/apps/tools/ChatBotView.vue';
+import MobileToolsView from '@/views/apps/tools/MobileToolsView.vue';
+import MobileLangAppsView from '@/views/apps/tools/MobileLangAppsView.vue';
+import MobileSearchView from '@/views/apps/tools/MobileSearchView.vue'
+import CreateContentMobile from '@/components/social/library/CreateContentMobile.vue';
+import ListComponent from '@/components/media/audio/ListComponent.vue'
+import SearchResults from '@/components/common/utils/SearchResults.vue'
 import Ventriglisse3D from '@/ventriglisse3d/Ventriglisse3D.vue';
-import QrCodeGenerator from '@/components/QrCodeGenerator.vue'
+import QrCodeGenerator from '@/components/ui/QrCodeGenerator.vue'
 
 // ========================================
 // ERREURS & CATCH-ALL
 // ========================================
-import Error404 from "@/components/Utils/Error404.vue";
+import Error404 from "@/components/common/utils/Error404.vue";
 
 // Define your routes
 const routes = [
@@ -276,27 +274,37 @@ const routes = [
   // ========================================
   { path: '/tasklist', component: Index, name: 'Index', meta: { requiresAuth: true, requiredRole: ['editor', 'admin'] } },
   { path: '/chat', component: IndexChat, name: 'IndexChat', meta: { requiresAuth: true } },
-  { path: '/list', component: ListComponent, name: 'ListComponent', meta: { requiresAuth: true, requiredRole: ['editor', 'admin'] } },
+  { path: '/calendar', component: CalendarView, name: 'CalendarView', meta: { requiresAuth: true } },
+  { path: '/files', component: FilesView, name: 'FilesView', meta: { requiresAuth: true } },
+  { path: '/mail', component: MailIndex, name: 'MailIndex', meta: { requiresAuth: true } },
+  { path: '/notes', component: NotesWorkspaceView, name: 'NotesWorkspaceView', meta: { requiresAuth: true } },
+  { path: '/events', component: EventManagementView, name: 'EventManagementView', meta: { requiresAuth: true } },
+  { path: '/tools', component: ToolsView, name: 'ToolsView', meta: { requiresAuth: true } },
+  { path: '/game', component: GameView, name: 'GameView', meta: { requiresAuth: true } },
+  { path: '/chatbot', component: ChatBotView, name: 'ChatBotView', meta: { requiresAuth: true } },
+  { path: '/mobile-tools', component: MobileToolsView, name: 'MobileToolsView', meta: { requiresAuth: true } },
+  { path: '/mobile-lang-apps', component: MobileLangAppsView, name: 'MobileLangApps', meta: { mobileOnly: true } },
+  { path: '/mobile-search', component: MobileSearchView, name: 'MobileSearchView', meta: { requiresAuth: true } },
   { path: '/template-test', component: () => import('@/views/TemplateTest.vue'), name: 'TemplateTest' },
 
   // ========================================
   // MOBILE SPÉCIFIQUE
   // ========================================
-  { path: '/create', component: () => import('@/components/Bibliotheque/Social/CreateContentMobile.vue'), name: 'CreateContentMobile', meta: { mobileOnly: true } },
-  { path: '/mobile-outils', component: () => import('./views/MobileOutils.vue'), name: 'MobileOutils', meta: { mobileOnly: true } },
-  { path: '/mobile-search', component: () => import('./views/MobileSearch.vue'), name: 'MobileSearch', meta: { mobileOnly: true } },
+  { path: '/create', component: CreateContentMobile, name: 'CreateContentMobile', meta: { mobileOnly: true } },
+  { path: '/mobile-outils', component: MobileToolsView, name: 'MobileToolsView', meta: { mobileOnly: true } },
+  { path: '/mobile-search-old', component: MobileSearchView, name: 'MobileSearchOld', meta: { mobileOnly: true } },
+  { path: '/list', component: ListComponent, name: 'ListComponent', meta: { requiresAuth: true, requiredRole: ['editor', 'admin'] } },
 
   // ========================================
   // ROUTES SPÉCIALES & LAZY LOADING
   // ========================================
-  { path: '/validate-pfp1a', component: () => import('@/components/Dashboard/DashboardDetails/ValidatePFP1A.vue'), name: 'ValidatePFP1A', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
+  { path: '/validate-pfp1a', component: () => import('@/components/admin/details/ValidatePFP1A.vue'), name: 'ValidatePFP1A', meta: { requiresAuth: true, requiredRole: ['admin', 'editor'] } },
   { path: '/ventriglisse3d', component: Ventriglisse3D, name: 'Ventriglisse3D', meta: { requiresAuth: false } },
-  { path: '/qr', component: () => import('@/components/QrCodeGenerator.vue'), name: 'QRCodePage', meta: { requiresAuth: false } },
-  { path: '/lang-apps', component: MobileLangApps, name: 'MobileLangApps', meta: { mobileOnly: true } },
-  { path: '/notes', component: NotesWorkspace, name: 'NotesWorkspace', meta: { requiresAuth: true } },
-  { path: '/outils', component: Outils, name: 'Outils', meta: { requiresAuth: true } },
-  { path: '/game', component: Game, name: 'Game', meta: { requiresAuth: true } },
-  { path: '/chatbotsi', component: ChatBotSI, name: 'ChatBotSI', meta: { requiresAuth: true, requiredRole: ['admin', 'chatbotSi'] } },
+  { path: '/qr', component: () => import('@/components/ui/QrCodeGenerator.vue'), name: 'QRCodePage', meta: { requiresAuth: false } },
+  { path: '/notes', component: NotesWorkspaceView, name: 'NotesWorkspaceView', meta: { requiresAuth: true } },
+  { path: '/outils', component: ToolsView, name: 'ToolsView', meta: { requiresAuth: true } },
+  { path: '/game', component: GameView, name: 'GameView', meta: { requiresAuth: true } },
+  { path: '/chatbotsi', component: ChatBotView, name: 'ChatBotSI', meta: { requiresAuth: true, requiredRole: ['admin', 'chatbotSi'] } },
 
   // ========================================
   // ERREURS & CATCH-ALL

@@ -35,7 +35,7 @@ import { ref, reactive, onMounted, watch, computed } from 'vue';
 import { getDatabase, ref as dbRef, get } from 'firebase/database';
 import { useRoute, useRouter } from 'vue-router';
 
-import Navbar from '@/components/Utils/Navbar.vue';
+import Navbar from '@/components/common/utils/Navbar.vue';
 import ProfileInfoAdmin from '@/components/UserProfile/ProfileInfoAdmin.vue';
 import ResumStageUserProfile from '@/components/UserProfile/ResumStageUserProfile.vue';
 import DocumentsUserProfile from '@/components/UserProfile/DocumentsUserProfile.vue';

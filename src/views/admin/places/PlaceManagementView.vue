@@ -292,8 +292,8 @@
 </template>
 
 <script>
-import Navbar from '@/components/Utils/Navbar.vue';
-import OverCreatePlace from '@/components/Dashboard/DashboardDetails/OverCreatePlace.vue';
+import Navbar from '@/components/common/utils/Navbar.vue';
+import OverCreatePlace from '@/components/admin/details/OverCreatePlace.vue';
 import { db, auth, storage } from '../../../../firebase';
 import { ref, onValue, remove, update } from "firebase/database";
 import Button from 'primevue/button';

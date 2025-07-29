@@ -187,7 +187,7 @@
 
 <script>
 import { ref, computed, onMounted } from "vue";
-import Navbar from '@/components/Utils/Navbar.vue';
+import Navbar from '@/components/common/utils/Navbar.vue';
 import { db, auth } from "../../../firebase"; // Corriger l'import Firebase
 import { ref as dbRef, get, update } from "firebase/database";
 import { useRoute } from "vue-router";
