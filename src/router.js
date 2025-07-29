@@ -3,87 +3,149 @@ import { ref as dbRef, get as dbGet } from 'firebase/database';
 import { onAuthStateChanged } from 'firebase/auth';
 import { db, auth } from '../firebase'; // Import your Firebase configuration
 
-// Import your components
-import Map from "@/components/Home/Map.vue";
-import GanttView from "@/components/Home/GanttView.vue";
-import Institution from "@/components/Home/Institution.vue";
-import Place from "@/components/Home/Place.vue";
-import Profile from "@/components/Home/Profile.vue";
-import Error404 from "@/components/Utils/Error404.vue";
-import InstitutionList from "@/components/Dashboard/DashboardList/InstitutionList.vue";
-import EtudiantList from "@/components/Dashboard/DashboardList/EtudiantList.vue";
-import InstitutionForm from "@/components/Dashboard/DashboardForms/InstitutionForm.vue";
-import EtudiantForm from "@/components/Dashboard/DashboardForms/EtudiantForm.vue";
-import EtudiantFormModif from "@/components/Dashboard/DashboardForms/EtudiantFormModif.vue";
-import InstitutionDetails from "@/components/Dashboard/DashboardDetails/InstitutionDetails.vue";
-import InstitutionFormModif from "@/components/Dashboard/DashboardForms/InstitutionFormModif.vue";
-import EtudiantDetails from "@/components/Dashboard/DashboardDetails/EtudiantDetails.vue";
-import PlaceDetails from "@/components/Dashboard/DashboardDetails/PlaceDetails.vue";
-import PFPDetails from "@/components/Dashboard/DashboardDetails/PFPDetails.vue";
-import VotationView from "@/components/Dashboard/DashboardDetails/VotationView.vue";
-import VotationPreview from "@/components/Dashboard/DashboardDetails/Votation_preview.vue";
-import Validation from "@/components/Dashboard/DashboardDetails/Validation.vue";
-import Reception from "@/components/Dashboard/DashboardDetails/Reception.vue";
-import NewUserForm from "@/components/Dashboard/DashboardForms/NewUserForm.vue";
-import NewUserFormModif from "@/components/Dashboard/DashboardForms/NewUserFormModif.vue";
-import UserList from "@/components/Dashboard/DashboardList/UserList.vue";
-import EnseignentForm from "@/components/Dashboard/DashboardForms/EnseignentForm.vue";
-import EnseignentFormModif from "@/components/Dashboard/DashboardForms/EnseignentFormModif.vue";
-import EnseignentList from "@/components/Dashboard/DashboardList/EnseignentList.vue";
-import PraticienFormateurForm from "@/components/Dashboard/DashboardForms/PraticienFormateurForm.vue";
-import PraticienFormateurFormModif from "@/components/Dashboard/DashboardForms/PraticienFormateurFormModif.vue";
-import PraticienFormateurList from "@/components/Dashboard/DashboardList/PraticienFormateurList.vue";
-import Faq from "@/components/Home/Faq.vue";
-import NewPassword from '@/views/pages/auth/NewPassword.vue'
-import SignUp from "@/components/Utils/SignUp.vue";
-import TermsOfUse from "@/components/Utils/TermsOfUse.vue";
-import InfoExterne from "@/components/Utils/InfoExterne.vue";
-import HomePage from '@/views/pages/HomePage.vue';
-import Login from '@/views/pages/auth/Login.vue';
-import Register from '@/views/pages/auth/Register.vue';
-import DashbordAdmin from '@/views/dashboards/DashbordAdmin.vue';
-import ListUser from '@/views/user-management/ListUser.vue';
-import InstitutionView from '@/components/Institutions/InstitutionView.vue';
-import Management_votation from '@/components/Dashboard/DashboardDetails/Management_votation.vue';
-import Management_votation_lese from '@/components/Dashboard/DashboardDetails/Management_votation_lese.vue';
-import Management_votation_etudiants from '@/components/Dashboard/DashboardDetails/Management_votation_etudiants.vue';
-import ManagementPlace from '@/components/Dashboard/DashboardDetails/Management_place.vue';
-import OffreDePlace from '@/components/Dashboard/DashboardDetails/OffreDePlac3BA22PFP4.vue';
-import ManagementPlacesSafe from '@/components/Dashboard/DashboardDetails/ManagementPlacesSafe.vue';
-import VotationLese from '@/components/Dashboard/DashboardDetails/VotationLese.vue';
-import StageRepartitionBA2 from '@/components/Dashboard/DashboardDetails/StageRepartitionBA2.vue';
-import ResultPreviewVotation from '@/components/Dashboard/DashboardDetails/ResultPreviewVotation.vue';
-import StatsPlacePFP from '@/components/Dashboard/DashboardDetails/StatsPlacePFP.vue';
-import PlacesAssignment from '@/components/Dashboard/DashboardDetails/PlacesAssignment.vue';
-import PlacesAssigned from '@/components/Dashboard/DashboardDetails/PlacesAssigned.vue';
-import ManagementPFPEnCours from '@/components/Dashboard/DashboardDetails/ManagementPFPEnCours.vue';
-import ManagementRepondant from '@/components/Dashboard/DashboardDetails/Management_repondant.vue';
-import InfoRepondant from '@/components/Dashboard/DashboardDetails/Info_repondant.vue';
+// ========================================
+// AUTHENTIFICATION & ACCUEIL
+// ========================================
 import LoginHome from '@/components/Utils/LoginHome.vue';
 import LoginHome2 from '@/components/Utils/LoginHome2.vue'
+import NewPassword from '@/views/pages/auth/NewPassword.vue'
+import Login from '@/views/pages/auth/Login.vue';
+import Register from '@/views/pages/auth/Register.vue';
+import SignUp from "@/components/Utils/SignUp.vue";
+
+// ========================================
+// PAGES PRINCIPALES & NAVIGATION
+// ========================================
+import HomePage from '@/views/pages/HomePage.vue';
+import Map from "@/components/Home/Map.vue";
+import Institution from "@/components/Home/Institution.vue";
+import Place from "@/components/Home/Place.vue";
+import GanttView from "@/components/Home/GanttView.vue";
+import Faq from "@/components/Home/Faq.vue";
+import TermsOfUse from "@/components/Utils/TermsOfUse.vue";
+import InfoExterne from "@/components/Utils/InfoExterne.vue";
+import HistoriquePFP from '@/components/Home/HistoriquePFP.vue'
+import DocumentsPFP from '@/components/Home/DocumentsPFP.vue'
+
+// ========================================
+// PROFILS & UTILISATEURS
+// ========================================
+import Profile from "@/components/Home/Profile.vue";
+import ProfileAdmin from '@/components/Home/ProfileAdmin.vue'
+import SettingView from '@/components/Home/SettingView.vue'
+
+// ========================================
+// DASHBOARD & ADMINISTRATION
+// ========================================
+import DashbordAdmin from '@/views/dashboards/DashbordAdmin.vue';
+
+// ========================================
+// SOCIAL & COMMUNICATION
+// ========================================
 import NewsFeed from '@/components/Social/NewsFeed.vue';
+import MentionGroupPage from '@/components/Social/MentionGroupPage.vue';
 import HashtagPage from '@/components/Social/HashtagPage.vue';
 import CommunityManagement from '@/components/Social/CommunityManagement.vue';
 import ManageOneCommunity from '@/components/Social/ManageOneCommunity.vue';
-import MentionGroupPage from '@/components/Social/MentionGroupPage.vue';
-import HistoriquePFP from '@/components/Home/HistoriquePFP.vue'
-import DocumentsPFP from '@/components/Home/DocumentsPFP.vue'
+import CommunityInfo from '@/components/Social/CommunityInfo.vue'; // Import du composant Infos
+
+// ========================================
+// GESTION UTILISATEURS - LISTES
+// ========================================
+import ListUser from '@/views/user-management/ListUser.vue';
+import UserList from "@/components/Dashboard/DashboardList/UserList.vue";
+import EtudiantList from "@/components/Dashboard/DashboardList/EtudiantList.vue";
+import EnseignentList from "@/components/Dashboard/DashboardList/EnseignentList.vue";
+import PraticienFormateurList from "@/components/Dashboard/DashboardList/PraticienFormateurList.vue";
+import InstitutionList from "@/components/Dashboard/DashboardList/InstitutionList.vue";
+
+// ========================================
+// FORMULAIRES DE CRÉATION/MODIFICATION
+// ========================================
+import NewUserForm from "@/components/Dashboard/DashboardForms/NewUserForm.vue";
+import NewUserFormModif from "@/components/Dashboard/DashboardForms/NewUserFormModif.vue";
+import EtudiantForm from "@/components/Dashboard/DashboardForms/EtudiantForm.vue";
+import EtudiantFormModif from "@/components/Dashboard/DashboardForms/EtudiantFormModif.vue";
+import EnseignentForm from "@/components/Dashboard/DashboardForms/EnseignentForm.vue";
+import EnseignentFormModif from "@/components/Dashboard/DashboardForms/EnseignentFormModif.vue";
+import PraticienFormateurForm from "@/components/Dashboard/DashboardForms/PraticienFormateurForm.vue";
+import PraticienFormateurFormModif from "@/components/Dashboard/DashboardForms/PraticienFormateurFormModif.vue";
+import InstitutionForm from "@/components/Dashboard/DashboardForms/InstitutionForm.vue";
+import InstitutionFormModif from "@/components/Dashboard/DashboardForms/InstitutionFormModif.vue";
+import AffectationStageEtudiant from '@/components/Dashboard/DashboardForms/AffectationStageEtudiant.vue'
+
+// ========================================
+// INSTITUTIONS & DÉTAILS
+// ========================================
+import InstitutionView from '@/components/Institutions/InstitutionView.vue';
+import InstitutionDetails from "@/components/Dashboard/DashboardDetails/InstitutionDetails.vue";
+import EtudiantDetails from "@/components/Dashboard/DashboardDetails/EtudiantDetails.vue";
+import PlaceDetails from "@/components/Dashboard/DashboardDetails/PlaceDetails.vue";
+import PFPDetails from "@/components/Dashboard/DashboardDetails/PFPDetails.vue";
+
+// ========================================
+// VOTATIONS & GESTION
+// ========================================
+import VotationView from "@/components/Dashboard/DashboardDetails/VotationView.vue";
+import VotationPreview from "@/components/Dashboard/DashboardDetails/Votation_preview.vue";
+import VotationLese from '@/components/Dashboard/DashboardDetails/VotationLese.vue';
+import Management_votation from '@/components/Dashboard/DashboardDetails/Management_votation.vue';
+import Management_votation_lese from '@/components/Dashboard/DashboardDetails/Management_votation_lese.vue';
+import Management_votation_etudiants from '@/components/Dashboard/DashboardDetails/Management_votation_etudiants.vue';
+
+// ========================================
+// GESTION DES PLACES & STAGES
+// ========================================
+import ManagementPlace from '@/components/Dashboard/DashboardDetails/Management_place.vue';
+import ManagementPlacesSafe from '@/components/Dashboard/DashboardDetails/ManagementPlacesSafe.vue';
+import OffreDePlace from '@/components/Dashboard/DashboardDetails/OffreDePlac3BA22PFP4.vue';
+import PlacesAssignment from '@/components/Dashboard/DashboardDetails/PlacesAssignment.vue';
+import PlacesAssigned from '@/components/Dashboard/DashboardDetails/PlacesAssigned.vue';
+import StageRepartitionBA2 from '@/components/Dashboard/DashboardDetails/StageRepartitionBA2.vue';
+import ManagementPFPEnCours from '@/components/Dashboard/DashboardDetails/ManagementPFPEnCours.vue';
+
+// ========================================
+// VALIDATION & RÉCEPTION
+// ========================================
+import Validation from "@/components/Dashboard/DashboardDetails/Validation.vue";
+import Reception from "@/components/Dashboard/DashboardDetails/Reception.vue";
+import InfoRepondant from '@/components/Dashboard/DashboardDetails/Info_repondant.vue';
+import ManagementRepondant from '@/components/Dashboard/DashboardDetails/Management_repondant.vue';
+
+// ========================================
+// STATISTIQUES & RÉSULTATS
+// ========================================
+import ResultPreviewVotation from '@/components/Dashboard/DashboardDetails/ResultPreviewVotation.vue';
+import StatsPlacePFP from '@/components/Dashboard/DashboardDetails/StatsPlacePFP.vue';
+
+// ========================================
+// APPLICATIONS & OUTILS
+// ========================================
 import Index from '@/views/apps/tasklist/Index.vue'
 import IndexChat from '@/views/apps/chat/IndexChat.vue'
-import CommunityInfo from '@/components/Social/CommunityInfo.vue'; // Import du composant Infos
 import ListComponent from '@/components/Bibliotheque/SoundBox/ListComponent.vue'
-import ProfileAdmin from '@/components/Home/ProfileAdmin.vue'
-import SettingView from '@/components/Home/SettingView.vue'
 import SearchResults from '@/components/Utils/SearchResults.vue'
-import AffectationStageEtudiant from '@/components/Dashboard/DashboardForms/AffectationStageEtudiant.vue'
-import CreateContentMobile from '@/components/Bibliotheque/Social/CreateContentMobile.vue';
-import Ventriglisse3D from '@/ventriglisse3d/Ventriglisse3D.vue';
-import QrCodeGenerator from '@/components/QrCodeGenerator.vue'
-import MobileLangApps from '@/views/MobileLangApps.vue';
 import Outils from '@/views/Outils.vue';
 import Game from '@/views/Game.vue';
 import NotesWorkspace from '@/views/NotesWorkspace.vue';
 import ChatBotSI from '@/views/ChatBotSI.vue'
+
+// ========================================
+// MOBILE SPÉCIFIQUE
+// ========================================
+import CreateContentMobile from '@/components/Bibliotheque/Social/CreateContentMobile.vue';
+import MobileLangApps from '@/views/MobileLangApps.vue';
+
+// ========================================
+// COMPOSANTS SPÉCIAUX & UTILITAIRES
+// ========================================
+import Ventriglisse3D from '@/ventriglisse3d/Ventriglisse3D.vue';
+import QrCodeGenerator from '@/components/QrCodeGenerator.vue'
+
+// ========================================
+// ERREURS & CATCH-ALL
+// ========================================
+import Error404 from "@/components/Utils/Error404.vue";
 
 // Define your routes
 const routes = [
