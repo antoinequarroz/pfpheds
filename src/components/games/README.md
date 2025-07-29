@@ -14,7 +14,7 @@ npm install three
 
 ```vue
 <script setup>
-import Ventriglisse3D from '@/ventriglisse3d/Ventriglisse3D.vue';
+import Ventriglisse3D from '@/components/games/Ventriglisse3D.vue';
 </script>
 <template>
   <Ventriglisse3D />
