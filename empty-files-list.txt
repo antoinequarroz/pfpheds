@@ -1,0 +1,37 @@
+﻿src\components\admin\details\EtudiantDetails.vue
+src\components\admin\details\ManagementPFPEnCours.vue
+src\components\admin\details\ManagementPlacesSafe.vue
+src\components\admin\details\OffreDePlac3BA22PFP4.vue
+src\components\admin\details\OffreDePlace.vue
+src\components\admin\details\PlacesAssigned.vue
+src\components\admin\details\StageRepartitionBA2 copy.vue
+src\components\admin\details\UserProfile.vue
+src\components\admin\details\VotaitonDiviséCritere.vue
+src\components\admin\details\Votation copy 2.vue
+src\components\admin\details\Votation copy.vue
+src\components\admin\details\VotationLese copy.vue
+src\components\admin\details\VotationLese.vue
+src\components\admin\details\VotationView2.vue
+src\components\admin\details\VotationView33.vue
+src\components\admin\forms\NewUserForm.vue
+src\components\admin\forms\PraticienFormateurForm.vue
+src\components\admin\items\StatsBox.vue
+src\components\admin\lists\AdminSidebar.vue
+src\components\common\filters\FilterSidebar.vue
+src\components\common\filters\FiltreMap.vue
+src\components\social\library\StoryStats.vue
+src\components\social\library\TextAreaComponent.vue
+src\components\social\library\WebcamCapture.vue
+src\components\user\details\ChatProfil.vue
+src\components\user\details\ProfileInfoAdmin.vue
+src\components\user\details\VotationResultProfil.vue
+src\components\user\library\ProfileAdminRightSidebar.vue
+src\views\admin\institutions\InstitutionDetailsView.vue
+src\views\admin\institutions\InstitutionListView.vue
+src\views\admin\places\PlaceStatsView.vue
+src\views\admin\users\UserListView.vue
+src\views\admin\validation\ValidationView.vue
+src\views\admin\votations\VotationManagementView.vue
+src\views\apps\chat\ChatSidebar.vue
+src\views\apps\chat\IndexChat.vue
+src\views\apps\events\EventManagementView.vue
