@@ -85,6 +85,8 @@ npm run clean        # Nettoyage et réinstallation
 - **☁️ Hosting** : Firebase Hosting
 - **⚡ Functions** : Firebase Cloud Functions
 
+*Cela va être modifié avec Supabase et Supabase Auth*
+
 ### Technologies Complémentaires
 
 - **🗺️ Cartographie** : Leaflet.js
@@ -93,6 +95,8 @@ npm run clean        # Nettoyage et réinstallation
 - **📅 Calendrier** : FullCalendar
 - **🤖 IA/Voice** : ElevenLabs
 - **🎨 Styles** : CSS Custom + PrimeVue
+- **🚀 Deployment** : Docker + VPS
+- **⚙️ CI/CD** : GitHub Actions
 
 ---
 
@@ -136,19 +140,19 @@ pfpheds/
 
 ### 🔐 Authentification Multi-Provider
 
-- **Firebase Auth** : Email/password, Google, etc.
-- **Supabase** : Alternative backend
+- **Auth** : Email/password
+- **Supabase** : Alternative backend / *En développement*
 - **Gestion des rôles** : Étudiant, Enseignant, Praticien, Admin
 - **Sécurité** : Guards de navigation, permissions
 
 ### 👑 Interface d'Administration
 
 - **📊 Dashboard** : Métriques et vue d'ensemble
-- **👥 Gestion Utilisateurs** : Étudiants, enseignants, praticiens
+- **👥 Gestion Utilisateurs** : Étudiants, enseignants, praticiens formateurs
 - **🏥 Gestion Institutions** : Lieux de stage partenaires
 - **📍 Gestion Places** : Attribution et statistiques
-- **✅ Validation** : Modération de contenu
-- **🗳️ Votations** : Système de votes
+- **✅ Validation** : Validation des PFP
+- **🗳️ Votation** : Système de votes
 
 ### 💬 Réseau Social Éducatif
 
@@ -178,7 +182,7 @@ pfpheds/
 
 ### 🎮 Gamification
 
-- **🎯 Jeux Éducatifs** : Ventriglisse3D (Three.js)
+- **🎯 Jeux Éducatifs** : Games (Three.js)
 - **🏆 Système de Points** : Progression et récompenses
 - **🥇 Classements** : Compétition amicale
 - **🎖️ Achievements** : Badges et accomplissements
@@ -342,8 +346,10 @@ onMounted(() => {
 ### Environnements
 
 - **Development** : Local (Vite dev server)
-- **Staging** : Firebase Hosting (branch develop)
-- **Production** : Firebase Hosting (branch main)
+- **Staging** : Server Hosting (branch develop)
+- **Test** : Server Hosting (branch main)
+- **Production** : VPS (branch prod)
+
 
 ### Build et Déploiement
 
@@ -459,8 +465,8 @@ main (production)
 4. **Pull Request** : Vers `develop`
 5. **Code Review** : Validation par l'équipe
 6. **Merge** : Fusion dans `develop`
-7. **Test** : Validation en staging
-8. **Production** : Fusion dans `main`
+7. **Test** : Validation en staging dans `main`
+8. **Production** : Fusion dans `prod`
 
 ---
 
@@ -534,15 +540,14 @@ main (production)
 
 ### Équipe de Développement
 
-- **Lead Developer** : Antoine Quarroz
-- **Architecture** : Cascade AI Assistant
-- **UI/UX** : Équipe Design HEdS
+- **Lead Developer** : Antoine Quarroz et Loïc Berthod
+- **Architecture** : Antoine Quarroz et Loïc Berthod
+- **UI/UX** : Antoine Quarroz 
 
 ### Support Technique
 
 - **Issues** : [GitHub Issues](https://github.com/your-org/pfpheds/issues)
 - **Documentation** : Ce README + docs/
-- **Email** : support@heds-platform.ch
 
 ---
 
@@ -561,5 +566,5 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](./LICENSE) pour plus d
 
 ---
 
-*Dernière mise à jour : 30 janvier 2025*  
-*Version : 0.1.0.21*
+*Dernière mise à jour : 30 juillet 2025*  
+*Version : 0.2.0.0*
