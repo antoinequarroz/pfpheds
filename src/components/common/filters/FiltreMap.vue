@@ -1,4 +1,4 @@
-﻿<!-- src/components/FilterMap.vue -->
+<!-- src/components/FilterMap.vue -->
 <template>
   <div class="map-layout">
     <div v-if="isMobile">
@@ -109,22 +109,22 @@
 <script setup>
 import { ref, onMounted, onUnmounted, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
-import { db } from '../../../firebase';
+import { db } from '../../../../firebase';
 import { ref as firebaseRef, onValue } from 'firebase/database';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-import LeftSidebar from '@/components/Bibliotheque/Social/LeftSidebar.vue';
+import LeftSidebar from '@/components/social/library/LeftSidebar.vue'
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 import FilterSidebare from './FilterSidebar.vue';
-import HeaderIcons from '@/components/Utils/HeaderIcons.vue'
+import HeaderIcons from '@/components/common/utils/HeaderIcons.vue'
 
 // Import du fichier filter.json (contenant les IDPlace et leurs critères)
 import filterData from './filter.json';
 
 // Import et configuration du logo pour les marqueurs
-import schoolLogo from '../../../public/assets/images/markerheds.png';
+import schoolLogo from '../../../../public/assets/images/markerheds.png';
 const originalWidth = 25;
 const originalHeight = 30;
 const markerScale = 1;
@@ -207,13 +207,13 @@ const initMap = () => {
 
 // Récupération des institutions depuis Firebase
 const fetchInstitutionsFromFirebase = () => {
-  const institutionsRef = firebaseRef(db, 'institutions/');
+  const institutionsRef = firebaseRef(db, 'Institutions/');
   onValue(institutionsRef, (snapshot) => {
     const data = snapshot.val();
     allInstitutions.value = data
       ? Object.keys(data).map((key) => ({ id: key, ...data[key] }))
       : [];
-    console.log('institutions récupérées:', allInstitutions.value);
+    console.log('Institutions récupérées:', allInstitutions.value);
     addLocationsToMap(filteredInstitutions.value);
   });
 };
