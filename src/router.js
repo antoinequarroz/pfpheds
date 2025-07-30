@@ -283,6 +283,7 @@ const routes = [
   { path: '/mail', component: MailIndex, name: 'MailIndex', meta: { requiresAuth: true } },
   { path: '/notes', component: NotesWorkspaceView, name: 'NotesWorkspaceView', meta: { requiresAuth: true } },
   { path: '/events', component: EventManagementView, name: 'EventManagementView', meta: { requiresAuth: true } },
+  { path: '/event-management', component: EventManagementView, name: 'EventManagement', meta: { requiresAuth: true } },
   { path: '/tools', component: ToolsView, name: 'ToolsView', meta: { requiresAuth: true } },
   { path: '/game', component: GameView, name: 'GameView', meta: { requiresAuth: true } },
   { path: '/chatbot', component: ChatBotView, name: 'ChatBotView', meta: { requiresAuth: true } },

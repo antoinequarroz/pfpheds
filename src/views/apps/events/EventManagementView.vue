@@ -45,6 +45,13 @@
 
       <!-- Grille de cartes événements -->
       <div class="grid-scrollable-wrapper">
+        <!-- Debug info -->
+        <div v-if="events.length === 0" class="no-events-message">
+          <p>Aucun événement trouvé. Total d'événements chargés: {{ events.length }}</p>
+          <p>Utilisateur connecté: {{ userId ? 'Oui' : 'Non' }}</p>
+          <p>Store initialisé: {{ eventStore ? 'Oui' : 'Non' }}</p>
+        </div>
+        
         <div class="grid-container">
           <div
             v-for="event in filteredEvents"
@@ -99,6 +106,9 @@
 <script setup>
 // Imports Vue/Pinia/PrimeVue
 import { ref, computed, onMounted, inject } from 'vue';
+import { useRouter } from 'vue-router';
+import { auth } from '../../../../firebase.js';
+import { onAuthStateChanged } from 'firebase/auth';
 import Navbar from '@/components/common/utils/Navbar.vue';
 import LeftSidebar from '@/components/social/library/LeftSidebar.vue';
 import RightSidebar from '@/components/social/library/RightSidebar.vue';
@@ -115,11 +125,19 @@ import EventDetail from '@/components/events/EventDetail.vue';
 
 // Pinia store
 const eventStore = useEventStore();
-const events = computed(() => eventStore.events);
+const events = computed(() => eventStore.events || []);
 
-// Utilisateur courant (auth injectée)
-const userState = inject('userState');
-const userId = computed(() => userState?.user?.uid || null);
+// Router
+const router = useRouter();
+
+// Utilisateur courant (auth directe au lieu d'injection)
+const currentUser = ref(null);
+const userId = computed(() => currentUser.value?.uid || null);
+
+// Écouter les changements d'authentification
+onAuthStateChanged(auth, (user) => {
+  currentUser.value = user;
+});
 
 // Modales
 const showCreateDialog = ref(false);
@@ -204,7 +222,7 @@ async function registerEvent(event) {
     let currentUserInfo = {
       nom: '',
       prenom: '',
-      photoURL: userState.user?.photoURL || 'https://ui-avatars.com/api/?name=Utilisateur'
+      photoURL: auth.currentUser?.photoURL || 'https://ui-avatars.com/api/?name=Utilisateur'
     };
 
     if (snapshot.exists()) {
@@ -214,15 +232,15 @@ async function registerEvent(event) {
       currentUserInfo = {
         nom: userData.Nom || userData.nom || userData.lastName || '',
         prenom: userData.Prenom || userData.prenom || userData.firstName || '',
-        photoURL: userData.PhotoURL || userData.photoURL || userData.avatar || userState.user?.photoURL || 'https://ui-avatars.com/api/?name=Utilisateur'
+        photoURL: userData.PhotoURL || userData.photoURL || userData.avatar || auth.currentUser?.photoURL || 'https://ui-avatars.com/api/?name=Utilisateur'
       };
     } else {
       console.log('Aucune donnée utilisateur trouvée dans Firebase');
       // Utiliser les données de Firebase Auth comme fallback
       currentUserInfo = {
-        nom: userState.user?.displayName?.split(' ')[1] || '',
-        prenom: userState.user?.displayName?.split(' ')[0] || '',
-        photoURL: userState.user?.photoURL || 'https://ui-avatars.com/api/?name=Utilisateur'
+        nom: auth.currentUser?.displayName?.split(' ')[1] || '',
+        prenom: auth.currentUser?.displayName?.split(' ')[0] || '',
+        photoURL: auth.currentUser?.photoURL || 'https://ui-avatars.com/api/?name=Utilisateur'
       };
     }
 
@@ -233,9 +251,9 @@ async function registerEvent(event) {
     console.error('Erreur lors de la récupération des données utilisateur:', error);
     // Fallback avec les données Firebase Auth
     const currentUserInfo = {
-      nom: userState.user?.displayName?.split(' ')[1] || '',
-      prenom: userState.user?.displayName?.split(' ')[0] || '',
-      photoURL: userState.user?.photoURL || 'https://ui-avatars.com/api/?name=Utilisateur'
+      nom: auth.currentUser?.displayName?.split(' ')[1] || '',
+      prenom: auth.currentUser?.displayName?.split(' ')[0] || '',
+      photoURL: auth.currentUser?.photoURL || 'https://ui-avatars.com/api/?name=Utilisateur'
     };
     eventStore.toggleRegistration(event.id, userId.value, event.registered, currentUserInfo);
   }
@@ -314,8 +332,15 @@ async function fixEventAdmin(event) {
 }
 
 // Charger les événements au montage
-onMounted(() => {
-  eventStore.listenEvents();
+onMounted(async () => {
+  console.log('EventManagementView mounted');
+  try {
+    console.log('Starting to listen for events...');
+    await eventStore.listenEvents();
+    console.log('Events loaded:', events.value.length);
+  } catch (error) {
+    console.error('Error loading events:', error);
+  }
 });
 </script>
 
@@ -420,6 +445,17 @@ onMounted(() => {
   margin: 2em 0;
   text-align: center;
   grid-column: 1/-1;
+}
+.no-events-message {
+  text-align: center;
+  padding: 2rem;
+  background: var(--surface-card);
+  border-radius: 0.5rem;
+  margin-bottom: 2rem;
+  color: var(--text-color-secondary);
+}
+.no-events-message p {
+  margin: 0.5rem 0;
 }
 .same-width-btn {
   min-width: 160px !important;
