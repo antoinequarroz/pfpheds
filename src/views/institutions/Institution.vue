@@ -25,6 +25,7 @@
             <!-- Barre de recherche au centre -->
             <div class="search-bar">
               <span class="p-input-icon-left">
+                <i class="pi pi-search" />
                 <InputText v-model="searchTerm" placeholder="Rechercher par nom, ville, canton ou id" class="search-input style-bar" />
               </span>
             </div>
@@ -108,7 +109,12 @@ import Tag from 'primevue/tag';
 import LeftSidebar from '@/components/social/library/LeftSidebar.vue'
 import FilterSidebar from '@/components/common/filters/FilterSidebar.vue'
 import HeaderIcons from '@/components/common/utils/HeaderIcons.vue'
-// import filtre data
+
+// Données de filtrage temporaires - à remplacer par vos vraies données
+const filterData = [
+  // Exemple de structure de données pour les filtres
+  // { IDPlace: 'institution_id', criteria: ['critere1', 'critere2', 'langue1', 'pfp1'] }
+];
 
 export default {
   name: 'Institution',
@@ -134,7 +140,8 @@ export default {
         languages: []
       },
       cantonsList: [], // <-- Liste dynamique des cantons
-      isMobile: window.innerWidth < 768
+      isMobile: window.innerWidth < 768,
+      filterData: filterData // Ajout des données de filtre
     };
   },
   computed: {
@@ -153,7 +160,7 @@ export default {
           }
         }
         // Recherche l'entrée correspondante dans filterData
-        const entry = filterData.find(item => item.IDPlace === inst.InstitutionId);
+        const entry = this.filterData.find(item => item.IDPlace === inst.InstitutionId);
         // Filtre par canton
         if (this.activeFilters.cantons.length > 0 && (!inst.Canton || !this.activeFilters.cantons.includes(inst.Canton))) {
           return false;
@@ -188,26 +195,34 @@ export default {
       return text;
     },
     fetchInstitutionsFromFirebase() {
-      const institutionsRef = dbRef(db, 'institutions/');
+      console.log('Fetching institutions from Firebase...');
+      const institutionsRef = dbRef(db, 'Institutions/');
       onValue(institutionsRef, (snapshot) => {
-        const data = snapshot.val();
-        if (data) {
+        console.log('Firebase snapshot received:', snapshot.exists());
+        if (snapshot.exists()) {
+          const data = snapshot.val();
+          console.log('Institutions data:', data);
           this.allInstitutions = Object.keys(data).map(key => ({
             InstitutionId: key,
             ...data[key],
-            ImageURL: data[key].ImageURL || '/default-image.jpg',
+            ImageURL: data[key].ImageURL || 'https://eduport.webestica.com/assets/images/courses/4by3/21.jpg',
             Description: data[key].Description || 'Pas de description disponible'
           }));
+          console.log('Processed institutions:', this.allInstitutions.length);
           // Génère la liste unique des cantons présents
           const allCantons = this.allInstitutions.map(inst => inst.Canton).filter(Boolean);
           this.cantonsList = [...new Set(allCantons)].sort();
+          console.log('Available cantons:', this.cantonsList);
           this.$nextTick(() => {
             this.adjustDescriptionHeight();
           });
         } else {
+          console.log('No institutions data found in Firebase');
           this.allInstitutions = [];
           this.cantonsList = [];
         }
+      }, (error) => {
+        console.error('Firebase error:', error);
       });
     },
     adjustDescriptionHeight() {
@@ -235,8 +250,16 @@ export default {
   },
   mounted() {
     this.fetchInstitutionsFromFirebase();
+    // Gestion responsive
+    window.addEventListener('resize', () => {
+      this.isMobile = window.innerWidth < 768;
+    });
   },
-  beforeUnmount() {},
+  beforeUnmount() {
+    window.removeEventListener('resize', () => {
+      this.isMobile = window.innerWidth < 768;
+    });
+  },
 };
 </script>
 

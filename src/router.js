@@ -79,7 +79,7 @@ import AffectationStageEtudiant from '@/components/admin/forms/AffectationStageE
 // ========================================
 // INSTITUTIONS & DÉTAILS
 // ========================================
-import InstitutionView from '@/components/institutions/InstitutionView.vue';
+import InstitutionView from '@/views/institutions/InstitutionView.vue';
 import InstitutionDetailsView from "@/views/admin/institutions/InstitutionDetailsView.vue";
 import EtudiantDetails from "@/components/admin/details/EtudiantDetails.vue";
 import PlaceDetails from "@/components/admin/details/PlaceDetails.vue";
