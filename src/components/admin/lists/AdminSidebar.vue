@@ -43,11 +43,10 @@ const menu = ref([
     icon: 'pi pi-home',
     items: [
       { label: 'Étudiant', icon: 'pi pi-users', to: '/etudiant_list' },
-      { label: 'Profil Users Admin', icon: 'pi pi-users', to: '/profilAdmin/4qoWztDujictoqTEJvJK6xF1Zcr1' },
       { label: 'Institution', icon: 'pi pi-home', to: '/institution_list' },
       { label: 'Enseignant', icon: 'pi pi-flag', to: '/enseignent_list' },
       { label: 'Praticien formateur', icon: 'pi pi-check-circle', to: '/praticien_formateur_list' },
-      { label: 'Utilisateur', icon: 'pi pi-user', to: '/user_list' },
+      { label: 'Profil Users Admin', icon: 'pi pi-users', to: '/profilAdmin/4qoWztDujictoqTEJvJK6xF1Zcr1' },
     ]
   },
   {
