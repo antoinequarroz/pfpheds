@@ -140,8 +140,8 @@ import { db, auth } from 'root/firebase.js'
 import { ref as dbRef, onValue, set } from 'firebase/database'
 import { onAuthStateChanged } from 'firebase/auth'
 import Navbar from '@/components/common/utils/Navbar.vue'
-import EditFileDocPFP from '@/components/Home/EditFileDocPFP.vue'
-import AddFileDocPFP from '@/components/Home/AddFileDocPFP.vue'
+import EditFileDocPFP from '@/components/home/EditFileDocPFP.vue'
+import AddFileDocPFP from '@/components/home/AddFileDocPFP.vue'
 
 // Variables réactives pour la structure, l'auth, et l'affichage des modales
 const folders = ref([])
