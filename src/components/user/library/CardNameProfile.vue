@@ -1,3 +1,4 @@
+
 <template>
   <!-- BANDEAU MAISON GAMIFICATION
   <BandeauMaison

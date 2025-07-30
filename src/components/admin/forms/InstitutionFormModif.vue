@@ -1,3 +1,4 @@
+
 <template>
   <div class="admin-scrollable">
     <Navbar />
@@ -535,3 +536,4 @@ export default {
   display: none;
 }
 </style>
+
