@@ -247,7 +247,7 @@ export default {
   },
   methods: {
     fetchAuthorDetails() {
-      if (!this.post.IdUser) return;
+      if (!this.post || !this.post.IdUser) return;
       const userRef = dbRef(db, `Users/${this.post.IdUser}`);
       onValue(userRef, (snapshot) => {
         const userData = snapshot.val();
@@ -291,6 +291,8 @@ export default {
       return `${date.toLocaleDateString()} à ${date.toLocaleTimeString()}`;
     },
     checkLikeStatus() {
+      if (!this.post) return;
+      
       if (this.post.likes && this.currentUser) {
         this.isLiked = !!this.post.likes[this.currentUser.uid];
         this.likeCount = Object.keys(this.post.likes).length;
