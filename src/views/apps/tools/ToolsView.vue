@@ -45,7 +45,7 @@ import Navbar from '@/components/common/utils/Navbar.vue';
 import Button from 'primevue/button';
 
 const allOutils = [
-  { to: '/institution', icon: 'pi pi-building', label: 'Institutions' },
+  { to: '/institution', icon: 'pi pi-building', label: 'institutions' },
   { to: '/map', icon: 'pi pi-map', label: 'Carte' },
   { to: '/documents_pfp', icon: 'pi pi-file', label: 'Documents' },
   { to: '/event-management', icon: 'pi pi-calendar', label: 'Event' },

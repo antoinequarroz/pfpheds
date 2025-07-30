@@ -82,7 +82,7 @@ export default {
     };
   },
   computed: {
-    // Total d'institutions partenaires (utilisées dans Places et présentes dans Institutions)
+    // Total d'institutions partenaires (utilisées dans Places et présentes dans institutions)
     totalInstitutions() {
       const ids = new Set();
       for (const key in this.places) {
@@ -93,7 +93,7 @@ export default {
       }
       return ids.size;
     },
-    // Institutions partenaires utilisées (au moins une place de l'institution a PFP4 > 0)
+    // institutions partenaires utilisées (au moins une place de l'institution a PFP4 > 0)
     institutionsUtilisees() {
       const ids = new Set();
       for (const key in this.places) {
@@ -260,7 +260,7 @@ export default {
         this.places = snapshot.val() || {};
       });
     },
-    // Récupère les données "Institutions" depuis Firebase
+    // Récupère les données "institutions" depuis Firebase
     fetchInstitutions() {
       const institutionsRef = ref(db, '/Institutions');
       onValue(institutionsRef, (snapshot) => {

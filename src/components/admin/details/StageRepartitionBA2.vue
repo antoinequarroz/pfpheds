@@ -177,15 +177,15 @@ const fetchStudents = async () => {
     }
 };
 
-// Récupère les institutions depuis "/Institutions"
+// Récupère les institutions depuis "/institutions"
 const fetchInstitutions = async () => {
     try {
         const db = getDatabase();
-        const snapshot = await get(dbRef(db, '/Institutions'));
+        const snapshot = await get(dbRef(db, '/institutions'));
         if (snapshot.exists()) {
             institutionsMapping.value = snapshot.val();
         } else {
-            console.error("Aucune donnée trouvée dans /Institutions");
+            console.error("Aucune donnée trouvée dans /institutions");
         }
     } catch (error) {
         console.error("Erreur lors du fetch des institutions :", error);

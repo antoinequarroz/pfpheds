@@ -124,7 +124,7 @@ export default {
       });
     };
     const fetchInstitutions = () => {
-      const refI = firebaseRef(db, 'Institutions');
+      const refI = firebaseRef(db, 'institutions');
       onValue(refI, snap => {
         institutions.value = snap.val() || {};
       });

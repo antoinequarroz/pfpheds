@@ -23,7 +23,7 @@ export default {
     return {
       counterBoxes: [
         { start: 0, end: 87, title: 'Places de stages', bgClass: 'bg-warning bg-opacity-15', iconClass: 'fas fa-briefcase fa-fw', iconBgClass: 'bg-warning' },
-        { start: 0, end: 81, title: 'Institutions', bgClass: 'bg-danger bg-opacity-10', iconClass: 'fas fa-regular fa-hospital fa-fw', iconBgClass: 'bg-danger' },
+        { start: 0, end: 81, title: 'institutions', bgClass: 'bg-danger bg-opacity-10', iconClass: 'fas fa-regular fa-hospital fa-fw', iconBgClass: 'bg-danger' },
         { start: 0, end: 270, title: 'Élèves', bgClass: 'bg-primary bg-opacity-10', iconClass: 'fas fa-solid fa-graduation-cap fa-fw', iconBgClass: 'bg-primary' },
         { start: 0, end: 8, title: 'Formateurs', bgClass: 'bg-success bg-opacity-10', iconClass: 'fas fa-user-tie fa-fw', iconBgClass: 'bg-success' },
       ],

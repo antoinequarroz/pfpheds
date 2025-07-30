@@ -29,7 +29,7 @@
             </div>
           </div>
 
-          <!-- Institutions partenaires card -->
+          <!-- institutions partenaires card -->
           <div class="col-12 md:col-6 xl:col-3">
             <div class="card h-full">
               <span class="font-semibold text-lg">Institutions partenaires</span>
@@ -330,8 +330,8 @@ const setChartData = () => {
 };
 
 onMounted(() => {
-  // Institutions
-  const institutionsRef = dbRef(db, 'Institutions/');
+  // institutions
+  const institutionsRef = dbRef(db, 'institutions/');
   onValue(institutionsRef, (snapshot) => {
     const data = snapshot.val();
     institutions.value = data ? Object.keys(data).map(key => ({ id: key, ...data[key] })) : [];

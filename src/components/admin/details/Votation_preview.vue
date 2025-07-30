@@ -70,7 +70,7 @@ export default {
       onValue(institutionsRef, (snapshot) => {
         if (snapshot.exists()) {
           institutions.value = snapshot.val();
-          console.log("Institutions récupérées :", institutions.value);
+          console.log("institutions récupérées :", institutions.value);
         } else {
           console.error('Pas d’institutions disponibles');
           institutions.value = {};

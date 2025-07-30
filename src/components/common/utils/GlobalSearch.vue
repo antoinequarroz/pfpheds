@@ -82,7 +82,7 @@ const fetchSearchResults = async () => {
 
   try {
     const usersRef = firebaseRef(db, 'Users');
-    const institutionsRef = firebaseRef(db, 'Institutions');
+    const institutionsRef = firebaseRef(db, 'institutions');
     const postsRef = firebaseRef(db, 'Posts');
 
     const [usersSnap, institutionsSnap, postsSnap] = await Promise.all([

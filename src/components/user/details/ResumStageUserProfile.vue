@@ -23,7 +23,7 @@
     <p class="text-secondary">Aucun critère validé.</p>
   </div>
 
-  <!-- Institutions pour lesquelles l'étudiant a validé des critères -->
+  <!-- institutions pour lesquelles l'étudiant a validé des critères -->
   <h5 class="mb-4 m-2">Anciennes places</h5>
 
   <!-- Bloc d'édition de la PFP1 -->
@@ -288,9 +288,9 @@ onMounted(() => {
   fetchInstitutions();
 });
 
-// Récupère toutes les Institutions depuis Firebase
+// Récupère toutes les institutions depuis Firebase
 async function fetchInstitutions() {
-  const institutionsRef = dbRef(db, "Institutions");
+  const institutionsRef = dbRef(db, "institutions");
   const snapshot = await get(institutionsRef);
   if (snapshot.exists()) {
     const data = snapshot.val();

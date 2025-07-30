@@ -207,13 +207,13 @@ const initMap = () => {
 
 // Récupération des institutions depuis Firebase
 const fetchInstitutionsFromFirebase = () => {
-  const institutionsRef = firebaseRef(db, 'Institutions/');
+  const institutionsRef = firebaseRef(db, 'institutions/');
   onValue(institutionsRef, (snapshot) => {
     const data = snapshot.val();
     allInstitutions.value = data
       ? Object.keys(data).map((key) => ({ id: key, ...data[key] }))
       : [];
-    console.log('Institutions récupérées:', allInstitutions.value);
+    console.log('institutions récupérées:', allInstitutions.value);
     addLocationsToMap(filteredInstitutions.value);
   });
 };

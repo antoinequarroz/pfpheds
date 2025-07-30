@@ -314,7 +314,7 @@ export default {
 
     // Récupération de la liste des institutions (optionnel)
     async fetchInstitutionsData() {
-      const institutionsRef = dbRef(db, 'Institutions');
+      const institutionsRef = dbRef(db, 'institutions');
       onValue(institutionsRef, snapshot => {
         const institutionsData = snapshot.val() || {};
         this.institutions = institutionsData;

@@ -21,7 +21,7 @@ import AuthErrorView from '@/views/auth/AuthErrorView.vue';
 // PAGES PRINCIPALES & NAVIGATION
 // ========================================
 import Map from "@/views/home/MapView.vue";
-import Institution from "@/views/institutions/InstitutionListView.vue";
+import Institution from '@/views/institutions/Institution.vue'
 import Place from "@/views/institutions/PlaceListView.vue";
 import Faq from "@/views/home/FaqView.vue";
 import TermsOfUse from "@/views/home/TermsView.vue";
@@ -79,7 +79,7 @@ import AffectationStageEtudiant from '@/components/admin/forms/AffectationStageE
 // ========================================
 // INSTITUTIONS & DÉTAILS
 // ========================================
-import InstitutionView from '@/components/Institutions/InstitutionView.vue';
+import InstitutionView from '@/components/institutions/InstitutionView.vue';
 import InstitutionDetailsView from "@/views/admin/institutions/InstitutionDetailsView.vue";
 import EtudiantDetails from "@/components/admin/details/EtudiantDetails.vue";
 import PlaceDetails from "@/components/admin/details/PlaceDetails.vue";
@@ -289,7 +289,7 @@ const routes = [
   { path: '/mobile-tools', component: MobileToolsView, name: 'MobileToolsView', meta: { requiresAuth: true } },
   { path: '/mobile-lang-apps', component: MobileLangAppsView, name: 'MobileLangApps', meta: { mobileOnly: true } },
   { path: '/mobile-search', component: MobileSearchView, name: 'MobileSearchView', meta: { requiresAuth: true } },
-  { path: '/template-test', component: () => import('@/views/TemplateTest.vue'), name: 'TemplateTest' },
+  { path: '/template-test', component: () => import('@/views/template/TemplateTest.vue'), name: 'TemplateTest' },
 
   // ========================================
   // MOBILE SPÉCIFIQUE

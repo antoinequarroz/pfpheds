@@ -155,7 +155,7 @@ import { getStorage, ref as storageRef, uploadBytes, getDownloadURL } from "fire
 import UserCard from '@/views/apps/chat/UserCard.vue';
 import { inject, computed } from 'vue';
 import { useEventStore } from '@/stores/eventStore';
-import EventDetail from '@/components/Events/EventDetail.vue';
+import EventDetail from '@/components/events/EventDetail.vue';
 import Dialog from 'primevue/dialog';
 import Button from 'primevue/button';
 

@@ -247,7 +247,7 @@ export default {
 
     // Récupération d'autres données depuis Firebase
     const fetchInstitutions = () => {
-      const instRef = firebaseRef(db, 'Institutions');
+      const instRef = firebaseRef(db, 'institutions');
       onValue(instRef, snapshot => {
         institutions.value = snapshot.val() || {};
       });

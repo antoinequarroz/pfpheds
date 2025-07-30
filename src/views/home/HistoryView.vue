@@ -28,7 +28,7 @@
       <p class="text-secondary">Aucun critère validé.</p>
     </div>
 
-    <!-- Anciennes Institutions -->
+    <!-- Anciennes institutions -->
     <h5 class="mb-4">Anciennes Institutions</h5>
     <div class="card w-12" v-if="institutionsList && institutionsList.length">
       <div
@@ -217,7 +217,7 @@ onMounted(() => {
   text-align: center;
 }
 
-/* Styles Anciennes Institutions */
+/* Styles Anciennes institutions */
 .institution-card {
   display: flex;
   justify-content: space-between;
