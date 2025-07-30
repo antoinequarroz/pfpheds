@@ -318,6 +318,8 @@ export default {
       this.loadLikedUsers();
     },
     loadCommentCount() {
+      if (!this.post) return;
+      
       if (this.post.replies) {
         this.commentCount = Object.keys(this.post.replies).length;
       } else {

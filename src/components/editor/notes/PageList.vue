@@ -1,7 +1,7 @@
 <template>
   <Panel header="Feuilles" class="page-list page-list-panel">
     <InputText v-model="search" placeholder="Rechercher une feuille..." class="p-mb-2 w-12 mb-5" />
-    <ul class="page-list-ul mb-3">
+    <ul class="page-list-ul mb-3" v-if="filteredPages && filteredPages.length > 0">
       <li v-for="page in filteredPages" :key="page.id" :class="{active: selectedPageId === page.id}" class="mb-4">
         <span @click="$emit('select', page)">
           {{ page.title }}
@@ -11,6 +11,9 @@
         <Button icon="pi pi-trash" class="p-button-text p-button-sm" severity="danger" @click.stop="$emit('delete-page', page)" />
       </li>
     </ul>
+    <div v-else class="empty-state">
+      <p>Aucune feuille trouvée</p>
+    </div>
     <Button label="Nouvelle feuille" icon="pi pi-plus" class="p-mt-3" @click="$emit('create-page')" />
   </Panel>
 </template>
@@ -22,25 +25,28 @@ import Button from 'primevue/button';
 import InputText from 'primevue/inputtext';
 
 const props = defineProps({
-  pages: Array,
+  pages: {
+    type: Array,
+    default: () => []
+  },
 })
 const emit = defineEmits(['select', 'create-page', 'edit-page', 'delete-page'])
 const selectedPageId = null // sélection gérée dans la vue principale
 
 const search = ref('')
+
 const filteredPages = computed(() => {
-  let filtered = props.pages || []
-  if (search.value) {
-    filtered = filtered.filter(p => p.title.toLowerCase().includes(search.value.toLowerCase()))
-  }
-  // Tri alphabétique
-  return filtered.slice().sort((a, b) => a.title.localeCompare(b.title))
+  if (!props.pages || !Array.isArray(props.pages)) return []
+  if (!search.value) return props.pages
+  return props.pages.filter(page => 
+    page.title && page.title.toLowerCase().includes(search.value.toLowerCase())
+  )
 })
 
 function formatDate(date) {
-  if (!date) return ''
+  if (!date) return 'Date inconnue'
   const d = new Date(date)
-  return d.toLocaleDateString() + ' ' + d.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})
+  return d.toLocaleDateString('fr-FR')
 }
 </script>
 
@@ -88,5 +94,17 @@ function formatDate(date) {
   color: #888;
   font-size: 0.8em;
   margin-left: 0.5em;
+}
+.page-list-ul li.active {
+  background: var(--primary-color);
+  color: white;
+  border-radius: 4px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 1rem;
+  color: var(--text-color-secondary);
+  font-style: italic;
 }
 </style>
