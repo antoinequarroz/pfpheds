@@ -1,232 +1,372 @@
-# 📁 STRUCTURE DES VUES - DOCUMENTATION
+# 📁 Documentation des Vues - Plateforme HEdS
 
-## 🎯 **ORGANISATION LOGIQUE DES PAGES**
+## 🎯 Vue d'ensemble
 
-Cette structure sépare clairement les **pages complètes** (views) des **composants réutilisables** (components) pour une meilleure maintenabilité et scalabilité.
+Le dossier `/src/views/` contient toutes les **pages principales** de l'application. Chaque vue correspond à une route spécifique et représente une interface utilisateur complète. Cette organisation sépare clairement les pages (views) des composants réutilisables (components).
 
 ---
 
-## 📂 **STRUCTURE ACTUELLE**
+## 📂 Structure Générale
 
-### 🔐 **views/auth/** - Pages d'authentification
 ```
-├── LoginHome.vue            # 🏠 Page d'accueil avec login (Firebase)
-├── LoginHome2.vue           # 🏠 Page d'accueil avec login (Supabase)
-├── LoginView.vue            # 🔐 Page de connexion standard
-├── RegisterView.vue         # 📝 Page d'inscription
-├── ForgotPasswordView.vue   # 🔑 Mot de passe oublié
-├── NewPasswordView.vue      # 🔑 Nouveau mot de passe
-├── VerificationView.vue     # ✅ Vérification email/SMS
-├── LockScreenView.vue       # 🔒 Écran de verrouillage
-├── AccessView.vue           # 🚪 Page d'accès
-└── AuthErrorView.vue        # ❌ Erreur d'authentification
-```
-
-### 💬 **views/social/** - Pages sociales et communication
-```
-├── FeedView.vue             # 📱 Feed principal (ex: NewsFeed.vue)
-├── HashtagView.vue          # #️⃣ Page hashtag (ex: HashtagPage.vue)
-├── MentionView.vue          # 👥 Page mentions (ex: MentionGroupPage.vue)
-├── CommunitiesView.vue      # 🏘️ Gestion communautés (ex: CommunityManagement.vue)
-├── CommunityView.vue        # 🏘️ Une communauté (ex: ManageOneCommunity.vue)
-└── CommunityInfoView.vue    # ℹ️ Info communauté (ex: CommunityInfo.vue)
-```
-
-### 👑 **views/admin/** - Administration et dashboard
-```
-├── DashboardView.vue        # 📊 Dashboard principal (ex: DashbordAdmin.vue)
-├── ProfileAdminView.vue     # 👑 Profil administrateur
-├── users/                   # 👥 Gestion utilisateurs
-│   ├── UserListView.vue     # 📋 Liste utilisateurs
-│   ├── StudentListView.vue  # 🎓 Liste étudiants
-│   ├── TeacherListView.vue  # 👨‍🏫 Liste enseignants
-│   └── TrainerListView.vue  # 🏃‍♂️ Liste praticiens
-├── institutions/            # 🏥 Gestion institutions
-│   ├── InstitutionListView.vue    # 🏥 Liste institutions
-│   └── InstitutionDetailsView.vue # 🏥 Détails institution
-├── places/                  # 📍 Gestion places
-│   ├── PlaceManagementView.vue    # 📍 Gestion places
-│   ├── PlaceAssignmentView.vue    # 📍 Attribution places
-│   └── PlaceStatsView.vue         # 📊 Statistiques places
-├── votations/               # 🗳️ Gestion votations
-│   ├── VotationView.vue           # 🗳️ Vue votation
-│   ├── VotationManagementView.vue # 🗳️ Gestion votation
-│   └── VotationResultsView.vue    # 📊 Résultats votation
-└── validation/              # ✅ Validation
-    ├── ValidationView.vue   # ✅ Validation
-    └── ReceptionView.vue    # 📥 Réception
-```
-
-### 📱 **views/apps/** - Applications et outils
-```
-├── chat/                       # 💬 Application de chat
-│   ├── IndexChat.vue           # 💬 Interface principale
-│   ├── ChatBox.vue             # 💬 Boîte de discussion
-│   ├── ChatSidebar.vue         # 📋 Sidebar conversations
-│   └── UserCard.vue            # 👤 Carte utilisateur
-├── mail/                       # 📧 Application de messagerie
-│   ├── Index.vue               # 📧 Interface principale
-│   ├── ComposeNew.vue          # ✍️ Composer message
-│   ├── Detail.vue              # 🔍 Détails message
-│   └── Reply.vue               # ↩️ Répondre
-├── tasklist/                   # 📋 Gestion des tâches
-│   ├── Index.vue               # 📋 Interface principale
-│   ├── List.vue                # 📝 Liste des tâches
-│   └── CreateTaskDialog.vue    # ➕ Création tâche
-├── calendar/                   # 📅 Application calendrier
-│   └── CalendarView.vue        # 📅 Vue calendrier
-├── files/                      # 📁 Gestionnaire de fichiers
-│   └── FilesView.vue           # 📁 Gestion fichiers
-├── notes/                      # 📝 Application de notes
-│   └── NotesWorkspaceView.vue  # 📝 Espace de travail
-├── events/                     # 🎉 Gestion des événements
-│   └── EventManagementView.vue # 🎉 Gestion événements
-├── blog/                       # 📝 Application de blog
-│   ├── Detail.vue              # 📖 Détail article
-│   ├── Edit.vue                # ✏️ Édition article
-│   └── List.vue                # 📋 Liste articles
-└── tools/                      # 🔧 Outils et utilitaires
-    ├── ToolsView.vue           # 🔧 Interface outils
-    ├── GameView.vue            # 🎮 Jeu intégré
-    ├── ChatBotView.vue         # 🤖 ChatBot SI
-    ├── MobileToolsView.vue     # 📱 Outils mobile
-    ├── MobileLangAppsView.vue  # 🌐 Apps langues
-    └── MobileSearchView.vue    # 🔍 Recherche mobile
-```
-
-### 🏠 **views/home/** - Pages d'accueil et navigation principale
-```
-├── MapView.vue              # 🗺️ Carte interactive (ex: components/Home/Map.vue)
-├── FaqView.vue              # ❓ Questions fréquentes (ex: components/Home/Faq.vue)
-├── InfoExterneView.vue      # 🔗 Informations externes (ex: components/Utils/InfoExterne.vue)
-├── TermsView.vue            # 📄 Conditions d'utilisation (ex: components/Utils/TermsOfUse.vue)
-├── HistoryView.vue          # 📚 Historique PFP (ex: components/Home/HistoriquePFP.vue)
-└── DocumentsView.vue        # 📋 Documents PFP (ex: components/Home/DocumentsPFP.vue)
-```
-
-### 🏥 **views/institutions/** - Gestion des institutions et places
-```
-├── InstitutionListView.vue  # 🏥 Liste des institutions (ex: components/Home/Institution.vue)
-└── PlaceListView.vue        # 📍 Liste des places (ex: components/Home/Place.vue)
-```
-
-### 👤 **views/users/** - Gestion des utilisateurs
-```
-├── ProfileView.vue          # 👤 Profil utilisateur (ex: components/Home/Profile.vue)
-└── SettingsView.vue         # ⚙️ Paramètres utilisateur (ex: components/Home/SettingView.vue)
+views/
+├── 📁 admin/              # Administration et gestion
+├── 📁 apps/               # Applications intégrées
+├── 📁 auth/               # Authentification
+├── 📁 home/               # Pages d'accueil
+├── 📁 institutions/       # Gestion des institutions
+├── 📁 pages/              # Pages statiques
+├── 📁 social/             # Réseau social
+├── 📁 template/           # Templates de base
+├── 📁 users/              # Gestion des utilisateurs
+└── 📄 README.md           # Cette documentation
 ```
 
 ---
 
-## 🔗 **ROUTES CORRESPONDANTES**
+## 🔐 Authentication (`/views/auth/`)
 
-| Route | Composant | Description |
-|-------|-----------|-------------|
-| **🔐 AUTHENTIFICATION** | | |
-| `/` | LoginHome | Page d'accueil principale (Firebase) |
-| `/home` | LoginHome | Page d'accueil alternative (Firebase) |
-| `/home2` | LoginHome2 | Page d'accueil (Supabase) |
-| `/login` | LoginView | Connexion standard |
-| `/register` | RegisterView | Inscription |
-| `/forgot-password` | ForgotPasswordView | Mot de passe oublié |
-| `/new-password` | NewPasswordView | Nouveau mot de passe |
-| `/verification` | VerificationView | Vérification email/SMS |
-| `/lock-screen` | LockScreenView | Écran de verrouillage |
-| `/access` | AccessView | Page d'accès |
-| `/auth-error` | AuthErrorView | Erreur d'authentification |
-| **💬 SOCIAL** | | |
-| `/feed` | FeedView | Feed principal |
-| `/hashtag` | HashtagView | Page hashtag |
-| `/mention` | MentionView | Page mentions |
-| `/communities` | CommunitiesView | Gestion communautés |
-| `/community` | CommunityView | Une communauté |
-| `/community-info` | CommunityInfoView | Info communauté |
-| **👑 ADMINISTRATION** | | |
-| `/admin` | DashboardView | Dashboard principal |
-| `/user_list` | UserListView | Liste utilisateurs |
-| `/etudiant_list` | StudentListView | Liste étudiants |
-| `/enseignent_list` | TeacherListView | Liste enseignants |
-| `/praticien_formateur_list` | TrainerListView | Liste praticiens |
-| `/institution_list` | InstitutionListView | Liste institutions |
-| `/institution_details/:id` | InstitutionDetailsView | Détails institution |
-| `/management_places` | PlaceManagementView | Gestion places |
-| `/places_assignment` | PlaceAssignmentView | Attribution places |
-| `/stats_place_pfp` | PlaceStatsView | Statistiques places |
-| `/votation` | VotationView | Vue votation |
-| `/votation_management` | VotationManagementView | Gestion votation |
-| `/result_preview_votation` | VotationResultsView | Résultats votation |
-| `/validation` | ValidationView | Validation |
-| `/reception` | ReceptionView | Réception |
-| **📱 APPLICATIONS** | | |
-| `/chat` | IndexChat | Interface de chat |
-| `/mail` | Index | Interface de messagerie |
-| `/tasklist` | Index | Gestion des tâches |
-| `/calendar` | CalendarView | Calendrier |
-| `/files` | FilesView | Gestionnaire de fichiers |
-| `/notes` | NotesWorkspaceView | Application de notes |
-| `/events` | EventManagementView | Gestion des événements |
-| `/blog` | List | Application de blog |
-| `/tools` | ToolsView | Outils et utilitaires |
-| **🏠 PAGES PRINCIPALES** | | |
-| `/map` | MapView | Carte interactive |
-| `/institution` | InstitutionListView | Liste des institutions |
-| `/place` | PlaceListView | Liste des places |
-| `/faq` | FaqView | Questions fréquentes |
-| `/terms_of_use` | TermsView | Conditions d'utilisation |
-| `/info_externe` | InfoExterneView | Informations externes |
-| `/history` | HistoryView | Historique PFP |
-| `/documents` | DocumentsView | Documents PFP |
-| **👤 UTILISATEURS** | | |
-| `/profile/:id` | ProfileView | Profil utilisateur |
-| `/settings` | SettingsView | Paramètres utilisateur |
-| `/profilAdmin/:id` | ProfileAdminView | Profil administrateur |
+Module d'authentification complet avec Firebase Auth et Supabase.
+
+```
+auth/
+├── 📄 AccessView.vue           # Page d'accès générale
+├── 📄 AuthErrorView.vue        # Gestion des erreurs d'auth
+├── 📄 ForgotPasswordView.vue   # Mot de passe oublié
+├── 📄 LockScreenView.vue       # Écran de verrouillage
+├── 📄 LoginHome.vue            # Accueil avec login Firebase
+├── 📄 LoginHome2.vue           # Accueil avec login Supabase
+├── 📄 LoginView.vue            # Page de connexion standard
+├── 📄 NewPasswordView.vue      # Définition nouveau mot de passe
+├── 📄 RegisterView.vue         # Page d'inscription
+├── 📄 VerificationView.vue     # Vérification email/SMS
+└── 📄 README.md                # Documentation auth
+```
+
+### Fonctionnalités
+- **Multi-provider** : Firebase Auth + Supabase
+- **Sécurité** : Validation, vérification email
+- **UX** : Écran de verrouillage, gestion d'erreurs
+- **Responsive** : Interface adaptative mobile/desktop
 
 ---
 
-## ✅ **AVANTAGES DE CETTE STRUCTURE**
+## 👑 Administration (`/views/admin/`)
 
-### 🎯 **Séparation claire des responsabilités**
-- **Views** = Pages complètes avec routes
-- **Components** = Éléments réutilisables
+Interface d'administration complète pour la gestion de la plateforme.
 
-### 📈 **Scalabilité**
-- Structure qui grandit naturellement
-- Ajout facile de nouvelles sections
+```
+admin/
+├── 📄 DashboardView.vue        # Tableau de bord principal
+├── 📄 ProfileAdminView.vue     # Profil administrateur
+├── 📁 institutions/            # Gestion des institutions
+│   ├── InstitutionListView.vue     # Liste des institutions
+│   └── InstitutionDetailView.vue   # Détails d'une institution
+├── 📁 places/                  # Gestion des places de stage
+│   ├── PlaceManagementView.vue     # Gestion des places
+│   ├── PlaceAssignmentView.vue     # Attribution des places
+│   └── PlaceStatsView.vue          # Statistiques des places
+├── 📁 users/                   # Gestion des utilisateurs
+│   ├── UserListView.vue            # Liste des utilisateurs
+│   ├── StudentListView.vue         # Liste des étudiants
+│   ├── TeacherListView.vue         # Liste des enseignants
+│   └── TrainerListView.vue         # Liste des praticiens
+├── 📁 validation/              # Validation de contenu
+│   ├── ContentValidationView.vue   # Validation des contenus
+│   └── DocumentValidationView.vue  # Validation des documents
+├── 📁 votations/               # Système de votes
+│   ├── VotationListView.vue        # Liste des votations
+│   ├── VotationCreateView.vue      # Création de votation
+│   └── VotationResultsView.vue     # Résultats des votes
+└── 📄 README.md                # Documentation admin
+```
 
-### 🔍 **Navigation intuitive**
-- Organisation thématique logique
-- Facile de trouver n'importe quel fichier
-
-### 🔧 **Maintenabilité**
-- Modifications isolées par domaine
-- Code plus organisé et lisible
-
----
-
-## 🚀 **PROCHAINES ÉTAPES RECOMMANDÉES**
-
-1. **🔐 Authentification** - Organiser les pages de connexion
-2. **💬 Social** - Structurer les pages sociales
-3. **📊 Dashboard** - Organiser les tableaux de bord
-4. **📱 Applications** - Structurer les apps intégrées
-
----
-
-## 📝 **RÈGLES DE DÉVELOPPEMENT**
-
-### ✅ **À FAIRE**
-- Placer les nouvelles pages dans `views/`
-- Utiliser des noms descriptifs avec suffixe `View`
-- Grouper par domaine fonctionnel
-- Documenter les nouvelles routes
-
-### ❌ **À ÉVITER**
-- Mélanger pages et composants
-- Créer des structures trop profondes
-- Utiliser des noms génériques
-- Oublier de mettre à jour le router
+### Fonctionnalités
+- **Dashboard** : Vue d'ensemble avec métriques
+- **CRUD** : Gestion complète des entités
+- **Validation** : Modération de contenu
+- **Statistiques** : Rapports et analytics
+- **Permissions** : Contrôle d'accès par rôle
 
 ---
 
-*📅 Dernière mise à jour : 29/07/2025*
-*👨‍💻 Structure créée pour une meilleure organisation et scalabilité*
+## 📱 Applications (`/views/apps/`)
+
+Applications intégrées et outils spécialisés.
+
+```
+apps/
+├── 📁 blog/                    # Système de blog
+│   ├── BlogListView.vue            # Liste des articles
+│   ├── BlogDetailView.vue          # Détail d'un article
+│   └── BlogCreateView.vue          # Création d'article
+├── 📁 calendar/                # Calendrier
+│   └── CalendarView.vue            # Interface calendrier
+├── 📁 chat/                    # Messagerie
+│   ├── ChatView.vue                # Interface de chat
+│   ├── ChatListView.vue            # Liste des conversations
+│   ├── ChatRoomView.vue            # Salle de chat
+│   ├── ChatGroupView.vue           # Chat de groupe
+│   ├── ChatPrivateView.vue         # Chat privé
+│   ├── ChatSettingsView.vue        # Paramètres chat
+│   └── ChatArchiveView.vue         # Archives des messages
+├── 📁 events/                  # Gestion d'événements
+│   └── EventManagementView.vue     # Gestion des événements
+├── 📁 files/                   # Gestionnaire de fichiers
+│   └── FileManagerView.vue         # Interface de gestion
+├── 📁 mail/                    # Système de mail
+│   ├── MailInboxView.vue           # Boîte de réception
+│   ├── MailComposeView.vue         # Rédaction d'email
+│   ├── MailDetailView.vue          # Détail d'un email
+│   ├── MailSentView.vue            # Emails envoyés
+│   ├── MailDraftView.vue           # Brouillons
+│   └── MailTrashView.vue           # Corbeille
+├── 📁 notes/                   # Système de notes
+│   └── NotesWorkspaceView.vue      # Espace de travail notes
+├── 📁 tasklist/                # Gestion de tâches
+│   ├── TaskListView.vue            # Liste des tâches
+│   ├── TaskCreateView.vue          # Création de tâche
+│   └── TaskDetailView.vue          # Détail d'une tâche
+├── 📁 tools/                   # Outils utilitaires
+│   ├── ToolsView.vue               # Hub des outils
+│   ├── GameView.vue                # Interface de jeu
+│   ├── ChatBotView.vue             # ChatBot IA
+│   ├── MobileToolsView.vue         # Outils mobile
+│   ├── CalculatorView.vue          # Calculatrice
+│   └── ConverterView.vue           # Convertisseur
+└── 📄 README.md                # Documentation apps
+```
+
+### Fonctionnalités
+- **Productivité** : Notes, tâches, calendrier, mail
+- **Communication** : Chat, messagerie, événements
+- **Outils** : Calculatrice, convertisseur, jeux
+- **IA** : ChatBot intégré
+- **Fichiers** : Gestionnaire de documents
+
+---
+
+## 🏠 Accueil (`/views/home/`)
+
+Pages d'accueil et navigation principale.
+
+```
+home/
+├── 📄 DashboardView.vue        # Tableau de bord utilisateur
+├── 📄 HistoryView.vue          # Historique d'activité
+├── 📄 HomeView.vue             # Page d'accueil principale
+├── 📄 MapView.vue              # Carte interactive
+├── 📄 ProfileView.vue          # Profil utilisateur
+└── 📄 ToolsView.vue            # Vue des outils
+```
+
+### Fonctionnalités
+- **Dashboard** : Vue d'ensemble personnalisée
+- **Navigation** : Accès rapide aux fonctionnalités
+- **Carte** : Localisation des institutions
+- **Profil** : Gestion du compte utilisateur
+
+---
+
+## 🏥 Institutions (`/views/institutions/`)
+
+Gestion et affichage des institutions partenaires.
+
+```
+institutions/
+├── 📄 InstitutionListView.vue  # Liste des institutions
+├── 📄 InstitutionView.vue      # Détail d'une institution
+├── 📄 InstitutionMapView.vue   # Carte des institutions
+└── 📄 InstitutionSearchView.vue # Recherche d'institutions
+```
+
+### Fonctionnalités
+- **Catalogue** : Liste complète des institutions
+- **Détails** : Informations complètes par institution
+- **Cartographie** : Localisation géographique
+- **Recherche** : Filtres avancés
+
+---
+
+## 📄 Pages (`/views/pages/`)
+
+Pages statiques et contenu informatif.
+
+```
+pages/
+└── 📄 LandingView.vue          # Page de destination
+```
+
+### Fonctionnalités
+- **Landing** : Page d'atterrissage marketing
+- **Contenu** : Pages informatives statiques
+
+---
+
+## 💬 Social (`/views/social/`)
+
+Réseau social et fonctionnalités communautaires.
+
+```
+social/
+├── 📄 CommunitiesView.vue      # Gestion des communautés
+├── 📄 CommunityInfoView.vue    # Informations communauté
+├── 📄 CommunityView.vue        # Vue d'une communauté
+├── 📄 FeedView.vue             # Flux social principal
+├── 📄 HashtagView.vue          # Page des hashtags
+├── 📄 MentionView.vue          # Page des mentions
+└── 📄 README.md                # Documentation social
+```
+
+### Fonctionnalités
+- **Feed** : Flux d'actualités social
+- **Communautés** : Groupes thématiques
+- **Interactions** : Mentions, hashtags, commentaires
+- **Modération** : Gestion du contenu
+
+---
+
+## 🎨 Templates (`/views/template/`)
+
+Templates de base et layouts réutilisables.
+
+```
+template/
+└── (Templates de base pour nouvelles vues)
+```
+
+---
+
+## 👥 Utilisateurs (`/views/users/`)
+
+Gestion des profils et utilisateurs.
+
+```
+users/
+├── 📄 UserProfileView.vue      # Profil utilisateur détaillé
+└── 📄 UserSettingsView.vue     # Paramètres utilisateur
+```
+
+### Fonctionnalités
+- **Profil** : Affichage et édition du profil
+- **Paramètres** : Configuration personnelle
+
+---
+
+## 🛣️ Routing et Navigation
+
+### Structure des Routes
+```javascript
+// Exemple de configuration des routes
+const routes = [
+  // Authentification
+  { path: '/login', component: () => import('@/views/auth/LoginView.vue') },
+  { path: '/register', component: () => import('@/views/auth/RegisterView.vue') },
+  
+  // Accueil
+  { path: '/', component: () => import('@/views/home/HomeView.vue') },
+  { path: '/dashboard', component: () => import('@/views/home/DashboardView.vue') },
+  
+  // Administration
+  { 
+    path: '/admin', 
+    component: () => import('@/views/admin/DashboardView.vue'),
+    meta: { requiresAuth: true, requiresAdmin: true }
+  },
+  
+  // Applications
+  { path: '/apps/notes', component: () => import('@/views/apps/notes/NotesWorkspaceView.vue') },
+  { path: '/apps/chat', component: () => import('@/views/apps/chat/ChatView.vue') },
+  
+  // Social
+  { path: '/social', component: () => import('@/views/social/FeedView.vue') },
+  { path: '/community/:id', component: () => import('@/views/social/CommunityView.vue') }
+]
+```
+
+### Guards de Navigation
+- **requiresAuth** : Authentification requise
+- **requiresAdmin** : Droits administrateur
+- **requiresRole** : Rôle spécifique requis
+
+---
+
+## 🎨 Conventions de Développement
+
+### Nomenclature
+- **Fichiers** : PascalCase + "View.vue" (ex: `DashboardView.vue`)
+- **Composants** : Nom descriptif de la page
+- **Dossiers** : kebab-case pour les modules
+
+### Structure d'une Vue
+```vue
+<template>
+  <div class="page-container">
+    <!-- Contenu de la page -->
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+// Imports des composants et services
+
+// Logique de la vue
+</script>
+
+<style scoped>
+/* Styles spécifiques à la vue */
+</style>
+```
+
+### Bonnes Pratiques
+- **Lazy Loading** : Import dynamique des vues
+- **Meta Tags** : Titre et description pour SEO
+- **Error Handling** : Gestion des erreurs
+- **Loading States** : États de chargement
+- **Responsive** : Adaptation mobile/desktop
+
+---
+
+## 📊 Métriques et Performance
+
+### Optimisations
+- **Code Splitting** : Division par routes
+- **Lazy Loading** : Chargement à la demande
+- **Caching** : Cache des vues fréquentes
+- **Bundle Analysis** : Analyse de la taille
+
+### Monitoring
+- **Page Views** : Suivi des visites
+- **Performance** : Temps de chargement
+- **Erreurs** : Tracking des erreurs
+- **UX** : Métriques d'expérience utilisateur
+
+---
+
+## 🔄 Évolution et Maintenance
+
+### Ajout d'une Nouvelle Vue
+1. Créer le fichier dans le bon dossier
+2. Ajouter la route dans `router.js`
+3. Configurer les guards si nécessaire
+4. Tester la navigation
+5. Mettre à jour cette documentation
+
+### Refactoring
+- Identifier les vues similaires
+- Extraire les composants communs
+- Optimiser les imports
+- Maintenir la cohérence
+
+---
+
+## 📚 Documentation Complémentaire
+
+- **Components** : `/src/components/README.md`
+- **Services** : `/src/service/README.md`
+- **Stores** : `/src/stores/README.md`
+- **Architecture** : `/ARCHITECTURE-DOCUMENTATION.md`
+
+---
+
+*Documentation mise à jour le 30 janvier 2025*

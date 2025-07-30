@@ -1,529 +1,604 @@
-# 📚 Documentation Architecture - PFP HEDS Application
+# 🏗️ Architecture Documentation - Plateforme HEdS
 
-> **Version :** 2.0  
-> **Date :** Janvier 2025  
-> **Framework :** Vue.js 3 + Firebase + PrimeVue  
+## 📋 Table des Matières
+
+1. [Vue d'ensemble](#vue-densemble)
+2. [Architecture Technique](#architecture-technique)
+3. [Structure des Dossiers](#structure-des-dossiers)
+4. [Composants Principaux](#composants-principaux)
+5. [Services et API](#services-et-api)
+6. [Gestion d'État](#gestion-détat)
+7. [Routing et Navigation](#routing-et-navigation)
+8. [Authentification et Sécurité](#authentification-et-sécurité)
+9. [Base de Données](#base-de-données)
+10. [Déploiement](#déploiement)
 
 ---
 
 ## 🎯 Vue d'ensemble
 
-L'application PFP HEDS est une plateforme éducative et sociale complète construite avec Vue.js 3, intégrant Firebase pour le backend et PrimeVue pour l'interface utilisateur. Elle combine gestion institutionnelle, fonctionnalités sociales, outils éducatifs et jeux interactifs.
+La **Plateforme HEdS** est une application web moderne développée pour la Haute École de Santé (HEdS) du Valais. Elle sert de plateforme éducative et collaborative pour les étudiants, enseignants et praticiens formateurs dans le domaine de la physiothérapie.
 
-### 🏗️ Architecture Générale
+### Objectifs Principaux
+- 📚 Gestion des formations pratiques (PFP)
+- 🏥 Cartographie des institutions partenaires
+- 👥 Réseau social éducatif
+- 📝 Système de notes et documentation
+- 🎮 Gamification de l'apprentissage
+- 📊 Administration et suivi
+
+---
+
+## 🏛️ Architecture Technique
+
+### Stack Frontend
+- **Framework**: Vue.js 3 (Composition API)
+- **Build Tool**: Vite.js
+- **UI Library**: PrimeVue + Custom Theme
+- **State Management**: Pinia
+- **Routing**: Vue Router 4
+- **PWA**: Workbox + Service Worker
+- **Mobile**: Capacitor + Ionic
+
+### Stack Backend
+- **Authentication**: Firebase Auth
+- **Database**: Firebase Realtime Database
+- **Storage**: Firebase Storage
+- **Hosting**: Firebase Hosting
+- **Functions**: Firebase Cloud Functions
+
+### Technologies Complémentaires
+- **Maps**: Leaflet.js
+- **Rich Text Editor**: TipTap
+- **Charts**: Chart.js
+- **Calendar**: FullCalendar
+- **AI/Voice**: ElevenLabs
+- **CSS Framework**: Custom + PrimeVue Theme
+
+---
+
+## 📁 Structure des Dossiers
 
 ```
 pfpheds/
 ├── 📁 public/                    # Assets statiques
-├── 📁 src/                       # Code source principal
-│   ├── 📁 assets/               # Ressources (images, fonts, etc.)
-│   ├── 📁 components/           # Composants Vue réutilisables
-│   ├── 📁 views/               # Pages/Vues principales
-│   ├── 📁 hooks/               # Composables Vue
-│   ├── 📁 layout/              # Composants de mise en page
-│   ├── 📁 service/             # Services et utilitaires
-│   ├── 📁 stores/              # Stores Pinia
-│   ├── 📁 styles/              # Styles globaux
-│   ├── 📄 App.vue              # Composant racine
-│   ├── 📄 main.js              # Point d'entrée
-│   └── 📄 router.js            # Configuration des routes
-├── 📄 firebase.js              # Configuration Firebase
-└── 📄 package.json             # Dépendances
+│   ├── assets/images/           # Images publiques
+│   ├── manifest.json           # PWA manifest
+│   └── sw.js                   # Service Worker
+├── 📁 src/
+│   ├── 📁 assets/              # Assets sources
+│   │   ├── images/            # Images, logos, icônes
+│   │   ├── styles/            # Styles globaux
+│   │   └── theme/             # Thème PrimeVue
+│   ├── 📁 components/         # Composants Vue
+│   │   ├── admin/             # Interface d'administration
+│   │   ├── common/            # Composants réutilisables
+│   │   ├── editor/            # Éditeurs (TipTap, notes)
+│   │   ├── events/            # Gestion d'événements
+│   │   ├── games/             # Gamification
+│   │   ├── home/              # Page d'accueil
+│   │   ├── institutions/      # Gestion des institutions
+│   │   ├── social/            # Réseau social
+│   │   ├── ui/                # Composants UI génériques
+│   │   └── user/              # Gestion utilisateurs
+│   ├── 📁 hooks/              # Composables Vue
+│   ├── 📁 layout/             # Layouts de l'application
+│   ├── 📁 service/            # Services API
+│   ├── 📁 stores/             # Stores Pinia
+│   ├── 📁 views/              # Pages/Vues principales
+│   │   ├── admin/             # Vues administration
+│   │   ├── apps/              # Applications intégrées
+│   │   ├── auth/              # Authentification
+│   │   ├── home/              # Accueil
+│   │   ├── institutions/      # Institutions
+│   │   ├── social/            # Social
+│   │   └── users/             # Utilisateurs
+│   ├── App.vue                # Composant racine
+│   ├── main.js                # Point d'entrée
+│   └── router.js              # Configuration routing
+├── 📁 backend/                # Backend Node.js (optionnel)
+├── 📁 nginx/                  # Configuration Nginx
+├── firebase.js                # Configuration Firebase
+├── vite.config.js            # Configuration Vite
+└── package.json              # Dependencies
 ```
 
 ---
 
-## 📂 Structure Détaillée des Composants
+## 🧩 Composants Principaux
 
-### `/src/components/` - Composants Réutilisables
-
-#### 🎮 `games/` - Jeux Interactifs
-```
-games/
-├── 📄 GameHub.vue              # Hub de sélection des jeux
-├── 📄 Ventriglisse3D.vue       # Jeu de luge 3D (Three.js)
-├── 📁 assets/                  # Assets du jeu (sons, textures, modèles)
-│   ├── 🔊 bip.wav
-│   ├── 🔊 go.wav
-│   ├── 🔊 slide.mp3
-│   ├── 🔊 finish.mp3
-│   ├── 🎨 cafte1.png
-│   ├── 🎨 cafte2.png
-│   ├── 🎨 cafte3.png
-│   └── 🎲 jump.glb
-├── 📄 participants.json        # Configuration des participants
-└── 📄 README.md               # Documentation du jeu
-```
-
-**Fonctionnalités :**
-- Interface de sélection de jeux avec design glassmorphism
-- Jeu Ventriglisse3D avec rendu 3D (Three.js)
-- Gestion des participants et avatars
-- Système de course avec physique et classement
-- Audio intégré (sons de jeu)
-
-#### 🌐 `social/` - Fonctionnalités Sociales
-```
-social/
-├── 📁 library/                 # Composants de base
-│   ├── 📄 MainFeed.vue         # Flux principal
-│   ├── 📄 PostItem.vue         # Affichage des posts
-│   ├── 📄 CreatePostDialog.vue # Création de posts
-│   ├── 📄 CommunityFeed.vue    # Flux communautaire
-│   ├── 📄 CommunitiesList.vue  # Liste des communautés
-│   ├── 📄 PublicCommunitiesList.vue # Communautés publiques
-│   ├── 📄 RightSidebar.vue     # Sidebar droite
-│   ├── 📄 LeftSidebar.vue      # Sidebar gauche
-│   ├── 📄 FilterComponent.vue  # Filtres de contenu
-│   ├── 📄 StoryCarousel.vue    # Carrousel de stories
-│   └── 📄 CreateContentMobile.vue # Création mobile
-└── 📁 forms/                   # Formulaires sociaux
-    └── 📄 CreateNewCommunity.vue # Création de communauté
-```
-
-**Fonctionnalités :**
-- Flux social avec posts, médias, hashtags
-- Système de communautés (création, gestion, adhésion)
-- Upload de médias (images, vidéos, PDFs)
-- Mentions et hashtags automatiques
-- Interface responsive (mobile/desktop)
-- Intégration Firebase Realtime Database
-
-#### 👤 `user/` - Gestion Utilisateurs
-```
-user/
-├── 📁 details/                 # Détails utilisateur
-│   ├── 📄 ProfileInfo.vue      # Informations de profil
-│   ├── 📄 ProfileInfoAdmin.vue # Profil admin
-│   ├── 📄 DocumentsUserProfile.vue # Documents utilisateur
-│   ├── 📄 ResumStageUserProfile.vue # Résumé des stages
-│   └── 📄 ChatProfil.vue       # Chat utilisateur
-├── 📁 forms/                   # Formulaires utilisateur
-└── 📁 profile/                 # Composants de profil
-    ├── 📄 CardNameProfile.vue  # Carte nom
-    ├── 📄 VotationResultProfil.vue # Résultats votes
-    └── 📄 RadarProfil.vue      # Graphique radar
-```
-
-#### 🛠️ `admin/` - Administration
+### 1. Administration (`/src/components/admin/`)
 ```
 admin/
-├── 📁 details/                 # Détails administratifs
-├── 📁 forms/                   # Formulaires admin
-├── 📁 tables/                  # Tableaux de données
-└── 📁 validation/              # Validation de contenu
+├── forms/                    # Formulaires d'administration
+│   ├── AddEtudiant.vue      # Ajout d'étudiants
+│   ├── AddInstitution.vue   # Ajout d'institutions
+│   └── AddPraticien.vue     # Ajout de praticiens
+├── lists/                   # Listes d'administration
+│   ├── AdminSidebar.vue     # Navigation admin
+│   ├── ListEtudiant.vue     # Liste des étudiants
+│   └── ListInstitution.vue  # Liste des institutions
+└── modals/                  # Modales d'administration
+    ├── EditModal.vue        # Édition générique
+    └── DeleteModal.vue      # Confirmation suppression
 ```
 
-#### 🎨 `ui/` - Interface Utilisateur
+### 2. Social (`/src/components/social/`)
 ```
-ui/
-├── 📁 buttons/                 # Boutons personnalisés
-│   ├── 📄 ButtonNavbar.vue     # Bouton navigation
-│   └── 📄 SwitchColor.vue      # Commutateur couleur
-├── 📁 forms/                   # Éléments de formulaire
-├── 📁 modals/                  # Modales
-└── 📁 navigation/              # Navigation
+social/
+├── library/                 # Bibliothèque sociale
+│   ├── LeftSidebar.vue     # Navigation sociale
+│   ├── PostItem.vue        # Élément de post
+│   ├── StoryCarousel.vue   # Carrousel d'histoires
+│   └── UserProfile.vue     # Profil utilisateur
+├── posts/                  # Gestion des posts
+│   ├── CreatePost.vue      # Création de post
+│   ├── PostEditor.vue      # Éditeur de post
+│   └── PostList.vue        # Liste des posts
+└── messaging/              # Messagerie
+    ├── ChatWindow.vue      # Fenêtre de chat
+    └── MessageList.vue     # Liste des messages
 ```
 
-#### 🔧 `common/` - Composants Communs
+### 3. Éditeur (`/src/components/editor/`)
+```
+editor/
+├── notes/                  # Système de notes
+│   ├── TiptapSimpleEditor.vue    # Éditeur TipTap
+│   ├── NotebookSidebar.vue       # Sidebar des classeurs
+│   ├── PageList.vue              # Liste des pages
+│   └── NotesWorkspaceView.vue    # Espace de travail
+├── rich-text/              # Éditeur riche
+│   ├── MenuBar.vue         # Barre d'outils
+│   ├── Extensions/         # Extensions TipTap
+│   └── Toolbar.vue         # Toolbar personnalisée
+└── markdown/               # Support Markdown
+    └── MarkdownEditor.vue  # Éditeur Markdown
+```
+
+### 4. Commun (`/src/components/common/`)
 ```
 common/
-├── 📁 utils/                   # Utilitaires
-│   ├── 📄 Navbar.vue           # Barre de navigation
-│   ├── 📄 GlobalSearch.vue     # Recherche globale
-│   └── 📄 SearchResults.vue    # Résultats de recherche
-├── 📁 layout/                  # Mise en page
-└── 📁 feedback/                # Retours utilisateur
-```
-
-#### 📺 `media/` - Gestion Média
-```
-media/
-└── 📁 audio/                   # Composants audio
-    └── 📄 ListComponent.vue    # Liste de lecture
-```
-
----
-
-## 📄 Structure des Vues
-
-### `/src/views/` - Pages Principales
-
-#### 🏠 `home/` - Pages d'Accueil
-```
-home/
-├── 📄 HomeView.vue             # Page d'accueil principale
-├── 📄 DashboardView.vue        # Tableau de bord
-├── 📄 HistoryView.vue          # Historique utilisateur
-└── 📄 ProfileView.vue          # Vue profil
-```
-
-#### 👥 `social/` - Pages Sociales
-```
-social/
-├── 📄 SocialView.vue           # Hub social principal
-├── 📄 CommunityView.vue        # Vue communauté
-├── 📄 CommunityInfoView.vue    # Informations communauté
-├── 📄 MentionView.vue          # Mentions
-└── 📄 HashtagView.vue          # Hashtags
-```
-
-#### 🏢 `institutions/` - Gestion Institutionnelle
-```
-institutions/
-├── 📄 InstitutionListView.vue  # Liste des institutions
-└── 📄 InstitutionDetailView.vue # Détails institution
-```
-
-#### 🔐 `admin/` - Administration
-```
-admin/
-├── 📁 users/                   # Gestion utilisateurs
-├── 📁 institutions/            # Gestion institutions
-├── 📁 content/                 # Gestion contenu
-└── 📄 AdminDashboard.vue       # Tableau de bord admin
-```
-
-#### 📱 `apps/` - Applications Intégrées
-```
-apps/
-├── 📁 tools/                   # Outils
-├── 📁 games/                   # Jeux
-└── 📁 utilities/               # Utilitaires
-```
-
-#### 🔑 `auth/` - Authentification
-```
-auth/
-├── 📄 LoginView.vue            # Connexion
-├── 📄 RegisterView.vue         # Inscription
-└── 📄 ResetPasswordView.vue    # Réinitialisation
+├── filters/                # Composants de filtrage
+│   ├── FiltreMap.vue      # Carte avec filtres
+│   ├── FilterSidebar.vue  # Sidebar de filtres
+│   └── filter.json        # Configuration filtres
+├── utils/                 # Utilitaires
+│   ├── Navbar.vue         # Navigation principale
+│   ├── HeaderIcons.vue    # Icônes d'en-tête
+│   └── LoadingSpinner.vue # Spinner de chargement
+└── forms/                 # Formulaires génériques
+    ├── FormField.vue      # Champ de formulaire
+    └── FormValidator.vue  # Validation
 ```
 
 ---
 
-## 🔧 Services et Configuration
+## 🔧 Services et API
 
-### `/src/service/` - Services
-```
+### Structure des Services (`/src/service/`)
+```javascript
 service/
-├── 📄 firebase.js              # Service Firebase
-├── 📄 auth.js                  # Service d'authentification
-├── 📄 storage.js               # Service de stockage
-└── 📄 api.js                   # Service API
+├── authService.js          # Authentification Firebase
+├── databaseService.js      # Base de données
+├── storageService.js       # Stockage de fichiers
+├── notesService.js         # Gestion des notes
+├── institutionService.js   # Gestion des institutions
+├── userService.js          # Gestion des utilisateurs
+├── postService.js          # Gestion des posts
+├── gameService.js          # Gamification
+└── notificationService.js  # Notifications
 ```
 
-### `/src/stores/` - Stores Pinia
+### Exemple de Service
+```javascript
+// notesService.js
+import { db } from '../firebase'
+import { ref, push, set, get, remove } from 'firebase/database'
+
+export const notesService = {
+  // Créer un nouveau classeur
+  async createNotebook(userId, notebookData) {
+    const notebooksRef = ref(db, `notes/${userId}/notebooks`)
+    const newNotebookRef = push(notebooksRef)
+    await set(newNotebookRef, {
+      ...notebookData,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    })
+    return newNotebookRef.key
+  },
+
+  // Récupérer les classeurs
+  async getNotebooks(userId) {
+    const notebooksRef = ref(db, `notes/${userId}/notebooks`)
+    const snapshot = await get(notebooksRef)
+    return snapshot.val() || {}
+  },
+
+  // Créer une nouvelle page
+  async createPage(userId, notebookId, pageData) {
+    const pagesRef = ref(db, `notes/${userId}/notebooks/${notebookId}/pages`)
+    const newPageRef = push(pagesRef)
+    await set(newPageRef, {
+      ...pageData,
+      createdAt: Date.now(),
+      updatedAt: Date.now()
+    })
+    return newPageRef.key
+  }
+}
 ```
+
+---
+
+## 🗃️ Gestion d'État (Pinia)
+
+### Structure des Stores (`/src/stores/`)
+```javascript
 stores/
-├── 📄 auth.js                  # Store authentification
-├── 📄 user.js                  # Store utilisateur
-└── 📄 app.js                   # Store application
+├── auth.js                 # État d'authentification
+├── user.js                 # Données utilisateur
+└── app.js                  # État global de l'app
 ```
 
-### `/src/hooks/` - Composables
-```
-hooks/
-├── 📄 useAuth.js               # Hook authentification
-├── 📄 useFirebase.js           # Hook Firebase
-└── 📄 useMedia.js              # Hook média
-```
-
----
-
-## 🎨 Styles et Thèmes
-
-### `/src/styles/` - Styles Globaux
-```
-styles/
-├── 📄 main.css                 # Styles principaux
-└── 📄 variables.css            # Variables CSS
-```
-
-### 🎨 Design System
-
-**Couleurs Principales :**
-- `--primary-600` : Couleur principale
-- `--primary-700` : Couleur principale foncée
-- `--surface-hover` : Couleur de survol
-
-**Composants UI :**
-- **PrimeVue** : DataTable, Dialog, Button, InputText, etc.
-- **Glassmorphism** : Effets de verre dépoli
-- **Responsive Design** : Adaptation mobile/desktop
-
----
-
-## 🔌 Intégrations Techniques
-
-### 🔥 Firebase
+### Store d'Authentification
 ```javascript
-// Configuration Firebase
-import { initializeApp } from 'firebase/app';
-import { getDatabase } from 'firebase/database';
-import { getStorage } from 'firebase/storage';
-import { getAuth } from 'firebase/auth';
-```
+// stores/auth.js
+import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+import { auth } from '../firebase'
 
-**Services utilisés :**
-- **Realtime Database** : Données en temps réel
-- **Storage** : Stockage de fichiers
-- **Authentication** : Gestion des utilisateurs
+export const useAuthStore = defineStore('auth', () => {
+  const user = ref(null)
+  const loading = ref(false)
+  const error = ref(null)
 
-### 🎮 Three.js (Jeux)
-```javascript
-// Intégration Three.js pour Ventriglisse3D
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-```
+  const isAuthenticated = computed(() => !!user.value)
+  const isAdmin = computed(() => user.value?.role === 'admin')
 
-### 🎨 PrimeVue
-```javascript
-// Composants PrimeVue utilisés
-import DataTable from 'primevue/datatable';
-import Dialog from 'primevue/dialog';
-import Button from 'primevue/button';
+  const login = async (email, password) => {
+    loading.value = true
+    try {
+      const result = await signInWithEmailAndPassword(auth, email, password)
+      user.value = result.user
+    } catch (err) {
+      error.value = err.message
+    } finally {
+      loading.value = false
+    }
+  }
+
+  return {
+    user,
+    loading,
+    error,
+    isAuthenticated,
+    isAdmin,
+    login
+  }
+})
 ```
 
 ---
 
 ## 🛣️ Routing et Navigation
 
-### Structure des Routes
+### Configuration Router (`router.js`)
 ```javascript
-// Principales catégories de routes
 const routes = [
-  // Pages publiques
+  // Routes publiques
   { path: '/', component: HomeView },
   { path: '/login', component: LoginView },
   
-  // Pages utilisateur (auth requise)
-  { path: '/dashboard', component: DashboardView, meta: { requiresAuth: true } },
-  { path: '/profile/:id', component: ProfileView, meta: { requiresAuth: true } },
+  // Routes protégées
+  {
+    path: '/dashboard',
+    component: DashboardView,
+    meta: { requiresAuth: true }
+  },
   
-  // Pages sociales
-  { path: '/social', component: SocialView, meta: { requiresAuth: true } },
-  { path: '/community/:id', component: CommunityInfoView },
+  // Routes admin
+  {
+    path: '/admin',
+    component: AdminLayout,
+    meta: { requiresAuth: true, requiresAdmin: true },
+    children: [
+      { path: 'users', component: UserListView },
+      { path: 'institutions', component: InstitutionListView }
+    ]
+  },
   
-  // Administration (rôle admin requis)
-  { path: '/admin/*', meta: { requiresAuth: true, requiredRole: ['admin'] } },
+  // Applications intégrées
+  {
+    path: '/apps',
+    children: [
+      { path: 'notes', component: NotesWorkspaceView },
+      { path: 'social', component: SocialView },
+      { path: 'games', component: GamesView }
+    ]
+  }
+]
+```
+
+### Guards de Navigation
+```javascript
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
   
-  // Jeux
-  { path: '/ventriglisse3d', component: Ventriglisse3D },
-  { path: '/games', component: GameHub }
-];
+  if (to.meta.requiresAuth && !authStore.isAuthenticated) {
+    next('/login')
+  } else if (to.meta.requiresAdmin && !authStore.isAdmin) {
+    next('/unauthorized')
+  } else {
+    next()
+  }
+})
 ```
 
 ---
 
-## 📱 Responsive Design
+## 🔐 Authentification et Sécurité
 
-### Breakpoints
-- **Mobile** : `< 768px`
-- **Tablet** : `768px - 1024px`
-- **Desktop** : `> 1024px`
+### Firebase Auth Configuration
+```javascript
+// firebase.js
+import { initializeApp } from 'firebase/app'
+import { getAuth } from 'firebase/auth'
+import { getDatabase } from 'firebase/database'
 
-### Adaptations Mobiles
-```css
-@media (max-width: 768px) {
-  .sidebar { display: none; }
-  .main-content { width: 100%; }
-  .game-canvas { height: 400px; }
+const firebaseConfig = {
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  databaseURL: import.meta.env.VITE_FIREBASE_DATABASE_URL,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID
+}
+
+const app = initializeApp(firebaseConfig)
+export const auth = getAuth(app)
+export const db = getDatabase(app)
+```
+
+### Rôles et Permissions
+```javascript
+// Rôles utilisateur
+const USER_ROLES = {
+  STUDENT: 'student',
+  TEACHER: 'teacher',
+  PRACTITIONER: 'practitioner',
+  ADMIN: 'admin',
+  SUPER_ADMIN: 'super_admin'
+}
+
+// Permissions par rôle
+const PERMISSIONS = {
+  [USER_ROLES.STUDENT]: ['read_posts', 'create_posts', 'read_notes'],
+  [USER_ROLES.TEACHER]: ['read_posts', 'create_posts', 'moderate_posts'],
+  [USER_ROLES.ADMIN]: ['*'] // Toutes les permissions
 }
 ```
 
 ---
 
-## 🔒 Sécurité et Authentification
+## 🗄️ Base de Données (Firebase Realtime Database)
 
-### Middleware de Route
-```javascript
-// Vérification d'authentification
-router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth && !isAuthenticated()) {
-    next('/login');
-  } else if (to.meta.requiredRole && !hasRole(to.meta.requiredRole)) {
-    next('/unauthorized');
-  } else {
-    next();
+### Structure de la Base de Données
+```json
+{
+  "users": {
+    "userId": {
+      "email": "user@example.com",
+      "displayName": "John Doe",
+      "role": "student",
+      "profile": {
+        "avatar": "url",
+        "bio": "Description",
+        "institution": "institutionId"
+      },
+      "preferences": {
+        "theme": "light",
+        "notifications": true
+      }
+    }
+  },
+  "institutions": {
+    "institutionId": {
+      "name": "Hôpital du Valais",
+      "address": "Avenue de la Gare 10",
+      "city": "Sion",
+      "canton": "VS",
+      "coordinates": {
+        "latitude": 46.2276,
+        "longitude": 7.3467
+      },
+      "contact": {
+        "phone": "+41 27 603 40 00",
+        "email": "info@hopitalvs.ch",
+        "website": "https://hopitalvs.ch"
+      }
+    }
+  },
+  "posts": {
+    "postId": {
+      "authorId": "userId",
+      "content": "Contenu du post",
+      "createdAt": 1640995200000,
+      "likes": {
+        "userId": true
+      },
+      "comments": {
+        "commentId": {
+          "authorId": "userId",
+          "content": "Commentaire",
+          "createdAt": 1640995200000
+        }
+      }
+    }
+  },
+  "notes": {
+    "userId": {
+      "notebooks": {
+        "notebookId": {
+          "title": "Mon Classeur",
+          "pages": {
+            "pageId": {
+              "title": "Ma Page",
+              "content": "Contenu JSON TipTap",
+              "createdAt": 1640995200000,
+              "updatedAt": 1640995200000
+            }
+          }
+        }
+      }
+    }
+  },
+  "games": {
+    "userId": {
+      "scores": {
+        "gameType": {
+          "score": 1500,
+          "level": 5,
+          "achievements": ["first_win", "streak_10"]
+        }
+      }
+    }
   }
-});
+}
 ```
-
-### Rôles Utilisateur
-- **User** : Utilisateur standard
-- **Editor** : Éditeur de contenu
-- **Admin** : Administrateur complet
 
 ---
 
-## 🚀 Performance et Optimisation
+## 🚀 Déploiement
 
-### Lazy Loading
+### Environnements
+- **Development**: Local (Vite dev server)
+- **Staging**: Firebase Hosting (branch develop)
+- **Production**: Firebase Hosting (branch main)
+
+### Configuration Vite
 ```javascript
-// Chargement paresseux des composants
-const AdminDashboard = () => import('@/views/admin/AdminDashboard.vue');
+// vite.config.js
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import { VitePWA } from 'vite-plugin-pwa'
+
+export default defineConfig({
+  plugins: [
+    vue(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      workbox: {
+        globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+      }
+    })
+  ],
+  resolve: {
+    alias: {
+      '@': '/src'
+    }
+  },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          vendor: ['vue', 'vue-router', 'pinia'],
+          ui: ['primevue'],
+          editor: ['@tiptap/vue-3', '@tiptap/starter-kit']
+        }
+      }
+    }
+  }
+})
 ```
 
-### Optimisations
-- **Code Splitting** : Division du code par routes
-- **Tree Shaking** : Élimination du code mort
-- **Asset Optimization** : Compression des images et médias
-- **Firebase Caching** : Cache des données Firebase
-
----
-
-## 🧪 Tests et Qualité
-
-### Structure de Tests
-```
-tests/
-├── 📁 unit/                    # Tests unitaires
-├── 📁 integration/             # Tests d'intégration
-└── 📁 e2e/                     # Tests end-to-end
-```
-
-### Outils de Qualité
-- **ESLint** : Linting JavaScript/Vue
-- **Prettier** : Formatage de code
-- **Vue Test Utils** : Tests de composants Vue
-
----
-
-## 📦 Déploiement
-
-### Build de Production
-```bash
-npm run build
-```
-
-### Variables d'Environnement
-```env
-VITE_FIREBASE_API_KEY=your_api_key
-VITE_FIREBASE_AUTH_DOMAIN=your_domain
-VITE_FIREBASE_PROJECT_ID=your_project_id
-```
-
----
-
-## 🔄 Workflow de Développement
-
-### 1. Développement Local
-```bash
-npm run dev
-```
-
-### 2. Structure des Commits
-```
-feat: nouvelle fonctionnalité
-fix: correction de bug
-docs: mise à jour documentation
-style: changements de style
-refactor: refactoring de code
-```
-
-### 3. Branches
-- `main` : Production
-- `develop` : Développement
-- `feature/*` : Nouvelles fonctionnalités
-- `hotfix/*` : Corrections urgentes
-
----
-
-## 📋 Conventions de Code
-
-### Nomenclature des Composants
-```
-PascalCase pour les composants : UserProfile.vue
-camelCase pour les props : userName
-kebab-case pour les événements : user-updated
-```
-
-### Structure des Composants Vue
-```vue
-<template>
-  <!-- Template HTML -->
-</template>
-
-<script>
-// Imports
-// Composant definition
-// Props, data, computed, methods
-// Lifecycle hooks
-</script>
-
-<style scoped>
-/* Styles scopés */
-</style>
+### Scripts de Déploiement
+```json
+{
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy:staging": "npm run build && firebase deploy --only hosting:staging",
+    "deploy:prod": "npm run build && firebase deploy --only hosting:production"
+  }
+}
 ```
 
 ---
 
-## 🆘 Dépannage Courant
+## 📊 Métriques et Monitoring
 
-### Problèmes Firebase
-```javascript
-// Vérifier la configuration Firebase
-console.log('Firebase config:', firebaseConfig);
+### Performance
+- **Lighthouse Score**: 90+ (Performance, Accessibility, SEO)
+- **Bundle Size**: < 2MB (avec code splitting)
+- **First Contentful Paint**: < 2s
+- **Time to Interactive**: < 3s
+
+### Monitoring
+- **Firebase Analytics**: Suivi d'utilisation
+- **Firebase Crashlytics**: Rapport d'erreurs
+- **Firebase Performance**: Métriques de performance
+
+---
+
+## 🔧 Outils de Développement
+
+### Qualité de Code
+- **ESLint**: Linting JavaScript/Vue
+- **Prettier**: Formatage de code
+- **Husky**: Git hooks
+- **Commitizen**: Commits conventionnels
+
+### Testing (À implémenter)
+- **Vitest**: Tests unitaires
+- **Vue Test Utils**: Tests de composants
+- **Cypress**: Tests E2E
+
+---
+
+## 📚 Documentation Technique
+
+### Conventions de Code
+- **Naming**: camelCase pour JS, kebab-case pour Vue
+- **Components**: PascalCase
+- **Files**: kebab-case
+- **Constants**: UPPER_SNAKE_CASE
+
+### Git Workflow
+```
+main (production)
+├── develop (staging)
+│   ├── feature/HEDS-123-add-notes-feature
+│   ├── bugfix/HEDS-124-fix-login-issue
+│   └── hotfix/HEDS-125-critical-fix
 ```
 
-### Problèmes de Build
-```bash
-# Nettoyer le cache
-npm run clean
-npm install
-```
+---
 
-### Problèmes de Routing
-```javascript
-// Vérifier les routes dans router.js
-console.log('Current route:', this.$route);
-```
+## 🎯 Roadmap Technique
+
+### Phase 1 (Actuelle)
+- ✅ Architecture de base
+- ✅ Authentification Firebase
+- ✅ Interface d'administration
+- ✅ Système de notes
+- ✅ Réseau social
+
+### Phase 2 (En cours)
+- 🔄 Optimisation des performances
+- 🔄 Tests automatisés
+- 🔄 PWA avancée
+- 🔄 Notifications push
+
+### Phase 3 (Planifiée)
+- 📋 Application mobile native
+- 📋 IA/ML pour recommandations
+- 📋 API GraphQL
+- 📋 Microservices
 
 ---
 
-## 📚 Ressources et Documentation
-
-### Documentation Officielle
-- [Vue.js 3](https://vuejs.org/)
-- [Firebase](https://firebase.google.com/docs)
-- [PrimeVue](https://primefaces.org/primevue/)
-- [Three.js](https://threejs.org/docs/)
-
-### Guides Internes
-- `README.md` : Guide de démarrage
-- `CONTRIBUTING.md` : Guide de contribution
-- `CHANGELOG.md` : Historique des versions
-
----
-
-## 🎯 Roadmap et Évolutions
-
-### Version Actuelle (2.0)
-- ✅ Refactoring complet de l'architecture
-- ✅ Intégration des jeux (Ventriglisse3D)
-- ✅ Système social complet
-- ✅ Interface responsive
-
-### Prochaines Versions
-- 🔄 **v2.1** : Nouveaux jeux interactifs
-- 🔄 **v2.2** : Amélioration des performances
-- 🔄 **v2.3** : Tests automatisés complets
-- 🔄 **v3.0** : Migration vers Vue 4 (quand disponible)
-
----
-
-## 👥 Équipe et Contacts
-
-### Développement
-- **Lead Developer** : Antoine Quarroz
-- **Architecture** : Cascade AI Assistant
-
-### Support
-- **Issues** : GitHub Issues
-- **Documentation** : Ce fichier
-- **Contact** : [email@domain.com]
-
----
-
-*Cette documentation est maintenue à jour avec chaque version majeure de l'application. Dernière mise à jour : Janvier 2025*
+*Documentation mise à jour le 30 janvier 2025*
