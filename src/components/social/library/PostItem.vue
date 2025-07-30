@@ -220,6 +220,11 @@ export default {
   watch: {
     post: {
       handler() {
+        // Vérification de sécurité : s'assurer que post existe avant d'appeler les méthodes
+        if (!this.post) {
+          return;
+        }
+        
         this.fetchAuthorDetails();
         this.checkLikeStatus();
         this.loadCommentCount();
@@ -369,6 +374,11 @@ export default {
       this.replyToId = null;
     },
     async loadCommentAvatars() {
+      // Vérification de sécurité : s'assurer que post existe
+      if (!this.post || !this.post.replies) {
+        return;
+      }
+      
       const userIds = new Set();
       // Collecte tous les IdUser des commentaires et réponses (thread 1 niveau)
       for (const reply of Object.values(this.post.replies || {})) {
@@ -822,7 +832,7 @@ export default {
   }
   .pdf-mobile-btn:active,
   .pdf-mobile-btn:hover {
-    background: var(--primary-color-hover, #1976d2);
+    background: var(--primary-color, #1976d2);
     color: #fff;
     text-decoration: none;
   }
