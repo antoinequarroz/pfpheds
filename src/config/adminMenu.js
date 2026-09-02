@@ -1,6 +1,6 @@
 /**
  * Menu Admin Restructuré par Filière
- * 
+ *
  * Structure:
  * 1. Admin Général - Dashboard et configuration système
  * 2. Physiothérapie - Formation Pratique/PFP + Gamification
@@ -82,7 +82,7 @@ export default [
         icon: 'pi pi-cog',
         items: [
           { label: 'Mon Profil Répondant', icon: 'pi pi-user', to: '/admin/formation-pratique/profil-repondant' },
-          { label: 'Management Signature', icon: 'pi pi-pencil', to: '/admin/formation-pratique/management-repondant-signature' },
+          { label: 'Gestion Signatures', icon: 'pi pi-pencil', to: '/admin/formation-pratique/management-repondant-signature' },
           // { label: 'Management Places', icon: 'pi pi-map-marker', to: '/admin/formation-pratique/management-places' }
         ]
       },
@@ -109,6 +109,7 @@ export default [
           { label: 'Vue d\'ensemble FP', icon: 'pi pi-th-large', to: '/admin/formation-pratique/secretariat/vue-ensemble' },
           { label: 'Vérification Critères', icon: 'pi pi-check-circle', to: '/admin/formation-pratique/secretariat/verification-criteres' },
           { label: 'Suivi Institutions', icon: 'pi pi-building', to: '/admin/formation-pratique/secretariat/suivi-institutions' },
+          { label: 'Couverture des stages', icon: 'pi pi-chart-pie', to: '/admin/formation-pratique/secretariat/couverture-stages' },
           { label: 'Suivi Envoi Offres', icon: 'pi pi-send', to: '/admin/formation-pratique/secretariat/suivi-offres-institutions' },
           { label: 'Tableau Offres', icon: 'pi pi-table', to: '/admin/formation-pratique/secretariat/tableau-offres' },
           { label: 'Récap PFP Notes', icon: 'pi pi-file', to: '/admin/formation-pratique/secretariat/recap-pfp-notes' },
@@ -117,7 +118,7 @@ export default [
           { label: 'Centre d\'Alertes', icon: 'pi pi-bell', to: '/admin/formation-pratique/secretariat/alertes' }
         ]
       },
-      
+
       // Gamification masquée temporairement pour la présentation (ne pas supprimer)
       // {
       //   label: 'Gamification',

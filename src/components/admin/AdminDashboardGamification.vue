@@ -8,7 +8,7 @@
       <div v-else class="p-4 max-w-7xl mx-auto">
         <!-- Header -->
         <div class="surface-card p-4 border-round shadow-2 mb-4 border-left-3 border-primary">
-          <div class="flex justify-content-between align-items-center">
+          <div class="dashboard-header flex justify-content-between align-items-center gap-3">
             <div class="flex align-items-center gap-3">
               <i class="pi pi-star-fill text-primary text-3xl"></i>
               <div>
@@ -17,27 +17,27 @@
               </div>
             </div>
             
-            <div class="flex gap-3">
+            <div class="dashboard-periods flex gap-3">
               <ButtonGroup>
                 <Button
-                  label="7j"
-                  :outlined="period !== '7d'"
-                  :severity="period === '7d' ? 'primary' : 'secondary'"
-                  @click="period = '7d'"
+                  label="Semaine"
+                  :outlined="period !== 'week'"
+                  :severity="period === 'week' ? 'primary' : 'secondary'"
+                  @click="changePeriod('week')"
                   size="small"
                 />
                 <Button
-                  label="30j"
-                  :outlined="period !== '30d'"
-                  :severity="period === '30d' ? 'primary' : 'secondary'"
-                  @click="period = '30d'"
+                  label="Mois"
+                  :outlined="period !== 'month'"
+                  :severity="period === 'month' ? 'primary' : 'secondary'"
+                  @click="changePeriod('month')"
                   size="small"
                 />
                 <Button
-                  label="90j"
-                  :outlined="period !== '90d'"
-                  :severity="period === '90d' ? 'primary' : 'secondary'"
-                  @click="period = '90d'"
+                  label="Trimestre"
+                  :outlined="period !== 'quarter'"
+                  :severity="period === 'quarter' ? 'primary' : 'secondary'"
+                  @click="changePeriod('quarter')"
                   size="small"
                 />
               </ButtonGroup>
@@ -57,60 +57,18 @@
             v-for="kpi in kpisWithData"
             :key="kpi.id"
             v-bind="kpi"
-            @action="handleKpiAction(kpi)"
           />
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="mb-4">
-          <h2 class="text-xl font-semibold text-900 mb-3">Actions Rapides</h2>
-          <div class="grid">
-            <div class="col-12 md:col-6 lg:col-4">
-              <div 
-                class="surface-card p-4 border-round shadow-2 cursor-pointer hover:shadow-4 transition-all transition-duration-300 border-2 border-transparent hover:border-primary h-full"
-                @click="navigateTo('/admin/gamification/challenges')"
-              >
-                <div class="flex align-items-center justify-content-center w-3rem h-3rem bg-orange-100 border-circle mb-3">
-                  <i class="pi pi-trophy text-orange-500 text-xl"></i>
-                </div>
-                <h3 class="text-lg font-semibold text-900 m-0 mb-2">Gérer les Défis</h3>
-                <p class="text-600 text-sm m-0 mb-3 line-height-3">Créer, modifier et supprimer des défis</p>
-              </div>
-            </div>
-
-            <div class="col-12 md:col-6 lg:col-4">
-              <div 
-                class="surface-card p-4 border-round shadow-2 cursor-pointer hover:shadow-4 transition-all transition-duration-300 border-2 border-transparent hover:border-primary h-full"
-                @click="navigateTo('/admin/gamification/users')"
-              >
-                <div class="flex align-items-center justify-content-center w-3rem h-3rem bg-green-100 border-circle mb-3">
-                  <i class="pi pi-users text-green-500 text-xl"></i>
-                </div>
-                <h3 class="text-lg font-semibold text-900 m-0 mb-2">Gérer les Utilisateurs</h3>
-                <p class="text-600 text-sm m-0 mb-3 line-height-3">Attribuer des rôles et gérer les permissions</p>
-              </div>
-            </div>
-
-            <div class="col-12 md:col-6 lg:col-4">
-              <div 
-                class="surface-card p-4 border-round shadow-2 cursor-pointer hover:shadow-4 transition-all transition-duration-300 border-2 border-transparent hover:border-primary h-full"
-                @click="navigateTo('/admin/gamification/houses')"
-              >
-                <div class="flex align-items-center justify-content-center w-3rem h-3rem bg-blue-100 border-circle mb-3">
-                  <i class="pi pi-home text-blue-500 text-xl"></i>
-                </div>
-                <h3 class="text-lg font-semibold text-900 m-0 mb-2">Gérer les Maisons</h3>
-                <p class="text-600 text-sm m-0 mb-3 line-height-3">Points des maisons et statistiques</p>
-              </div>
-            </div>
-          </div>
         </div>
 
         <!-- Activités récentes -->
         <div class="mb-4">
           <h2 class="text-xl font-semibold text-900 mb-3">Activités récentes</h2>
           <div class="surface-card p-4 border-round shadow-2">
-            <div v-if="!activities.length" class="text-600">Aucune activité récente</div>
+            <div v-if="activitiesError" class="flex align-items-center justify-content-between gap-3">
+              <span class="text-red-500">Les activités récentes sont momentanément indisponibles.</span>
+              <Button label="Réessayer" class="p-button-text p-button-sm" @click="loadActivities" />
+            </div>
+            <div v-else-if="!activities.length" class="text-600">Aucune activité récente</div>
             <div v-else class="flex flex-column gap-2">
               <div
                 v-for="(a, i) in activities"
@@ -123,10 +81,9 @@
                   </div>
                   <div>
                     <div class="text-900 font-medium">{{ a.title || a.description || 'Activité' }}</div>
-                    <small class="text-500">{{ a.time || formatTime(a.timestamp) }}</small>
+                    <small class="text-500">{{ formatTime(a.occurredAt) }}<span v-if="a.xp"> · {{ a.xp > 0 ? '+' : '' }}{{ a.xp }} XP</span></small>
                   </div>
                 </div>
-                <Button v-if="a.to" label="Voir" class="p-button-text p-button-sm" @click="navigateTo(a.to)" />
               </div>
             </div>
           </div>
@@ -136,57 +93,42 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { ref, onMounted, computed } from 'vue'
 import AdminLayout from './layouts/AdminLayout.vue'
 import KpiCard from './widgets/KpiCard.vue'
 import Button from 'primevue/button'
 import ButtonGroup from 'primevue/buttongroup'
 import ProgressSpinner from 'primevue/progressspinner'
-import { useKpiManager } from '@/composables/useKpiManager'
-import gamificationService from '@/service/gamificationService'
+import { useAdminDashboardStats } from '@/composables/useAdminDashboardStats'
+import { fetchGamificationActivity } from '@/service/adminDashboardStatsService'
+import { getKpisForRole } from '@/config/kpiConfigs'
+import { useRoleStore } from '@/stores/role'
 
-const router = useRouter()
-
-// Utiliser le système KPI modulable
-const {
-  kpisWithData,
-  loading,
-  refreshing,
-  period,
-  loadKpis,
-  refresh
-} = useKpiManager('gamification')
+const roleStore = useRoleStore()
+const period = ref('month')
+const stats = useAdminDashboardStats({ domains: ['gamification'], period })
+const configurations = computed(() => getKpisForRole('gamification', roleStore.perms || [], roleStore.isSuper))
+const kpisWithData = stats.mapKpis('gamification', configurations)
+const { loading, refreshing } = stats
+const loadKpis = () => stats.load().catch(() => undefined)
+const refresh = async () => {
+  await Promise.all([stats.refresh().catch(() => undefined), loadActivities()])
+}
+const changePeriod = async (nextPeriod) => {
+  period.value = nextPeriod
+  await refresh()
+}
 
 const activities = ref([])
+const activitiesError = ref(false)
 
 const loadActivities = async () => {
+  activitiesError.value = false
   try {
-    const logs = await gamificationService.getRecentLogs()
-    activities.value = (logs || []).map(l => ({
-      type: l.action || 'activity',
-      title: l.title || l.description || 'Action gamification',
-      timestamp: l.timestamp || Date.now(),
-      to: null
-    }))
+    activities.value = await fetchGamificationActivity({ limit: 20 })
   } catch (_) {
     activities.value = []
-  }
-}
-
-const navigateTo = (path) => {
-  router.push(path)
-}
-
-const handleKpiAction = (kpi) => {
-  const routes = {
-    challenges_active: '/admin/gamification/challenges',
-    quests_completed: '/admin/gamification/quests',
-    badges_total: '/admin/gamification/badges',
-    users_active: '/admin/gamification/users'
-  }
-  if (routes[kpi.id]) {
-    router.push(routes[kpi.id])
+    activitiesError.value = true
   }
 }
 
@@ -217,5 +159,17 @@ onMounted(async () => {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 1.5rem;
+}
+
+@media (max-width: 900px) {
+  .dashboard-header {
+    align-items: flex-start !important;
+    flex-direction: column;
+  }
+
+  .dashboard-periods {
+    flex-wrap: wrap;
+    width: 100%;
+  }
 }
 </style>

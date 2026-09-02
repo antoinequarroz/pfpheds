@@ -139,6 +139,7 @@ test('sensitive API routes reject anonymous requests', async () => {
       ['/api/admin/users', 'POST'],
       ['/api/audiences/students', 'GET'],
       ['/api/audiences/si-teachers', 'GET'],
+      ['/api/admin-dashboard/v1/stats', 'GET'],
       ['/api/integrations/vimeo/videos', 'GET'],
       ['/api/integrations/github/status', 'GET'],
       ['/api/resultat-votation/student/test-user/PFP1A/2026', 'GET']
@@ -149,6 +150,30 @@ test('sensitive API routes reject anonymous requests', async () => {
         body: method === 'POST' ? '{}' : undefined
       })
       assert.equal(response.status, 401, `${method} ${pathname} must require authentication`)
+    }
+  } finally {
+    await new Promise((resolve, reject) =>
+      server.close((error) => (error ? reject(error) : resolve()))
+    )
+  }
+})
+
+test('development CORS accepts loopback origins on dynamic Vite ports', async () => {
+  const app = require('../index')
+  const server = app.listen(0, '127.0.0.1')
+  await new Promise((resolve) => server.once('listening', resolve))
+  const { port } = server.address()
+  try {
+    for (const origin of ['http://localhost:5182', 'http://127.0.0.1:6199']) {
+      const response = await fetch(`http://127.0.0.1:${port}/api/audiences/students`, {
+        method: 'OPTIONS',
+        headers: {
+          Origin: origin,
+          'Access-Control-Request-Method': 'GET'
+        }
+      })
+      assert.equal(response.status, 204)
+      assert.equal(response.headers.get('access-control-allow-origin'), origin)
     }
   } finally {
     await new Promise((resolve, reject) =>

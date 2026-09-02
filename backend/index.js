@@ -42,27 +42,43 @@ const vimeoRoutes = require('./supabase/vimeoBackend.js')
 const githubRoutes = require('./supabase/githubBackend.js')
 const audienceDirectoryRoutes = require('./supabase/audienceDirectoryBackend.js')
 const {
+  createAdminDashboardStatsRouter
+} = require('./dashboard/adminDashboardStatsBackend.js')
+const {
   createPasswordRecoveryRequestRouter
 } = require('./supabase/passwordRecoveryRequestBackend.js')
+const { createPfpOutcomeRouter } = require('./supabase/pfpOutcomeBackend.js')
 
 // push
 const pushRoutes = require('./supabase/pushBackend')
 
-const allowedOrigins =
-  process.env.NODE_ENV === 'production'
-    ? ['https://hedsvs.ch', 'https://www.hedsvs.ch', 'https://api2.hedsvs.ch']
-    : [
-        'http://localhost:5173',
-        'http://localhost:5174',
-        'http://localhost:5180',
-        'http://127.0.0.1:5173',
-        'http://127.0.0.1:5174',
-        'http://127.0.0.1:5180'
-      ]
+const allowedProductionOrigins = [
+  'https://hedsvs.ch',
+  'https://www.hedsvs.ch',
+  'https://api2.hedsvs.ch'
+]
+
+function isAllowedOrigin(origin) {
+  if (!origin) return true
+
+  if (process.env.NODE_ENV === 'production') {
+    return allowedProductionOrigins.includes(origin)
+  }
+
+  try {
+    const url = new URL(origin)
+    return (
+      url.protocol === 'http:' &&
+      (url.hostname === 'localhost' || url.hostname === '127.0.0.1')
+    )
+  } catch {
+    return false
+  }
+}
 
 const corsOptions = {
   origin(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
+    if (isAllowedOrigin(origin)) {
       return callback(null, true)
     }
     return callback(new Error(`CORS blocked for origin: ${origin}`))
@@ -132,6 +148,23 @@ app.use(
     'RepondantHES'
   ),
   audienceDirectoryRoutes
+)
+app.use(
+  '/api/admin-dashboard',
+  requireAnyPermission(
+    'students.read',
+    'EnseignantSoins',
+    'RMSoins',
+    'EnseignantPhysio',
+    'RMPhysio',
+    'RepondantHES'
+  ),
+  createAdminDashboardStatsRouter({ client: supabaseAdmin })
+)
+app.use(
+  '/api/pfp-outcomes',
+  requireAnyPermission('page1.access', 'AdminPhysio', 'SECRETARIAT'),
+  createPfpOutcomeRouter({ client: supabaseAdmin })
 )
 app.use('/api/integrations/vimeo', requireAnyPermission('editor'), vimeoRoutes)
 app.use('/api/integrations/github', requireAnyPermission('editor'), githubRoutes)

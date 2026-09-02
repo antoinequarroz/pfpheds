@@ -11,7 +11,7 @@
   />
 
   <!-- PROMPT QUIZ MAISON (masqué temporairement pour la présentation, ne pas supprimer) -->
-  <div v-if="SHOW_GAMIFICATION_UI && !hasValidHouse && !isGameMaster" class="house-quiz-prompt mb-4">
+  <div v-if="SHOW_HOUSE_QUIZ && !hasValidHouse && !isGameMaster" class="house-quiz-prompt mb-4">
     <div class="quiz-prompt-card">
       <div class="quiz-prompt-content">
         <i class="pi pi-graduation-cap quiz-prompt-icon"></i>
@@ -45,16 +45,18 @@
           type="file"
           accept="image/jpeg,image/png,image/gif,image/webp"
           class="avatar-input"
+          :disabled="profileSaving"
           @change="onAvatarChange"
         />
         <div class="flex gap-2 flex-wrap justify-content-center">
-          <Button label="Changer l'avatar" icon="pi pi-image" outlined @click="triggerAvatarSelect" />
+          <Button label="Changer l'avatar" icon="pi pi-image" outlined :disabled="profileSaving" @click="triggerAvatarSelect" />
           <Button
             v-if="selectedAvatarFile"
             label="Retirer"
             icon="pi pi-times"
             severity="secondary"
             text
+            :disabled="profileSaving"
             @click="clearAvatarSelection"
           />
         </div>
@@ -122,7 +124,13 @@
         </span>
       </div>
       <div class="info-item info-item-full actions-row">
-        <Button label="Sauvegarder le profil" @click="saveProfileWithXP" class="save-btn" />
+        <Button
+          label="Sauvegarder le profil"
+          :loading="profileSaving"
+          :disabled="profileSaving"
+          @click="saveProfileWithXP"
+          class="save-btn"
+        />
       </div>
     </div>
   </div>
@@ -132,6 +140,7 @@
 import { ref, onMounted, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/authStore';
+import { useUserStore } from '@/stores/userStore';
 import { supabase } from '@/supabase.js';
 import Dropdown from 'primevue/dropdown';
 import Button from 'primevue/button';
@@ -142,12 +151,13 @@ import XPBar from '@/components/gamification/XPBar.vue';
 import gamificationServiceSupabase from '@/service/gamificationServiceSupabase'
 import gamificationIntegration from '@/service/gamificationIntegration'
 import supabaseStorageService from '@/service/supabaseStorageService'
+import { gamificationFeatures } from '@/config/gamificationFeatures'
 
 const defaultAvatar = '@/assets/images/avatar/01.jpg';
 const toast = useToast();
 
-// Masque temporairement l'UI de gamification sur le profil (présentation) - repasser à true pour réactiver
-const SHOW_GAMIFICATION_UI = false;
+const SHOW_GAMIFICATION_UI = gamificationFeatures.userJourney;
+const SHOW_HOUSE_QUIZ = gamificationFeatures.userJourney && gamificationFeatures.houseQuiz;
 
 // Profil consulté (celui affiché)
 const user = ref({
@@ -175,6 +185,7 @@ const currentUserProfile = ref({
 const selectedAvatarFile = ref(null);
 const avatarInput = ref(null);
 const avatarPreviewUrl = ref('');
+const profileSaving = ref(false);
 // Référence pour la sélection d'un enseignant dans le dropdown (pour modifier Répondant HES)
 const selectedTeacher = ref("");
 
@@ -664,24 +675,6 @@ const saveProfile = async () => {
   try {
     console.log('💾 Sauvegarde du profil dans Supabase...')
 
-    // Si un nouvel avatar a été sélectionné, on l'upload sur Supabase Storage
-    if (selectedAvatarFile.value) {
-      try {
-        console.log('📸 Upload avatar vers Supabase Storage...');
-        const uploadResult = await supabaseStorageService.uploadAvatar(
-          user.value.uid,
-          selectedAvatarFile.value
-        );
-        user.value.photoURL = uploadResult.url;
-        clearAvatarSelection();
-        console.log('✅ Avatar uploadé sur Supabase:', uploadResult.url);
-      } catch (error) {
-        console.error("❌ Erreur lors de l'upload de l'avatar sur Supabase:", error);
-        toast.add({ severity: 'error', summary: 'Avatar', detail: "Erreur lors de l'upload de l'avatar", life: 3500 })
-        return;
-      }
-    }
-
     // Trouver le label de l'enseignant si un est sélectionné
     let hesReferent = user.value.repondantHES
     if (isAdmin.value && selectedTeacher.value) {
@@ -705,26 +698,61 @@ const saveProfile = async () => {
       }
     }
 
-    // Mise à jour du profil dans user_profiles Supabase
-    const { error: updateError } = await supabase
-      .from('user_profiles')
-      .update({
-        forname: user.value.prenom,
-        family_name: user.value.nom,
-        email: user.value.email,
-        city: user.value.ville,
-        bio: user.value.bio,
-        avatar_url: user.value.photoURL,
-        class: user.value.classe,
-        hes_referent: hesReferent,
-        updated_at: new Date().toISOString()
-      })
-      .eq('user_id', user.value.uid)
+    const profileChanges = {
+      forname: user.value.prenom,
+      family_name: user.value.nom,
+      email: user.value.email,
+      city: user.value.ville,
+      bio: user.value.bio,
+      avatar_url: user.value.photoURL,
+      class: user.value.classe,
+      hes_referent: hesReferent,
+      updated_at: new Date().toISOString()
+    }
+
+    let updatedProfile = null
+    let updateError = null
+
+    if (selectedAvatarFile.value) {
+      try {
+        console.log('📸 Upload avatar vers Supabase Storage...')
+        const uploadResult = await supabaseStorageService.replaceUserAvatar(
+          user.value.uid,
+          selectedAvatarFile.value,
+          profileChanges
+        )
+        updatedProfile = uploadResult.profile
+        user.value.photoURL = uploadResult.url
+        clearAvatarSelection()
+        console.log('✅ Avatar et profil enregistrés dans Supabase:', uploadResult.url)
+      } catch (error) {
+        console.error("❌ Erreur lors de l'upload de l'avatar sur Supabase:", error)
+        toast.add({ severity: 'error', summary: 'Avatar', detail: error?.message || "Erreur lors de l'upload de l'avatar", life: 5000 })
+        return false
+      }
+    } else {
+      const result = await supabase
+        .from('user_profiles')
+        .update(profileChanges)
+        .eq('user_id', user.value.uid)
+        .select('user_id, forname, family_name, email, city, bio, avatar_url, class, hes_referent, updated_at')
+        .single()
+      updatedProfile = result.data
+      updateError = result.error
+    }
 
     if (updateError) {
       console.error('❌ Erreur mise à jour profil:', updateError)
       toast.add({ severity: 'error', summary: 'Profil', detail: 'Erreur lors de la sauvegarde du profil', life: 3500 })
-      return
+      return false
+    }
+
+    if (userStore.user?.id === user.value.uid && updatedProfile) {
+      try {
+        await userStore.fetchProfile()
+      } catch (refreshError) {
+        console.warn('[Profil] Enregistré, rafraîchissement différé:', refreshError)
+      }
     }
 
     user.value.repondantHES = hesReferent
@@ -744,9 +772,12 @@ const saveProfile = async () => {
     // Recharger les données de gamification pour afficher les nouveaux badges/XP
     await fetchGamificationData(user.value.uid);
 
+    return true;
+
   } catch (error) {
     console.error("Erreur lors de la sauvegarde du profil :", error);
     toast.add({ severity: 'error', summary: 'Profil', detail: 'Erreur lors de la sauvegarde du profil', life: 3500 })
+    return false;
   }
 };
 
@@ -797,6 +828,7 @@ const clearAvatarSelection = () => {
 const route = useRoute();
 const router = useRouter();
 const authStore = useAuthStore();
+const userStore = useUserStore();
 
 onMounted(async () => {
   // Vérifier et créer le bucket avatars si nécessaire
@@ -959,8 +991,11 @@ const giveUserXP = async (action, customXP = null) => {
 
 // Fonction appelée lors de la sauvegarde du profil (pour donner de l'XP)
 const saveProfileWithXP = async () => {
+  if (profileSaving.value) return
+  profileSaving.value = true
   try {
-    await saveProfile()
+    const saved = await saveProfile()
+    if (!saved) return
 
     // NOUVEAU : Utiliser gamificationIntegration pour déclencher tous les événements
     const userId = route.params.id || currentUserProfile.value?.uid
@@ -978,6 +1013,8 @@ const saveProfileWithXP = async () => {
     }
   } catch (error) {
     console.error('Erreur lors de la sauvegarde avec gamification:', error)
+  } finally {
+    profileSaving.value = false
   }
 }
 </script>

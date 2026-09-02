@@ -3,8 +3,8 @@ import { modulePermissionGuard } from '@/router/guards/modulePermissionGuard'
 // Routes dashboard & administration
 export default [
   { path: '/admin', component: () => import('@/views/admin/DashboardView.vue'), name: 'DashboardView', meta: { requiresAuth: true, need: ['super.all', 'admin', 'AdminPhysio', 'EnseignantPhysio'] } },
-  { path: '/admin/dashboard-general', component: () => import('@/components/admin/AdminDashboardGeneral.vue'), name: 'AdminDashboardGeneral', meta: { requiresAuth: true, need: 'admin' } },
-  { path: '/admin/dashboard-rm', component: () => import('@/views/admin/DashboardRMView.vue'), name: 'DashboardRM', meta: { requiresAuth: true, need: ['admin', 'RMSoins'] } },
+  { path: '/admin/dashboard-general', redirect: '/admin', name: 'AdminDashboardGeneral', meta: { requiresAuth: true, need: 'admin' } },
+  { path: '/admin/dashboard-rm', component: () => import('@/views/admin/DashboardRMView.vue'), name: 'DashboardRM', meta: { requiresAuth: true, need: ['admin', 'RMSoins', 'auth.redirect.dashboard_rm'] } },
   { path: '/admin/soins-infirmiers/dashboard', component: () => import('@/views/admin/soins-infirmiers/DashboardSecretariatSI.vue'), name: 'DashboardSecretariatSI', meta: { requiresAuth: true, need: ['admin', 'RMSoins'] } },
   { path: '/admin/role-management', component: () => import('@/views/admin/RoleManagementView.vue'), name: 'RoleManagement', meta: { requiresAuth: true, need: ['super.all', 'admin'] } },
   { 
@@ -25,7 +25,7 @@ export default [
   { path: '/admin/teachers-assignment', component: () => import('@/views/admin/TeacherAssignmentView.vue'), name: 'TeacherAssignment', meta: { requiresAuth: true, need: ['admin', 'RMSoins', 'PlanificateurHoraires'] } },
   { path: '/admin/dashboard-pfp', component: () => import('@/components/admin/AdminDashboardPFP.vue'), name: 'AdminDashboardPFP', meta: { requiresAuth: true, need: ['super.all', 'admin', 'AdminPhysio'] } },
   { path: '/admin/dashboard-academique', component: () => import('@/components/admin/AdminDashboardAcademique.vue'), name: 'AdminDashboardAcademique', meta: { requiresAuth: true, need: ['super.all', 'admin', 'editor'] } },
-  { path: '/admin/dashboard-gamification', component: () => import('@/components/admin/AdminDashboardGamification.vue'), name: 'AdminDashboardGamification', meta: { requiresAuth: true, need: ['super.all', 'admin', 'house_coach'] } },
+  { path: '/admin/dashboard-gamification', component: () => import('@/components/admin/AdminDashboardGamification.vue'), name: 'AdminDashboardGamification', meta: { requiresAuth: true, need: ['super.all', 'admin', 'AdminPhysio'] } },
   { path: '/admin/alerts', component: () => import('@/views/admin/AlertsDashboard.vue'), name: 'AlertsDashboard', meta: { requiresAuth: true, need: ['super.all', 'admin', 'AdminPhysio', 'EnseignantPhysio'] } },
   { path: '/admin/settings', component: () => import('@/views/admin/SettingsView.vue'), name: 'AdminSettingsView', meta: { requiresAuth: true, need: ['admin', 'editor'] } },
   { path: '/admin/supabase-diagnostic', component: () => import('@/views/admin/SupabaseDiagnosticView.vue'), name: 'SupabaseDiagnosticView', meta: { requiresAuth: true, need: 'admin' } },
@@ -45,7 +45,7 @@ export default [
   { path: '/admin/planning', component: () => import('@/views/admin/planning/PlanningView.vue'), name: 'PlanningView', meta: { requiresAuth: true, need: ['admin', 'editor'] } },
   { path: '/admin/planning/manage', component: () => import('@/views/admin/planning/PlanningAdminView.vue'), name: 'PlanningAdminView', meta: { requiresAuth: true, need: ['admin', 'editor'] } },
   { path: '/admin/planning/years', component: () => import('@/views/admin/AcademicYearManagement.vue'), name: 'AcademicYearManagement', meta: { requiresAuth: true, need: 'admin' } },
-  { path: '/admin/planning/weekly', component: () => import('@/views/admin/planning/WeeklyPlanningAdminView.vue'), name: 'WeeklyPlanningAdminView', meta: { requiresAuth: true, need: ['admin', 'editor'] } },
+  { path: '/admin/planning/weekly', component: () => import('@/views/admin/planning/WeeklyPlanningAdminView.vue'), name: 'WeeklyPlanningAdminView', meta: { requiresAuth: true, need: ['admin', 'editor', 'planning.weekly.view'] } },
   { path: '/admin/planning/semester', component: () => import('@/views/admin/planning/SemesterPlanningAdminView.vue'), name: 'SemesterPlanningAdminView', meta: { requiresAuth: true, need: ['admin', 'editor'] } },
   { path: '/admin/planning/annual', component: () => import('@/views/admin/planning/AnnualPlanningView.vue'), name: 'AnnualPlanningView', meta: { requiresAuth: true, need: ['admin', 'editor'] } },
   { path: '/admin/soins-infirmiers/planning-journalier', component: () => import('@/views/admin/soins-infirmiers/DailyPlanningView.vue'), name: 'DailyPlanningView', meta: { requiresAuth: true, need: ['admin', 'editor'] } },
@@ -77,7 +77,7 @@ export default [
   { path: '/admin/gamification/badges', component: () => import('@/views/admin/gamification/BadgeManagementView.vue'), name: 'BadgeManagementView', meta: { requiresAuth: true, need: ['super.all', 'admin', 'AdminPhysio', 'EnseignantPhysio'] } },
   { path: '/admin/gamification/users', component: () => import('@/views/admin/gamification/UserManagementView.vue'), name: 'UserManagementView', meta: { requiresAuth: true, need: ['super.all', 'admin', 'AdminPhysio', 'EnseignantPhysio'] } },
   { path: '/admin/gamification/houses', component: () => import('@/views/admin/gamification/HouseManagementView.vue'), name: 'HouseManagementView', meta: { requiresAuth: true, need: ['super.all', 'admin', 'AdminPhysio', 'EnseignantPhysio'] } },
-  { path: '/admin/gamification/analytics', component: () => import('@/views/admin/gamification/AnalyticsDashboardView.vue'), name: 'AnalyticsDashboardView', meta: { requiresAuth: true, need: ['super.all', 'admin', 'AdminPhysio', 'EnseignantPhysio'] } },
+  { path: '/admin/gamification/analytics', redirect: '/admin/dashboard-gamification', name: 'AnalyticsDashboardView', meta: { requiresAuth: true, need: ['super.all', 'admin', 'AdminPhysio'] } },
 
   // Gamification création (public)
   { path: '/create-challenge', component: () => import('@/views/admin/gamification/ChallengeManagementView.vue'), name: 'CreateChallenge', meta: { requiresAuth: true, need: ['super.all', 'admin', 'house_coach'] } },

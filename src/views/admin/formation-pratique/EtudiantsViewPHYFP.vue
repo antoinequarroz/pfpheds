@@ -27,7 +27,7 @@
             />
             <InputText v-model="globalSearch" placeholder="Rechercher (nom, email)" class="w-16rem" />
             <Button icon="pi pi-file-excel" label="Excel" outlined severity="success" @click="exportExcel" />
-            <Button icon="pi pi-filter-slash" label="Reset filtres" outlined severity="secondary" @click="resetFilters" />
+            <Button icon="pi pi-filter-slash" label="Réinitialiser" outlined severity="secondary" @click="resetFilters" />
             <Button icon="pi pi-refresh" outlined :disabled="loading" @click="loadStudents" />
           </div>
         </div>
@@ -168,6 +168,7 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import { supabase } from '@/supabase'
 import { getAllStudents } from '@/service/studentDirectoryService'
+import { SUPABASE_SELECTS } from '@/service/supabaseContracts'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
 import AdminLayout from '@/components/admin/layouts/AdminLayout.vue'
@@ -352,7 +353,7 @@ async function loadStudents() {
     if (userIds.length > 0) {
       const { data: physioData } = await supabase
         .from('StudentsPhysio')
-        .select('user_id, class, msq, sysint, neuroger, aigu, rehab, ambu, fr, de, sae, cas_particulier, canton')
+        .select(SUPABASE_SELECTS.studentPhysioCriteria)
         .in('user_id', userIds)
       ;(physioData || []).forEach(p => physioMap.set(p.user_id, p))
     }

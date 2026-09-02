@@ -1,5 +1,22 @@
 import { supabase } from '@/supabase'
 
+const emptyQuestStats = () => ({
+  totalQuests: 0,
+  notStartedQuests: 0,
+  activeQuests: 0,
+  completedQuests: 0,
+  failedQuests: 0,
+  totalXPFromQuests: 0,
+  averageProgress: 0,
+  total: 0,
+  notStarted: 0,
+  inProgress: 0,
+  completed: 0,
+  failed: 0,
+  totalXP: 0,
+  totalCompleted: 0,
+})
+
 /**
  * Service pour la gestion utilisateur des quêtes sur Supabase
  */
@@ -181,19 +198,9 @@ class UserQuestsService {
   async startQuest(userId, questId) {
     try {
       const { data, error } = await supabase
-        .from('user_quest_progress')
-        .upsert({
-          user_id: userId,
-          quest_id: questId,
-          status: 'in_progress',
-          progress: 0,
-          current_step: 0,
-          started_at: new Date().toISOString()
-        }, {
-          onConflict: 'user_id,quest_id'
+        .rpc('start_my_quest', {
+          p_quest_id: questId
         })
-        .select()
-        .single()
       
       if (error) throw error
       
@@ -213,36 +220,8 @@ class UserQuestsService {
    * @param {number} currentStep - Étape actuelle
    * @returns {Promise<Object>} Progression mise à jour
    */
-  async updateQuestProgress(userId, questId, progress, currentStep) {
-    try {
-      const updateData = {
-        progress,
-        current_step: currentStep,
-        updated_at: new Date().toISOString()
-      }
-      
-      // Si complétée à 100%
-      if (progress >= 100) {
-        updateData.status = 'completed'
-        updateData.completed_at = new Date().toISOString()
-      }
-      
-      const { data, error } = await supabase
-        .from('user_quest_progress')
-        .update(updateData)
-        .eq('user_id', userId)
-        .eq('quest_id', questId)
-        .select()
-        .single()
-      
-      if (error) throw error
-      
-      return data
-      
-    } catch (error) {
-      console.error('❌ Erreur mise à jour progression:', error)
-      throw error
-    }
+  async updateQuestProgress() {
+    throw new Error('La progression des quêtes doit être validée par une action serveur')
   }
   
   /**
@@ -251,22 +230,8 @@ class UserQuestsService {
    * @param {string} questId - ID quête
    * @returns {Promise<Object>} Progression complétée
    */
-  async completeQuest(userId, questId) {
-    try {
-      const { data, error } = await supabase
-        .rpc('complete_quest', {
-          p_user_id: userId,
-          p_quest_id: questId
-        })
-      
-      if (error) throw error
-      
-      return data
-      
-    } catch (error) {
-      console.error('❌ Erreur complétion quête:', error)
-      throw error
-    }
+  async completeQuest() {
+    throw new Error('Une quête ne peut être complétée que par une action serveur vérifiée')
   }
   
   /**
@@ -283,33 +248,39 @@ class UserQuestsService {
       
       if (error) throw error
       
-      const stats = {
-        total: data.length,
-        notStarted: data.filter(q => q.status === 'not_started').length,
-        inProgress: data.filter(q => q.status === 'in_progress').length,
-        completed: data.filter(q => q.status === 'completed').length,
-        failed: data.filter(q => q.status === 'failed').length,
-        totalXP: data
+      const rows = data || []
+      const notStartedQuests = rows.filter(q => q.status === 'not_started').length
+      const activeQuests = rows.filter(q => q.status === 'in_progress').length
+      const completedQuests = rows.filter(q => q.status === 'completed').length
+      const failedQuests = rows.filter(q => q.status === 'failed').length
+      const totalXPFromQuests = rows
           .filter(q => q.status === 'completed')
-          .reduce((sum, q) => sum + (q.quest?.xp_reward || 0), 0),
-        averageProgress: data.length > 0
-          ? Math.round(data.reduce((sum, q) => sum + q.progress, 0) / data.length)
-          : 0
+          .reduce((sum, q) => sum + (Number(q.quest?.xp_reward) || 0), 0)
+      const averageProgress = rows.length > 0
+        ? Math.round(rows.reduce((sum, q) => sum + (Number(q.progress) || 0), 0) / rows.length)
+        : 0
+
+      return {
+        totalQuests: rows.length,
+        notStartedQuests,
+        activeQuests,
+        completedQuests,
+        failedQuests,
+        totalXPFromQuests,
+        averageProgress,
+        // Aliases temporaires pour les vues historiques.
+        total: rows.length,
+        notStarted: notStartedQuests,
+        inProgress: activeQuests,
+        completed: completedQuests,
+        failed: failedQuests,
+        totalXP: totalXPFromQuests,
+        totalCompleted: completedQuests,
       }
-      
-      return stats
       
     } catch (error) {
       console.error('❌ Erreur statistiques quêtes:', error)
-      return {
-        total: 0,
-        notStarted: 0,
-        inProgress: 0,
-        completed: 0,
-        failed: 0,
-        totalXP: 0,
-        averageProgress: 0
-      }
+      return emptyQuestStats()
     }
   }
   
@@ -348,7 +319,7 @@ class UserQuestsService {
       if (typeof channel.unsubscribe === 'function') {
         channel.unsubscribe()
       } else {
-        try { supabase.removeChannel(channel) } catch {}
+        try { supabase.removeChannel(channel) } catch { /* Channel was already removed. */ }
       }
     }
   }
