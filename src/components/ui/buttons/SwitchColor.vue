@@ -30,14 +30,18 @@ import { useLayout } from "@/layout/composables/layout";
 const { layoutConfig } = useLayout();
 const isDimTheme = ref(layoutConfig.colorScheme.value === "dim");
 
+const getThemeLinks = () => Array.from(
+  document.querySelectorAll('link[data-theme-link="heds"]')
+);
+
 const detectCurrentScheme = () => {
-  const themeLink = document.getElementById("theme-link");
-  if (!themeLink) return null;
-  const href = themeLink.getAttribute("href") || '';
-  if (href.includes('theme-dim')) return 'dim';
-  if (href.includes('theme-light')) return 'light';
-  if (href.includes('theme-dark')) return 'dark';
-  return null;
+  const themeLinks = getThemeLinks();
+  const activeLink = themeLinks.find((link) => link.media !== 'not all' && !link.disabled);
+  if (activeLink?.dataset.themeScheme) return activeLink.dataset.themeScheme;
+
+  // Vite bundles the default dim stylesheet into the main CSS in production.
+  // In that case only the optional light override remains as a <link> element.
+  return themeLinks.some((link) => link.dataset.themeScheme === 'light') ? 'dim' : null;
 };
 
 onMounted(() => {
@@ -49,42 +53,36 @@ onMounted(() => {
 });
 
 const toggleTheme = () => {
-  isDimTheme.value = !isDimTheme.value;
-  const newScheme = isDimTheme.value ? "dim" : "light";
-  changeColorScheme(newScheme);
+  const newScheme = isDimTheme.value ? "light" : "dim";
+  if (changeColorScheme(newScheme)) {
+    isDimTheme.value = newScheme === "dim";
+  }
 };
 
 const changeColorScheme = (newColorScheme) => {
-  const themeLink = document.getElementById("theme-link");
-  if (!themeLink) return;
+  const themeLinks = getThemeLinks();
+  const targetLink = themeLinks.find(
+    (link) => link.dataset.themeScheme === newColorScheme
+  );
 
-  const href = themeLink.getAttribute("href");
-  const newHref = href.replace(/theme-(dim|light|dark)/g, 'theme-' + newColorScheme);
+  const usesBundledDimTheme = newColorScheme === 'dim'
+    && themeLinks.some((link) => link.dataset.themeScheme === 'light');
 
-  if (newHref === href) return;
+  if (!targetLink && !usesBundledDimTheme) {
+    console.error(`Thème HEdS introuvable: ${newColorScheme}`);
+    return false;
+  }
 
-  replaceLink(themeLink, newHref, () => {
-    layoutConfig.colorScheme.value = newColorScheme;
+  themeLinks.forEach((link) => {
+    const isActive = link === targetLink;
+    link.disabled = !isActive;
+    link.media = isActive ? 'all' : 'not all';
   });
+
+  layoutConfig.colorScheme.value = newColorScheme;
+  return true;
 };
 
-const replaceLink = (linkElement, href, onComplete) => {
-  if (!linkElement || !href) return;
-
-  const id = linkElement.getAttribute("id");
-  const cloneLinkElement = linkElement.cloneNode(true);
-
-  cloneLinkElement.setAttribute("href", href);
-  cloneLinkElement.setAttribute("id", `${id}-clone`);
-
-  linkElement.parentNode.insertBefore(cloneLinkElement, linkElement.nextSibling);
-
-  cloneLinkElement.addEventListener("load", () => {
-    linkElement.remove();
-    cloneLinkElement.setAttribute("id", id);
-    if (onComplete) onComplete();
-  });
-};
 </script>
 
 <style scoped>
