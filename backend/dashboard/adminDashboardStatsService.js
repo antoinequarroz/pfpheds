@@ -266,26 +266,17 @@ function pfpDefinitions(client, filters = {}) {
 
 function academicDefinitions(client, filters = {}) {
   return {
-    teachers: flow(async (period) => {
-      const profiles = await selectRows(
+    teachers: snapshot(async () => {
+      const profiles = await selectAllRows(
         client,
         'user_profiles',
-        'role,permissions,is_active,classe,pfp_cohort,primary_track_id',
-        (query) => applyPeriod(query, 'created_at', period)
+        'role,permissions,is_active,classe,pfp_cohort,primary_track_id'
       )
       return filterProfiles(filterTeacherProfiles(profiles), filters).length
     }),
-    courses: flow((period) =>
-      countRows(client, 'courses', 'id', (query) => applyPeriod(query, 'created_at', period))
-    ),
-    media: flow((period) =>
-      countRows(client, 'video_library', 'id', (query) =>
-        applyPeriod(query, 'published_date', period)
-      )
-    ),
-    modules: flow((period) =>
-      countRows(client, 'modules', 'id', (query) => applyPeriod(query, 'created_at', period))
-    )
+    courses: snapshot(() => countRows(client, 'courses', 'id')),
+    media: snapshot(() => countRows(client, 'video_library', 'id')),
+    modules: snapshot(() => countRows(client, 'modules', 'id'))
   }
 }
 
