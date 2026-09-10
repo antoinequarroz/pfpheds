@@ -225,7 +225,7 @@
               showCenterText
               :centerValue="String(totalCantons)"
               centerLabel="cantons"
-              cutout="65%"
+              cutout="85%"
             />
           </div>
         </div>
@@ -567,6 +567,7 @@ const loadExtraStats = async () => {
 
     const profiles = studentDirectory.filter((p) => isInSelectedPeriod(p.updated_at || p.created_at))
     const places = (placesRes.data || []).filter((p) => isInSelectedPeriod(p.UpdatedAt || p.CreatedAt))
+    const totalStudents = studentDirectory.filter((p) => p.is_active !== false).length
     const votesInPeriod = (votesRes.data || []).filter((v) => isInSelectedPeriod(v.updated_at || v.created_at))
     const allVotes = votesRes.data || []
 
@@ -603,8 +604,8 @@ const loadExtraStats = async () => {
       .map(t => ({ type: t, ...byType[t] }))
 
     extraStats.value = [
-      { key: 'active_students', label: 'Étudiants actifs', value: activeStudents, color: '#22c55e', icon: 'pi pi-users' },
-      { key: 'open_places', label: 'Places ouvertes', value: openPlaces, color: '#3b82f6', icon: 'pi pi-map-marker' },
+      { key: 'active_students', label: 'Étudiants actifs', value: totalStudents, color: '#22c55e', icon: 'pi pi-users' },
+      { key: 'open_places', label: 'Places ouvertes', value: (placesRes.data || []).filter((p) => p.InstitutionId && p.NomPlace).length, color: '#3b82f6', icon: 'pi pi-map-marker' },
       { key: 'published_assignments', label: 'Attributions publiées', value: publishedAssignments, color: '#eab308', icon: 'pi pi-send' },
       { key: 'incomplete_profiles', label: 'Dossiers incomplets', value: incompleteProfiles, color: '#ef4444', icon: 'pi pi-exclamation-triangle' },
       { key: 'validated', label: 'PFP validées', value: validated, color: '#16a34a', icon: 'pi pi-check-circle' },
